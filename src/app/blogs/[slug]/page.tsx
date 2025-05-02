@@ -1,6 +1,10 @@
 import { createClient } from "@/utils/supabase/server";
 import ReactMarkdown from "react-markdown";
-import { notFound } from "next/navigation"; // for better error handling
+import { notFound } from "next/navigation";
+import { Layout } from "@/components";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github.css";
 
 type PageProps = {
   params: Promise<{
@@ -11,6 +15,7 @@ type PageProps = {
 export default async function Instruments({ params }: PageProps) {
   const supabase = await createClient();
   const slug = (await params).slug;
+
   const { data } = await supabase
     .from("blog_content")
     .select()
@@ -18,13 +23,23 @@ export default async function Instruments({ params }: PageProps) {
     .single();
 
   if (!data) {
-    notFound(); // Next.js-native 404
+    notFound();
   }
 
+  console.log(data.content, "content");
+
   return (
-    <div className="prose mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">{data.title}</h1>
-      <ReactMarkdown>{data.content}</ReactMarkdown>
-    </div>
+    <Layout>
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="prose dark:prose max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeHighlight]}
+          >
+            {data.content}
+          </ReactMarkdown>
+        </div>
+      </div>
+    </Layout>
   );
 }
