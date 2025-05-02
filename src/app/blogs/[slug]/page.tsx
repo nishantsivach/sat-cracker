@@ -31,6 +31,7 @@ export default async function Instruments({ params }: PageProps) {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-4 py-8">
+        <h1 className="text-5xl font-bold mb-6">{data.title}</h1>
         <div className="prose dark:prose max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
