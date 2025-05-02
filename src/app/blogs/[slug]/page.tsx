@@ -1,20 +1,24 @@
 import { createClient } from "@/utils/supabase/server";
 import ReactMarkdown from "react-markdown";
+import { notFound } from "next/navigation"; // for better error handling
 
-export default async function Instruments({
-  params,
-}: {
-  params: { slug: string };
-}) {
+type PageProps = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+export default async function Instruments({ params }: PageProps) {
   const supabase = await createClient();
+  const slug = (await params).slug;
   const { data } = await supabase
     .from("blog_content")
     .select()
-    .eq("slug", params.slug)
-    .single(); // assuming you're getting one item
+    .eq("slug", slug)
+    .single();
 
   if (!data) {
-    return <p>Not found.</p>;
+    notFound(); // Next.js-native 404
   }
 
   return (
