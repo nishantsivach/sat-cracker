@@ -25,7 +25,6 @@ export default function ChatPage() {
   const [subject, setSubject] = useState("general");
   const messagesEndRef = useRef<ElementRef<"div">>(null);
 
-  // Sample subjects for the chat
   const subjects = [
     {
       id: "general",
@@ -140,15 +139,8 @@ export default function ChatPage() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-blue-900 mb-2">SAT AI Tutor</h1>
-        <p className="text-neutral-600 mb-6">
-          Chat with our AI tutor to get personalized help with your SAT
-          preparation
-        </p>
-
+      <div className="max-w-6xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar with subjects */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-md p-4 sticky top-24">
               <h2 className="font-semibold text-neutral-800 mb-4">
@@ -212,7 +204,6 @@ export default function ChatPage() {
             </div>
           </div>
 
-          {/* Chat area */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-[600px]">
               {/* Chat messages */}
