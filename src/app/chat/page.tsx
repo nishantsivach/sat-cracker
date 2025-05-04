@@ -139,10 +139,10 @@ export default function ChatPage() {
 
   return (
     <Layout disableFooter>
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-md p-4 sticky top-24">
+            <div className="bg-white rounded-2xl shadow-md p-4 sticky top-20">
               <h2 className="font-semibold text-neutral-800 mb-4">
                 Select Topic
               </h2>
