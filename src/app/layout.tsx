@@ -39,6 +39,20 @@ export default function RootLayout({
                   gtag('config', 'G-C28NLF769V');
                 `}
         </Script>
+
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-MR80C1GSQC"
+        />
+
+        <Script id="google-analytics">
+          {`
+                 window.dataLayer = window.dataLayer || [];
+                 function gtag(){dataLayer.push(arguments);}
+                 gtag('js', new Date());
+                 gtag('config', 'G-MR80C1GSQC');
+               `}
+        </Script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
