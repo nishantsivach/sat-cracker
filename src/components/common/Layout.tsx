@@ -48,6 +48,13 @@ export function Layout({
               <span>Home</span>
             </Link>
             <Link
+              href="/sat"
+              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>SAT Guide</span>
+            </Link>
+            <Link
               href="/blogs"
               className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
             >
