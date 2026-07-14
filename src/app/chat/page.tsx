@@ -142,8 +142,8 @@ export default function ChatPage() {
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-md p-4 sticky top-20">
-              <h2 className="font-semibold text-neutral-800 mb-4">
+            <div className="bg-white rounded-2xl shadow-md p-4 sticky top-20 border border-site-border">
+              <h2 className="font-semibold text-site-text mb-4">
                 Select Topic
               </h2>
               <ul className="space-y-2">
@@ -153,8 +153,8 @@ export default function ChatPage() {
                       onClick={() => setSubject(item.id)}
                       className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl transition-colors ${
                         subject === item.id
-                          ? "bg-blue-700 text-white"
-                          : "text-neutral-600 hover:bg-neutral-100"
+                          ? "bg-site-primary text-white"
+                          : "text-site-muted hover:bg-site-highlight"
                       }`}
                     >
                       {item.icon}
@@ -167,15 +167,15 @@ export default function ChatPage() {
                 ))}
               </ul>
 
-              <div className="mt-6 pt-6 border-t border-neutral-200">
-                <h2 className="font-semibold text-neutral-800 mb-4">
+              <div className="mt-6 pt-6 border-t border-site-border">
+                <h2 className="font-semibold text-site-text mb-4">
                   Resources
                 </h2>
                 <ul className="space-y-1">
                   <li>
                     <a
                       href="/practice"
-                      className="text-blue-700 hover:underline text-sm flex items-center gap-1"
+                      className="text-site-primary hover:underline text-sm flex items-center gap-1"
                     >
                       <Plus className="h-3 w-3" />
                       Take practice test
@@ -184,7 +184,7 @@ export default function ChatPage() {
                   <li>
                     <Link
                       href="/blogs"
-                      className="text-blue-700 hover:underline text-sm flex items-center gap-1"
+                      className="text-site-primary hover:underline text-sm flex items-center gap-1"
                     >
                       <Plus className="h-3 w-3" />
                       Study materials
@@ -193,7 +193,7 @@ export default function ChatPage() {
                   <li>
                     <a
                       href="/tips"
-                      className="text-blue-700 hover:underline text-sm flex items-center gap-1"
+                      className="text-site-primary hover:underline text-sm flex items-center gap-1"
                     >
                       <Plus className="h-3 w-3" />
                       SAT tips & tricks
@@ -205,7 +205,7 @@ export default function ChatPage() {
           </div>
 
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-[600px]">
+            <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-[600px] border border-site-border">
               {/* Chat messages */}
               <div className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-4">
@@ -221,8 +221,8 @@ export default function ChatPage() {
                       <div
                         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                           message.role === "user"
-                            ? "bg-blue-700 text-white"
-                            : "bg-neutral-100 text-neutral-800"
+                            ? "bg-site-primary text-white"
+                            : "bg-site-highlight text-site-text"
                         }`}
                       >
                         {message.content}
@@ -231,7 +231,7 @@ export default function ChatPage() {
                   ))}
                   {isTyping && (
                     <div className="flex justify-start">
-                      <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-neutral-100 text-neutral-800 flex items-center gap-2">
+                      <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-site-highlight text-site-text flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span>Typing...</span>
                       </div>
@@ -242,25 +242,25 @@ export default function ChatPage() {
               </div>
 
               {/* Input area */}
-              <div className="border-t border-neutral-200 p-4">
+              <div className="border-t border-site-border p-4">
                 <form onSubmit={handleSendMessage} className="flex gap-2">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Type your question..."
-                    className="flex-1 px-4 py-3 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-4 py-3 rounded-xl border border-site-border focus:outline-none focus:ring-2 focus:ring-site-primary focus:border-transparent"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-3 bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-3 bg-site-primary text-white rounded-xl hover:bg-site-secondary transition-colors flex items-center gap-2"
                     disabled={input.trim() === ""}
                   >
                     <span>Send</span>
                     <SendHorizonal className="h-4 w-4" />
                   </button>
                 </form>
-                <div className="mt-2 text-xs text-neutral-500 text-center">
+                <div className="mt-2 text-xs text-site-muted text-center">
                   SATCracker AI will help you with SAT concepts and practice
                 </div>
               </div>

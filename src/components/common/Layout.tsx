@@ -8,6 +8,7 @@ import {
   User,
   Menu,
   X,
+  GitCompare,
 } from "lucide-react";
 
 export function Layout({
@@ -18,16 +19,16 @@ export function Layout({
   disableFooter?: boolean;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-100 via-white to-neutral-200 text-neutral-800 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-site-surface via-white to-slate-200 text-site-text font-sans">
       {/* Header with CSS-only mobile menu */}
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 shadow-sm border-b border-neutral-200">
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 shadow-sm border-b border-site-border">
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-blue-700 text-white p-1 rounded">
+            <div className="bg-site-primary text-white p-1 rounded">
               <BarChart3 className="h-5 w-5" />
             </div>
-            <h1 className="text-2xl font-bold text-blue-900">
-              SAT<span className="text-blue-700">Cracker</span>
+            <h1 className="text-2xl font-bold text-site-secondary">
+              SAT<span className="text-site-primary">Cracker</span>
             </h1>
           </Link>
 
@@ -42,42 +43,49 @@ export function Layout({
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/"
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
             >
               <Home className="h-4 w-4" />
               <span>Home</span>
             </Link>
             <Link
               href="/sat"
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
             >
               <BookOpen className="h-4 w-4" />
               <span>SAT Guide</span>
             </Link>
             <Link
+              href="/sat/vs-act"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
+            >
+              <GitCompare className="h-4 w-4" />
+              <span>SAT vs ACT</span>
+            </Link>
+            <Link
               href="/blogs"
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
             >
               <BookOpen className="h-4 w-4" />
               <span>Study Materials</span>
             </Link>
             <Link
               href="/practice"
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
             >
               <BarChart3 className="h-4 w-4" />
               <span>Practice Tests</span>
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-700 transition-colors"
+              className="flex items-center gap-1 text-site-muted hover:text-site-primary transition-colors"
             >
               <User className="h-4 w-4" />
               <span>My Profile</span>
             </Link>
             <Link
               href="/chat"
-              className="px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition-colors flex items-center gap-1"
+              className="px-4 py-2 rounded-xl bg-site-primary text-white hover:bg-site-secondary transition-colors flex items-center gap-1"
             >
               <MessageCircle className="h-4 w-4" />
               <span>Start Chat</span>
@@ -87,7 +95,7 @@ export function Layout({
           {/* Mobile menu button (label for the checkbox) */}
           <label
             htmlFor="mobile-menu-toggle"
-            className="md:hidden p-2 text-neutral-600 hover:text-blue-700 transition-colors cursor-pointer"
+            className="md:hidden p-2 text-site-muted hover:text-site-primary transition-colors cursor-pointer"
           >
             {/* Show X when menu is open, Menu icon when closed */}
             <Menu className="h-6 w-6 peer-checked:hidden block" />
@@ -96,39 +104,39 @@ export function Layout({
         </div>
 
         {/* Mobile navigation - hidden by default, shown when checkbox is checked */}
-        <div className="max-h-0 md:hidden overflow-hidden transition-all duration-300 peer-checked:max-h-screen bg-white border-t border-neutral-200 shadow-lg">
+        <div className="max-h-0 md:hidden overflow-hidden transition-all duration-300 peer-checked:max-h-screen bg-white border-t border-site-border shadow-lg">
           <nav className="flex flex-col gap-4 py-4 px-6">
             <Link
               href="/"
-              className="flex items-center gap-2 text-neutral-600 hover:text-blue-700 transition-colors py-2"
+              className="flex items-center gap-2 text-site-muted hover:text-site-primary transition-colors py-2"
             >
               <Home className="h-5 w-5" />
               <span>Home</span>
             </Link>
             <Link
               href="/blogs"
-              className="flex items-center gap-2 text-neutral-600 hover:text-blue-700 transition-colors py-2"
+              className="flex items-center gap-2 text-site-muted hover:text-site-primary transition-colors py-2"
             >
               <BookOpen className="h-5 w-5" />
               <span>Study Materials</span>
             </Link>
             <Link
               href="/practice"
-              className="flex items-center gap-2 text-neutral-600 hover:text-blue-700 transition-colors py-2"
+              className="flex items-center gap-2 text-site-muted hover:text-site-primary transition-colors py-2"
             >
               <BarChart3 className="h-5 w-5" />
               <span>Practice Tests</span>
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-2 text-neutral-600 hover:text-blue-700 transition-colors py-2"
+              className="flex items-center gap-2 text-site-muted hover:text-site-primary transition-colors py-2"
             >
               <User className="h-5 w-5" />
               <span>My Profile</span>
             </Link>
             <Link
               href="/chat"
-              className="flex items-center gap-2 mt-2 px-4 py-3 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition-colors"
+              className="flex items-center gap-2 mt-2 px-4 py-3 rounded-xl bg-site-primary text-white hover:bg-site-secondary transition-colors"
             >
               <MessageCircle className="h-5 w-5" />
               <span>Start Chat</span>
@@ -142,16 +150,16 @@ export function Layout({
 
       {/* Footer */}
       {!disableFooter && (
-        <footer className="bg-neutral-800 text-neutral-300">
+        <footer className="bg-slate-900 text-slate-300">
           <div className="max-w-6xl mx-auto px-6 py-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="bg-blue-700 text-white p-1 rounded">
+                  <div className="bg-site-primary text-white p-1 rounded">
                     <BarChart3 className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-bold text-white">
-                    SAT<span className="text-blue-400">Cracker</span>
+                    SAT<span className="text-site-accent">Cracker</span>
                   </h2>
                 </div>
                 <p className="text-sm text-neutral-400">
@@ -166,7 +174,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/blogs"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       Study Materials
                     </Link>
@@ -174,7 +182,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/practice"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       Practice Tests
                     </Link>
@@ -182,7 +190,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/tips"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       SAT Tips
                     </Link>
@@ -190,7 +198,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/faq"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       FAQ
                     </Link>
@@ -204,7 +212,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/about"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       About Us
                     </Link>
@@ -212,7 +220,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/contact"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       Contact
                     </Link>
@@ -220,7 +228,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/privacy"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       Privacy Policy
                     </Link>
@@ -228,7 +236,7 @@ export function Layout({
                   <li>
                     <Link
                       href="/terms"
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-site-accent transition-colors"
                     >
                       Terms of Service
                     </Link>
@@ -333,9 +341,9 @@ export function Layout({
                     <input
                       type="email"
                       placeholder="Your email"
-                      className="px-3 py-2 bg-neutral-700 text-white rounded text-sm flex-1 border border-neutral-600 focus:outline-none focus:border-blue-500"
+                      className="px-3 py-2 bg-slate-800 text-white rounded text-sm flex-1 border border-slate-600 focus:outline-none focus:border-site-primary"
                     />
-                    <button className="px-3 py-2 bg-blue-700 text-white rounded text-sm hover:bg-blue-800 transition-colors">
+                    <button className="px-3 py-2 bg-site-primary text-white rounded text-sm hover:bg-site-secondary transition-colors">
                       Subscribe
                     </button>
                   </div>
@@ -343,7 +351,7 @@ export function Layout({
               </div>
             </div>
 
-            <div className="border-t border-neutral-700 mt-8 pt-8 text-center text-sm text-neutral-500">
+            <div className="border-t border-slate-700 mt-8 pt-8 text-center text-sm text-slate-500">
               &copy; {new Date().getFullYear()} SATCracker. All rights reserved.
             </div>
           </div>

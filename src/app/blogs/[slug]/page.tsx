@@ -56,12 +56,12 @@ export default async function BlogPost({ params }: PageProps) {
 
   return (
     <Layout>
-      <div className="bg-blue-50 border-b-4 border-blue-700 overflow-hidden relative">
+      <div className="bg-site-highlight border-b-4 border-site-primary overflow-hidden relative">
         <div className="absolute inset-0 overflow-hidden opacity-10">
           {[...Array(40)].map((_, i) => (
             <div
               key={i}
-              className="absolute bg-blue-500 rounded-full"
+              className="absolute bg-site-primary rounded-full"
               style={{
                 width: "20px",
                 height: "20px",
@@ -76,7 +76,7 @@ export default async function BlogPost({ params }: PageProps) {
         <div className="absolute left-0 top-0 h-full w-16 md:w-24 flex flex-col justify-center items-center gap-6 opacity-10">
           {["A", "B", "C", "D", "E"].map((letter) => (
             <div key={letter} className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full border-2 border-blue-800 flex items-center justify-center font-bold">
+              <div className="w-6 h-6 rounded-full border-2 border-site-secondary flex items-center justify-center font-bold">
                 {letter}
               </div>
             </div>
@@ -88,34 +88,34 @@ export default async function BlogPost({ params }: PageProps) {
           <div className="mb-6">
             <Link
               href="/blogs"
-              className="inline-flex items-center text-blue-700 hover:text-blue-900 transition-colors"
+              className="inline-flex items-center text-site-primary hover:text-site-secondary transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               <span>Back to all articles</span>
             </Link>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-blue-900">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-site-secondary">
             {data.title}
           </h1>
 
           {/* Reading metrics banner styled like an SAT score report */}
-          <div className="bg-white border-2 border-blue-200 rounded-lg p-4 mb-8 shadow-sm">
-            <div className="flex flex-wrap items-center gap-6 text-blue-800">
+          <div className="bg-white border-2 border-site-border rounded-lg p-4 mb-8 shadow-sm">
+            <div className="flex flex-wrap items-center gap-6 text-site-secondary">
               <div className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                <Calendar className="h-5 w-5 mr-2 text-site-primary" />
                 <span>
                   {formatDate(data?.created_at || new Date().toISOString())}
                 </span>
               </div>
               <div className="flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-blue-600" />
+                <Clock className="h-5 w-5 mr-2 text-site-primary" />
                 <span>{readTime} min read</span>
               </div>
               {data.author && (
                 <div className="flex items-center">
-                  <div className="h-8 w-8 rounded-full bg-blue-100 border border-blue-300 flex items-center justify-center mr-2">
-                    <span className="text-xs font-bold text-blue-800">
+                  <div className="h-8 w-8 rounded-full bg-site-highlight border border-site-border flex items-center justify-center mr-2">
+                    <span className="text-xs font-bold text-site-secondary">
                       {data.author.name?.substring(0, 2).toUpperCase() || "ST"}
                     </span>
                   </div>
@@ -130,7 +130,7 @@ export default async function BlogPost({ params }: PageProps) {
       {/* Main content area */}
       <div className="relative">
         {/* SAT test section icon */}
-        <div className="hidden md:flex absolute top-6 right-6 flex-col items-center text-blue-700 opacity-20">
+        <div className="hidden md:flex absolute top-6 right-6 flex-col items-center text-site-primary opacity-20">
           <BookOpen className="w-12 h-12" />
           <div className="mt-2 text-xs font-bold">SAT SECTION</div>
         </div>
@@ -140,14 +140,14 @@ export default async function BlogPost({ params }: PageProps) {
           {/* Main content area styled like SAT test paper */}
           <div className="bg-white border border-gray-300 rounded-lg shadow-md p-8 mb-8 relative">
             {/* Margin line like test booklet */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-site-primary"></div>
 
             {/* SAT-like section heading */}
             <div className="mb-8 pb-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-blue-700" />
-                  <span className="font-bold text-blue-800 uppercase text-sm">
+                  <Brain className="w-5 h-5 text-site-primary" />
+                  <span className="font-bold text-site-secondary uppercase text-sm">
                     Expert Knowledge
                   </span>
                 </div>
@@ -155,7 +155,7 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
 
             {/* Markdown content */}
-            <article className="prose lg:prose-lg prose-headings:text-blue-800 prose-headings:font-bold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-md prose-img:shadow-md max-w-none">
+            <article className="prose lg:prose-lg prose-headings:text-site-secondary prose-headings:font-bold prose-a:text-site-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-md prose-img:shadow-md max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeHighlight]}
@@ -170,7 +170,7 @@ export default async function BlogPost({ params }: PageProps) {
             <div className="flex justify-between items-center flex-wrap gap-6">
               <Link
                 href="/blogs"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-blue-700 text-white hover:bg-blue-800 transition-colors"
+                className="inline-flex items-center px-4 py-2 rounded-md bg-site-primary text-white hover:bg-site-secondary transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to study materials

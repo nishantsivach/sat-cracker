@@ -23,10 +23,10 @@ export default async function LandingPage() {
       <section className="relative py-24 px-6 text-center overflow-hidden">
         {/* Background element - bubble patterns like answer sheets */}
         <div className="absolute inset-0 z-0 opacity-5">
-          <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-blue-500"></div>
-          <div className="absolute top-40 right-20 w-16 h-16 rounded-full bg-red-500"></div>
-          <div className="absolute bottom-20 left-1/4 w-24 h-24 rounded-full bg-yellow-500"></div>
-          <div className="absolute top-1/3 right-1/3 w-32 h-32 rounded-full bg-green-500"></div>
+          <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-site-primary"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 rounded-full bg-site-accent"></div>
+          <div className="absolute bottom-20 left-1/4 w-24 h-24 rounded-full bg-site-highlight"></div>
+          <div className="absolute top-1/3 right-1/3 w-32 h-32 rounded-full bg-site-secondary"></div>
         </div>
 
         {/* Floating SAT score elements */}
@@ -41,17 +41,17 @@ export default async function LandingPage() {
         </div>
 
         <div className="relative z-10">
-          <span className="inline-block bg-blue-100 text-blue-800 px-4 py-1 rounded-full font-medium mb-6">
+          <span className="inline-block bg-site-highlight text-site-primary px-4 py-1 rounded-full font-medium mb-6">
             #1 SAT Prep Companion
           </span>
-          <h1 className="text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-purple-800">
-            Crack the SAT<span className="text-black">.</span>
+          <h1 className="text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-site-secondary to-site-accent">
+            Crack the SAT<span className="text-site-text">.</span>
           </h1>
-          <p className="text-xl max-w-2xl mx-auto text-neutral-700 mb-6">
+          <p className="text-xl max-w-2xl mx-auto text-site-muted mb-6">
             Your AI-powered study partner for smarter SAT preparation —
             perfectly balancing
-            <span className="font-medium text-blue-700"> Math</span> and
-            <span className="font-medium text-purple-700">
+            <span className="font-medium text-site-primary"> Math</span> and
+            <span className="font-medium text-site-accent">
               {" "}
               Evidence-Based Reading & Writing
             </span>
@@ -60,7 +60,7 @@ export default async function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
             <Link
               href="/chat"
-              className="px-8 py-3 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="px-8 py-3 bg-site-primary text-white rounded-full hover:bg-site-secondary transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <span>Start Practice Now</span>
               <svg
@@ -79,7 +79,7 @@ export default async function LandingPage() {
             </Link>
             <Link
               href="/blogs"
-              className="px-8 py-3 bg-white text-blue-700 border border-blue-200 rounded-full hover:bg-blue-50 transition shadow-sm hover:shadow-md"
+              className="px-8 py-3 bg-white text-site-primary border border-site-border rounded-full hover:bg-site-highlight transition shadow-sm hover:shadow-md"
             >
               Explore SAT Resources
             </Link>
@@ -87,10 +87,10 @@ export default async function LandingPage() {
 
           {/* Score improvement ticker */}
           <div className="mt-12 bg-white/70 backdrop-blur-sm py-3 px-4 rounded-xl inline-flex items-center gap-3 border border-neutral-200 shadow-sm">
-            <TrendingUp className="text-green-600 w-5 h-5" />
+            <TrendingUp className="text-site-accent w-5 h-5" />
             <p className="text-sm font-medium">
               Students improve by{" "}
-              <span className="text-green-600 font-bold">200+ points</span> on
+              <span className="text-site-accent font-bold">200+ points</span> on
               average
             </p>
           </div>
@@ -98,7 +98,7 @@ export default async function LandingPage() {
       </section>
 
       {/* SAT Section Breakdown */}
-      <section className="py-20 px-6 bg-gradient-to-b from-white to-blue-50">
+      <section className="py-20 px-6 bg-gradient-to-b from-white to-site-highlight">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-16">
             Master Every Section of the SAT
@@ -106,11 +106,11 @@ export default async function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-10">
             {/* Math Section */}
-            <div className="bg-white rounded-2xl border border-neutral-200 p-8 shadow-md hover:shadow-lg transition">
+            <div className="bg-white rounded-2xl border border-site-border p-8 shadow-md hover:shadow-lg transition">
               <div className="flex items-start gap-4">
-                <div className="bg-blue-100 p-4 rounded-xl">
+                <div className="bg-site-highlight p-4 rounded-xl">
                   <svg
-                    className="w-8 h-8 text-blue-700"
+                    className="w-8 h-8 text-site-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -136,7 +136,7 @@ export default async function LandingPage() {
                       "Formula recall tips",
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <CheckCircle className="w-4 h-4 text-site-accent" />
                         <span className="text-sm">{item}</span>
                       </li>
                     ))}
@@ -146,10 +146,10 @@ export default async function LandingPage() {
             </div>
 
             {/* Reading & Writing Section */}
-            <div className="bg-white rounded-2xl border border-neutral-200 p-8 shadow-md hover:shadow-lg transition">
+            <div className="bg-white rounded-2xl border border-site-border p-8 shadow-md hover:shadow-lg transition">
               <div className="flex items-start gap-4">
-                <div className="bg-purple-100 p-4 rounded-xl">
-                  <BookOpen className="w-8 h-8 text-purple-700" />
+                <div className="bg-site-highlight p-4 rounded-xl">
+                  <BookOpen className="w-8 h-8 text-site-secondary" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold mb-2">Reading & Writing</h3>
@@ -163,7 +163,7 @@ export default async function LandingPage() {
                       "Evidence identification",
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <CheckCircle className="w-4 h-4 text-site-accent" />
                         <span className="text-sm">{item}</span>
                       </li>
                     ))}
@@ -178,7 +178,7 @@ export default async function LandingPage() {
       {/* Features Section */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full font-medium">
+          <span className="bg-site-highlight text-site-primary px-4 py-1 rounded-full font-medium">
             Powerful Tools
           </span>
           <h3 className="text-3xl font-bold mt-4">
@@ -189,22 +189,22 @@ export default async function LandingPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             {
-              icon: <Brain className="w-8 h-8 text-blue-600" />,
+              icon: <Brain className="w-8 h-8 text-site-primary" />,
               title: "AI-Powered Practice",
               desc: "Personalized question sets tailored to your weak areas.",
             },
             {
-              icon: <Clock className="w-8 h-8 text-purple-600" />,
+              icon: <Clock className="w-8 h-8 text-site-secondary" />,
               title: "Time Management",
               desc: "Learn efficient test-taking strategies to maximize your time.",
             },
             {
-              icon: <Target className="w-8 h-8 text-red-600" />,
+              icon: <Target className="w-8 h-8 text-site-accent" />,
               title: "Target Weak Areas",
               desc: "Focus your study time on concepts you need most.",
             },
             {
-              icon: <BookOpen className="w-8 h-8 text-green-600" />,
+              icon: <BookOpen className="w-8 h-8 text-site-accent" />,
               title: "Curated Resources",
               desc: "Access the best SAT content from our extensive library.",
             },
@@ -249,7 +249,7 @@ export default async function LandingPage() {
           ].map(({ icon, title, desc }) => (
             <div
               key={title}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition border border-neutral-200 flex flex-col items-start"
+              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition border border-site-border flex flex-col items-start"
             >
               <div className="mb-4">{icon}</div>
               <h4 className="text-xl font-bold mb-2">{title}</h4>
@@ -260,7 +260,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Practice Question Preview */}
-      <section className="py-20 px-6 bg-blue-50">
+      <section className="py-20 px-6 bg-site-highlight">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <h3 className="text-3xl font-bold">Sample SAT Questions</h3>
@@ -269,10 +269,10 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg border border-neutral-200 overflow-hidden">
-            <div className="p-6 border-b border-neutral-200">
+          <div className="bg-white rounded-xl shadow-lg border border-site-border overflow-hidden">
+            <div className="p-6 border-b border-site-border">
               <div className="flex justify-between items-center mb-4">
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                <span className="bg-site-highlight text-site-primary px-3 py-1 rounded-full text-sm font-medium">
                   Math - Medium
                 </span>
                 <div className="flex items-center gap-1">
@@ -288,7 +288,7 @@ export default async function LandingPage() {
                 {["A) 1", "B) 3", "C) 7", "D) 11"].map((option) => (
                   <div
                     key={option}
-                    className="border border-neutral-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition"
+                    className="border border-site-border rounded-lg p-3 hover:bg-site-highlight hover:border-site-primary cursor-pointer transition"
                   >
                     {option}
                   </div>
@@ -298,7 +298,7 @@ export default async function LandingPage() {
             <div className="bg-neutral-50 p-4 text-center">
               <Link
                 href="/chat"
-                className="text-blue-600 font-medium hover:text-blue-800 transition"
+                className="text-site-primary font-medium hover:text-site-secondary transition"
               >
                 Get explanations in chat →
               </Link>
@@ -310,7 +310,7 @@ export default async function LandingPage() {
       {/* Blog Preview Section */}
       <section className="py-20 px-6 flex flex-col items-center">
         <div className="text-center mb-12">
-          <span className="bg-green-100 text-green-800 px-4 py-1 rounded-full font-medium">
+          <span className="bg-site-highlight text-site-accent px-4 py-1 rounded-full font-medium">
             Expert Content
           </span>
           <h3 className="text-3xl font-bold mt-4">Latest SAT Insights</h3>
@@ -323,9 +323,9 @@ export default async function LandingPage() {
               key={blog.slug}
               className="w-full"
             >
-              <div className="bg-white h-full rounded-xl border border-neutral-200 hover:shadow-md transition overflow-hidden flex flex-col">
+              <div className="bg-white h-full rounded-xl border border-site-border hover:shadow-md transition overflow-hidden flex flex-col">
                 {/* Placeholder colored bar to simulate featured image */}
-                <div className="h-3 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                <div className="h-3 bg-gradient-to-r from-site-primary to-site-accent"></div>
                 <div className="p-5 flex flex-col flex-1">
                   <span className="text-xs text-neutral-500 mb-2">
                     {new Date(blog.created_at).toLocaleDateString()}
@@ -337,7 +337,7 @@ export default async function LandingPage() {
                     {blog.content}
                   </p>
                   <div className="mt-4 pt-3 border-t border-neutral-100">
-                    <span className="text-blue-600 text-sm font-medium">
+                    <span className="text-site-primary text-sm font-medium">
                       Read more →
                     </span>
                   </div>
@@ -403,11 +403,11 @@ export default async function LandingPage() {
             ].map(({ name, gain, quote }) => (
               <div
                 key={name}
-                className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200"
+                className="bg-white p-6 rounded-xl shadow-sm border border-site-border"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-lg font-bold">{name}</span>
-                  <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-medium">
+                  <span className="bg-site-highlight text-site-accent px-2 py-0.5 rounded text-xs font-medium">
                     {gain}
                   </span>
                 </div>
@@ -448,7 +448,7 @@ export default async function LandingPage() {
           ].map(({ q, a }) => (
             <div
               key={q}
-              className="bg-white/80 backdrop-blur-sm border border-neutral-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
+              className="bg-white/80 backdrop-blur-sm border border-site-border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
               <h4 className="font-bold text-lg mb-2">{q}</h4>
               <p className="text-neutral-600">{a}</p>
@@ -458,18 +458,18 @@ export default async function LandingPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-700 text-white text-center">
+      <section className="py-20 px-6 bg-gradient-to-r from-site-primary to-site-secondary text-white text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold mb-6">
             Ready to Boost Your SAT Score?
           </h2>
-          <p className="text-xl mb-8 text-blue-100">
+          <p className="text-xl mb-8 text-site-highlight">
             Join thousands of students who&apos;ve improved their scores with
             SATCracker.
           </p>
           <Link
             href="/chat"
-            className="inline-block px-8 py-4 bg-white text-blue-700 rounded-full font-bold shadow-lg hover:shadow-xl transition"
+            className="inline-block px-8 py-4 bg-white text-site-primary rounded-full font-bold shadow-lg hover:shadow-xl transition"
           >
             Start Your SAT Prep Journey
           </Link>

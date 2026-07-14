@@ -89,32 +89,32 @@ export default async function TopicGuidePage({ params }: PageProps) {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <Link href={sectionHref[guide.section]} className="inline-flex items-center text-blue-700 hover:underline mb-6">
+        <Link href={sectionHref[guide.section]} className="inline-flex items-center text-site-primary hover:underline mb-6">
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back to {guide.section === "math" ? "Math" : "Reading & Writing"}
         </Link>
 
-        <div className="flex items-center gap-2 mb-3 text-blue-700">
+        <div className="flex items-center gap-2 mb-3 text-site-primary">
           <BookOpen className="w-5 h-5" />
           <span className="text-sm font-semibold uppercase">SAT Topic Guide</span>
         </div>
 
-        <h1 className="text-4xl font-bold mb-3 text-neutral-900">{guide.name}</h1>
-        <p className="text-lg text-neutral-600 mb-10">{guide.summary}</p>
+        <h1 className="text-4xl font-bold mb-3 text-site-text">{guide.name}</h1>
+        <p className="text-lg text-site-muted mb-10">{guide.summary}</p>
 
-        <article className="prose lg:prose-lg prose-headings:text-blue-800 prose-a:text-blue-600 max-w-none">
+        <article className="prose lg:prose-lg prose-headings:text-site-secondary prose-a:text-site-primary max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
             {guide.body}
           </ReactMarkdown>
         </article>
 
         {guide.related.length > 0 && (
-          <div className="border-t border-neutral-200 mt-12 pt-6">
-            <h2 className="font-semibold text-neutral-800 mb-3">Related Topics</h2>
+          <div className="border-t border-site-border mt-12 pt-6">
+            <h2 className="font-semibold text-site-text mb-3">Related Topics</h2>
             <ul className="space-y-1">
               {guide.related.map((r) => (
                 <li key={r.href}>
-                  <Link href={r.href} className="text-blue-700 hover:underline">
+                  <Link href={r.href} className="text-site-primary hover:underline">
                     {r.title}
                   </Link>
                 </li>
