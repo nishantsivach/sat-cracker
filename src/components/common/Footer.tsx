@@ -1,0 +1,108 @@
+"use client";
+
+import Link from "next/link";
+import { BarChart3, ArrowUpRight } from "lucide-react";
+
+const footerLinks = {
+  resources: [
+    { label: "SAT Blog", href: "/blogs" },
+    { label: "Practice Tests", href: "/practice" },
+    { label: "SAT Guide", href: "/sat" },
+  ],
+  company: [
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+    { label: "Privacy", href: "/privacy" },
+  ],
+};
+
+export function Footer() {
+  return (
+    <footer className="bg-white border-t border-site-border">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
+        {/* Top section */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
+          {/* Brand */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-site-primary flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-site-accent" />
+              </div>
+              <span className="text-lg font-bold text-site-primary tracking-tight">
+                SAT<span className="text-site-accent">Cracker</span>
+              </span>
+            </Link>
+
+            <p className="text-sm text-site-muted leading-relaxed max-w-xs">
+              AI-powered SAT prep that focuses on what actually matters — 
+              understanding your mistakes and improving your score.
+            </p>
+
+            <div className="mt-5 flex items-center gap-2 text-xs text-site-muted">
+              <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
+              Trusted by 25,000+ students
+            </div>
+          </div>
+
+          {/* Link groups */}
+          {Object.entries(footerLinks).map(([category, links]) => (
+            <div key={category}>
+              <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-site-muted mb-4">
+                {category}
+              </h3>
+              <ul className="space-y-3">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-site-text hover:text-site-secondary transition-colors inline-flex items-center gap-1 group"
+                    >
+                      {link.label}
+                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-200" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-site-muted mb-4">
+              Stay sharp
+            </h3>
+            <p className="text-sm text-site-muted mb-3 leading-relaxed">
+              Weekly SAT tips and strategy breakdowns. No spam.
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+              className="flex gap-2"
+            >
+              <input
+                type="email"
+                placeholder="your@email.com"
+                className="flex-1 bg-site-background border border-site-border rounded-lg px-3.5 py-2.5 text-sm text-site-text placeholder:text-site-muted focus:outline-none focus:border-site-accent/40 transition-colors"
+              />
+              <button
+                type="submit"
+                className="bg-site-primary text-white px-4 rounded-lg text-sm font-bold hover:bg-site-primary/90 transition-colors shrink-0"
+              >
+                Join
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-16 pt-6 border-t border-site-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-site-muted">
+          <p>© {new Date().getFullYear()} SATCracker. All rights reserved.</p>
+          <p>
+            Made for students who actually want to improve.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

@@ -6,23 +6,23 @@ export default {
     extend: {
       colors: {
         site: {
-          primary: "#4F46E5",     
-          secondary: "#2563EB",    
-          accent: "#14B8A6",       
+          primary: "#1B2A4A",      
+          secondary: "#2E5EAA",  
+          accent: "#C89B3C",       
 
           // Text colors
-          text: "#111827",         
-          muted: "#6B7280",       
+          text: "#14161B",
+          muted: "#5B6472",
 
           // UI colors
-          border: "#E5E7EB",
+          border: "#E2E4E8",
           surface: "#FFFFFF",
-          background: "#F8FAFC",
+          background: "#F7F7F5", 
 
-          highlight: "#EEF2FF",   
-          success: "#22C55E",      
-          warning: "#F59E0B",      
-          error: "#EF4444",        
+          highlight: "#EEF1F6",   
+          success: "#2F9E44",
+          warning: "#B45309",
+          error: "#DC2626",
         },
       },
     },

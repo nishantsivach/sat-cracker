@@ -1,7 +1,8 @@
 import { Layout } from "@/components";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { Calendar, Clock, ChevronRight } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import { RetryButton } from "@/components/common/RetryButton";
 
 const PAGE_SIZE = 10;
 
@@ -16,7 +17,6 @@ export default async function BlogsPage({
   const from = (currentPage - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  // Get paginated blogs and total count
   const {
     data: blogs,
     error,
@@ -30,20 +30,13 @@ export default async function BlogsPage({
   if (error) {
     return (
       <Layout>
-        <div className="flex flex-col justify-center items-center min-h-screen">
-          <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-md max-w-2xl">
-            <h3 className="text-red-800 text-xl font-semibold mb-2">
-              Oops! Something went wrong
+        <div className="flex flex-col justify-center items-center min-h-[60vh] px-6">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md text-center">
+            <h3 className="text-red-800 text-lg font-bold mb-2">
+              Couldn&apos;t load blogs
             </h3>
-            <p className="text-red-700">
-              We couldn&apos;t load the blogs at this time: {error.message}
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-            >
-              Try Again
-            </button>
+            <p className="text-red-600 text-sm mb-4">{error.message}</p>
+            <RetryButton className="px-5 py-2.5 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition-colors" />
           </div>
         </div>
       </Layout>
@@ -53,15 +46,17 @@ export default async function BlogsPage({
   if (!blogs || blogs.length === 0) {
     return (
       <Layout>
-        <div className="flex flex-col justify-center items-center min-h-screen p-6">
-          <h2 className="text-2xl font-bold text-gray-700 mb-2">
-            No Blogs Yet
+        <div className="flex flex-col justify-center items-center min-h-[60vh] px-6">
+          <BookOpen className="w-16 h-16 text-site-muted mb-4" />
+          <h2 className="text-2xl font-bold text-site-text mb-2">
+            No articles yet
           </h2>
+          <p className="text-site-muted mb-6">Check back soon for SAT tips and guides.</p>
           <Link
             href="/"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="px-5 py-2.5 bg-site-primary text-white rounded-xl text-sm font-bold hover:bg-site-primary/90 transition-colors"
           >
-            Go to Homepage
+            Back to home
           </Link>
         </div>
       </Layout>
@@ -76,127 +71,215 @@ export default async function BlogsPage({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(undefined, {
+    return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
     });
   };
 
+  // Strips both HTML tags and common markdown syntax (##, **, _, etc.) so
+  // preview snippets show clean text instead of raw formatting characters —
+  // blog_content.content is authored as markdown, not HTML.
+  const stripFormatting = (raw: string) => {
+    return (
+      raw
+        ?.replace(/<[^>]*>/g, "")
+        .replace(/[#*_`>~-]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .substring(0, 180) || ""
+    );
+  };
+
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 mb-12 text-white shadow-lg">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            SatCracker Blog
-          </h1>
-          <p className="text-blue-100 text-lg max-w-2xl">
-            Discover the latest insights, tutorials, and news from the
-            SatCracker team
-          </p>
-        </div>
+      {/* Hero — consistent with Hero.tsx: dot-grid texture, underline+label
+          eyebrow instead of a pill badge, no blurred glow blob. */}
+      <section className="bg-site-primary text-white relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
 
-        {/* Featured blog */}
+        <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-18">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <span className="h-px w-8 bg-site-accent" />
+            <p className="text-xs font-semibold tracking-widest text-site-accent uppercase">
+              Blog
+            </p>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+            SAT tips, strategies & guides
+          </h1>
+          <p className="text-white/60 leading-relaxed max-w-xl text-[15px]">
+            Practical advice for the SAT — written for students who want to
+            improve, not just read.
+          </p>
+
+          {count ? (
+            <p className="mt-4 text-xs text-white/30">
+              {count} article{count !== 1 ? "s" : ""}
+            </p>
+          ) : null}
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Featured post — only on page 1 */}
         {currentPage === 1 && blogs.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
-              Latest Post
+          <div className="mb-14">
+            <h2 className="text-lg font-bold text-site-text mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
+              Latest article
             </h2>
-            <div className="bg-white rounded-xl shadow-md p-6 md:p-8 border border-gray-100">
-              <Link href={`/blogs/${blogs[0].slug}`}>
-                <h3 className="text-3xl font-bold text-gray-900 hover:text-blue-600 mb-3">
-                  {blogs[0].title}
-                </h3>
-              </Link>
-              <div className="flex items-center text-gray-500 text-sm mb-4 space-x-4">
-                <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  <span>{formatDate(blogs[0].created_at)}</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-4 w-4 mr-1" />
-                  <span>{calculateReadTime(blogs[0].content)} min read</span>
-                </div>
-              </div>
-              <p className="text-gray-600 mb-4 line-clamp-4">
-                {blogs[0].content?.slice(0, 300)}...
-              </p>
-              <Link href={`/blogs/${blogs[0].slug}`}>
-                <span className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800">
-                  Continue Reading <ChevronRight className="h-4 w-4 ml-1" />
+
+            <Link
+              href={`/blogs/${blogs[0].slug}`}
+              className="group block bg-white rounded-2xl border border-site-border p-6 md:p-8 hover:border-site-secondary/40 hover:shadow-lg transition-all"
+            >
+              <div className="flex items-center gap-3 text-xs text-site-muted mb-3">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {formatDate(blogs[0].created_at)}
                 </span>
-              </Link>
-            </div>
+                <span className="w-1 h-1 rounded-full bg-site-border" />
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  {calculateReadTime(blogs[0].content)} min read
+                </span>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-site-text group-hover:text-site-secondary transition-colors mb-3">
+                {blogs[0].title}
+              </h3>
+
+              <p className="text-site-muted leading-relaxed text-[15px] line-clamp-3 mb-5">
+                {stripFormatting(blogs[0].content)}
+              </p>
+
+              <span className="inline-flex items-center gap-2 text-sm font-bold text-site-secondary group-hover:text-site-primary transition-colors">
+                Read article
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
           </div>
         )}
 
-        {/* Blog grid */}
+        {/* All articles */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">
-            All Articles
+          <h2 className="text-lg font-bold text-site-text mb-5 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
+            {currentPage === 1 ? "More articles" : `Page ${currentPage}`}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {blogs.slice(currentPage === 1 ? 1 : 0).map((blog) => (
-              <article
+              <Link
                 key={blog.slug}
-                className="bg-white rounded-xl shadow-sm border p-6 flex flex-col justify-between"
+                href={`/blogs/${blog.slug}`}
+                className="group bg-white rounded-2xl border border-site-border p-6 hover:border-site-secondary/40 hover:shadow-md transition-all flex flex-col"
               >
-                <div>
-                  <Link href={`/blogs/${blog.slug}`}>
-                    <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 mb-2">
-                      {blog.title}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center text-gray-500 text-sm mb-3 space-x-4">
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      <span>{formatDate(blog.created_at)}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>{calculateReadTime(blog.content)} min read</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {blog.content?.slice(0, 150)}...
-                  </p>
-                </div>
-                <Link href={`/blogs/${blog.slug}`}>
-                  <span className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800">
-                    Read More <ChevronRight className="h-4 w-4 ml-1" />
+                <div className="flex items-center gap-3 text-xs text-site-muted mb-3">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3 h-3" />
+                    {formatDate(blog.created_at)}
                   </span>
-                </Link>
-              </article>
+                  <span className="w-1 h-1 rounded-full bg-site-border" />
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3 h-3" />
+                    {calculateReadTime(blog.content)} min
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-bold text-site-text group-hover:text-site-secondary transition-colors mb-3 leading-snug">
+                  {blog.title}
+                </h3>
+
+                <p className="text-sm text-site-muted leading-relaxed line-clamp-3 mb-5 flex-1">
+                  {stripFormatting(blog.content)}
+                </p>
+
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-site-secondary group-hover:text-site-primary transition-colors mt-auto">
+                  Read more
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
 
-        {/* Pagination controls */}
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              const isActive = currentPage === page;
-              return (
-                <Link
-                  key={page}
-                  href={`?page=${page}`}
-                  className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200
-                    ${
-                      isActive
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300 border-gray-300"
-                    }`}
-                >
-                  {page}
-                </Link>
-              );
-            })}
+          <div className="flex justify-center items-center gap-2 mt-12">
+            {currentPage > 1 && (
+              <Link
+                href={`?page=${currentPage - 1}`}
+                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border rounded-xl hover:border-site-secondary/40 hover:bg-site-highlight transition-all"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </Link>
+            )}
+
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: totalPages }, (_, i) => {
+                const page = i + 1;
+                const isActive = currentPage === page;
+
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  Math.abs(page - currentPage) <= 1
+                ) {
+                  return (
+                    <Link
+                      key={page}
+                      href={`?page=${page}`}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
+                        isActive
+                          ? "bg-site-primary text-white shadow-sm"
+                          : "text-site-text bg-white border border-site-border hover:border-site-secondary/40 hover:bg-site-highlight"
+                      }`}
+                    >
+                      {page}
+                    </Link>
+                  );
+                }
+
+                if (page === 2 || page === totalPages - 1) {
+                  return (
+                    <span
+                      key={page}
+                      className="w-10 h-10 flex items-center justify-center text-site-muted text-sm"
+                    >
+                      ...
+                    </span>
+                  );
+                }
+
+                return null;
+              })}
+            </div>
+
+            {currentPage < totalPages && (
+              <Link
+                href={`?page=${currentPage + 1}`}
+                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border rounded-xl hover:border-site-secondary/40 hover:bg-site-highlight transition-all"
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            )}
           </div>
         )}
-      </div>
+      </section>
     </Layout>
   );
 }
