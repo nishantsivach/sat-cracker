@@ -7,7 +7,6 @@ import { createClient } from "@/utils/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import {
   Home,
-  MessageCircle,
   User as UserIcon,
   LogOut,
   Menu,
@@ -16,6 +15,8 @@ import {
   GraduationCap,
   FileText,
   Target,
+  WandSparkles,
+  BookOpen,
 } from "lucide-react";
 import { Logo } from "./Logo";
 
@@ -51,23 +52,28 @@ export function Header() {
   }
 
   const navItems = [
-    { href: "/", icon: <Home className="w-4 h-4" />, text: "Home" },
-    {
-      href: "/sat",
-      icon: <GraduationCap className="w-4 h-4" />,
-      text: "SAT Guide",
-    },
-    {
-      href: "/blogs",
-      icon: <FileText className="w-4 h-4" />,
-      text: "Blog",
-    },
-    {
-      href: "/practice",
-      icon: <Target className="w-4 h-4" />,
-      text: "Practice",
-    },
-  ];
+  { href: "/", icon: <Home className="w-4 h-4" />, text: "Home" },
+  {
+    href: "/courses",
+    icon: <BookOpen className="w-4 h-4" />,
+    text: "Courses",
+  },
+  {
+    href: "/practice",
+    icon: <Target className="w-4 h-4" />,
+    text: "Practice",
+  },
+  {
+    href: "/sat",
+    icon: <GraduationCap className="w-4 h-4" />,
+    text: "SAT Guide",
+  },
+  {
+    href: "/blogs",
+    icon: <FileText className="w-4 h-4" />,
+    text: "Blog",
+  },
+];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-b border-site-border">
@@ -133,8 +139,8 @@ export function Header() {
             href="/chat"
             className="ml-2 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-site-secondary to-site-primary text-white text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
           >
-            <MessageCircle className="w-4 h-4" />
-            AI Tutor
+            <WandSparkles className="w-4 h-4" />
+            SAT Coach
           </Link>
         </nav>
 
@@ -153,7 +159,7 @@ export function Header() {
             href="/chat"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-site-secondary text-white text-xs font-bold"
           >
-            <MessageCircle className="w-3 h-3" />
+            <WandSparkles className="w-3 h-3" />
             Chat
           </Link>
 
@@ -250,8 +256,8 @@ export function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-site-secondary to-site-primary text-white text-sm font-bold"
             >
-              <MessageCircle className="w-4 h-4" />
-              Chat with AI Tutor
+              <WandSparkles className="w-4 h-4" />
+              Chat with AI SAT Coach
             </Link>
           </div>
         </div>
