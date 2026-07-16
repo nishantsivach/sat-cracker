@@ -2,10 +2,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
-  Brain,
   Sparkles,
   TrendingUp,
-  Target,
   Star,
   ShieldCheck,
   Zap,
@@ -50,7 +48,6 @@ export default function Hero() {
         className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-site-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"
         aria-hidden="true"
       />
-      {/* Extra glow behind glass panel */}
       <div
         className="absolute top-1/2 right-10 w-[400px] h-[400px] bg-site-accent/5 rounded-full blur-3xl pointer-events-none"
         aria-hidden="true"
@@ -59,6 +56,7 @@ export default function Hero() {
       <div className="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
         {/* LEFT */}
         <div className="min-h-[400px] lg:min-h-[500px]">
+          {/* Badge — only ONE */}
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-6">
             <Sparkles className="w-3.5 h-3.5 text-site-accent shrink-0" />
             <span className="text-xs font-semibold tracking-wider text-site-accent uppercase whitespace-nowrap">
@@ -67,18 +65,19 @@ export default function Hero() {
           </div>
 
           <h1 className="text-[2.75rem] lg:text-[3.75rem] font-black leading-[1.02] tracking-tight">
-            The SAT doesn&apos;t
+            Don&apos;t cheat on yourself.
             <br />
-            test intelligence.
-            <span className="block bg-gradient-to-r from-site-accent via-amber-300 to-site-accent bg-clip-text text-transparent">
-              It tests preparation.
+            <span className="bg-gradient-to-r from-site-accent via-amber-300 to-site-accent bg-clip-text text-transparent">
+              Preparation &gt;&gt; Intelligence
+            </span>
+            <span className="block text-lg text-white/50 font-normal mt-2">
+              (99% of the time)
             </span>
           </h1>
 
           <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-lg">
-            25,000+ students use adaptive practice and instant AI
-            explanations to find their weak spots and fix them — before test
-            day, not during it.
+            25,000+ students stopped guessing and started preparing with AI-powered
+            practice and instant explanations.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 min-h-[28px]">
@@ -166,7 +165,6 @@ export default function Hero() {
             ))}
           </div>
         </div>
-
         {/* RIGHT — Glassmorphism Panel with Zig-Zag White Cards */}
         <div
           className="relative lg:ml-auto w-full flex flex-col justify-center"
@@ -183,32 +181,24 @@ export default function Hero() {
           {/* Glass Panel Container */}
           <div
             className="relative rounded-3xl overflow-hidden"
-            style={{ height: "430px" }}
+            style={{ height: "450px" }}
           >
-            {/* Glass background */}
             <div className="absolute inset-0 bg-white/[0.04] backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl" />
-            {/* Inner glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-white/[0.01] rounded-3xl pointer-events-none" />
-            {/* Top shine */}
             <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
 
-            {/* Cards inside glass panel — zig-zag with MORE SPACE */}
             <div className="relative z-10 p-6 h-full">
+
               {/* Card 1 — top left */}
               <div
                 className="absolute left-6 right-16 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
-                style={{ top: "20px", height: "130px" }}
+                style={{ top: "35px", height: "130px" }}
               >
-                <div className="absolute top-0 left-0 bottom-0 w-1 bg-amber-400 rounded-l-2xl" />
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                      <Target className="w-4 h-4 text-amber-600" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-site-text">Smart practice</span>
-                      <p className="text-[10px] text-site-muted">Adaptive question sets</p>
-                    </div>
+                <div className="absolute top-0 left-0 right-0 h-1 bg-amber-400 rounded-t-2xl" />
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <span className="text-sm font-bold text-site-text">Smart practice</span>
+                    <p className="text-[10px] text-site-muted">Adaptive question sets</p>
                   </div>
                   <span className="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
@@ -233,19 +223,14 @@ export default function Hero() {
 
               {/* Card 2 — middle right */}
               <div
-                className="absolute left-18 right-6 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
-                style={{ top: "160px", height: "108px" }}
+                className="absolute left-18 right-5 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
+                style={{ top: "180px", height: "108px" }}
               >
-                <div className="absolute top-0 left-0 bottom-0 w-1 bg-blue-400 rounded-l-2xl" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-blue-400 rounded-t-2xl" />
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                      <TrendingUp className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-site-text">Progress tracking</span>
-                      <p className="text-[10px] text-site-muted">Real-time insights</p>
-                    </div>
+                  <div>
+                    <span className="text-sm font-bold text-site-text">Progress tracking</span>
+                    <p className="text-[10px] text-site-muted">Real-time insights</p>
                   </div>
                   <span className="text-2xl font-black text-site-primary">1380</span>
                 </div>
@@ -264,18 +249,13 @@ export default function Hero() {
               {/* Card 3 — bottom left */}
               <div
                 className="absolute left-6 right-16 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
-                style={{ top: "280px", height: "130px" }}
+                style={{ top: "300px", height: "115px" }}
               >
-                <div className="absolute top-0 left-0 bottom-0 w-1 bg-purple-400 rounded-l-2xl" />
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-                      <Brain className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-site-text">AI tutor</span>
-                      <p className="text-[10px] text-site-muted">Instant explanations</p>
-                    </div>
+                <div className="absolute top-0 left-0 right-0 h-1 bg-purple-400 rounded-t-2xl" />
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <span className="text-sm font-bold text-site-text">AI tutor</span>
+                    <p className="text-[10px] text-site-muted">Instant explanations</p>
                   </div>
                   <span className="flex items-center gap-1 text-[11px] text-site-muted whitespace-nowrap">
                     <Zap className="w-3 h-3 text-amber-500" />
@@ -287,6 +267,7 @@ export default function Hero() {
                   <span className="font-bold text-green-600">x = 2</span>. Most SAT problems follow this exact pattern.&rdquo;
                 </p>
               </div>
+
             </div>
           </div>
         </div>

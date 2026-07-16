@@ -62,7 +62,7 @@ export default function Features() {
           </h2>
 
           <p className="mt-4 text-site-muted text-lg leading-relaxed max-w-xl">
-            AI explanations, adaptive practice, and real progress tracking — 
+            AI explanations, adaptive practice, and real progress tracking —
             all built around how students actually prep, not how textbooks say they should.
           </p>
         </div>
@@ -72,29 +72,36 @@ export default function Features() {
             const Icon = feature.icon;
             const isLast = i === features.length - 1 || i === features.length - 2;
             const isRightColumn = i % 2 === 1;
+            // Row index: 0,0,1,1,2,2 (pairs)
+            const rowIndex = Math.floor(i / 2);
+            // Zig-zag gradient: row 0 left (i=0), row 1 right (i=3), row 2 left (i=4)
+            const hasGradient = (rowIndex === 0 && i === 0) || (rowIndex === 1 && i === 3) || (rowIndex === 2 && i === 4);
 
             return (
               <div
                 key={feature.title}
-                className={`group flex gap-5 py-8 ${
-                  !isLast ? "border-b border-site-border" : ""
-                } ${
-                  !isRightColumn
+                className={`group relative py-8 ${!isLast ? "border-b border-site-border" : ""
+                  } ${!isRightColumn
                     ? "md:border-r md:pr-14 border-site-border"
                     : "md:pl-14"
-                } ${isRightColumn && i < features.length - 1 ? "border-b md:border-b border-site-border" : ""}`}
+                  } ${isRightColumn && i < features.length - 1 ? "border-b md:border-b border-site-border" : ""}`}
               >
-                <div className="w-11 h-11 rounded-xl bg-site-highlight flex items-center justify-center shrink-0 group-hover:bg-site-primary/10 group-hover:scale-110 transition-all duration-300">
-                  <Icon className="w-5 h-5 text-site-secondary group-hover:text-site-primary transition-colors" />
-                </div>
+                {hasGradient && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-white via-site-accent/[0.06] to-site-accent/[0.15] pointer-events-none" />
+                )}
 
-                <div>
-                  <h3 className="text-lg font-bold text-site-text group-hover:text-site-primary transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] text-site-muted leading-relaxed">
-                    {feature.text}
-                  </p>
+                <div className="relative flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 text-site-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-site-text">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-1.5 text-[14px] text-site-muted leading-relaxed">
+                      {feature.text}
+                    </p>
+                  </div>
                 </div>
               </div>
             );

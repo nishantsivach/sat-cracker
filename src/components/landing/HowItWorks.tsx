@@ -1,37 +1,31 @@
-import { Target, Brain, BookOpen, Award } from "lucide-react";
-
 const steps = [
   {
     number: "01",
-    icon: Target,
     title: "See where you actually stand",
     text: "Take a diagnostic that mirrors the real SAT. No sugar-coating — you'll know exactly what you're walking into and what needs work.",
-    color: "bg-site-accent",
-    ringColor: "ring-site-accent/20",
+    accent: "border-l-site-accent",
+    badge: "bg-site-accent",
   },
   {
     number: "02",
-    icon: Brain,
     title: "Get a plan that makes sense",
     text: "Our AI looks at your specific mistakes and builds a roadmap around what you actually need to fix. No generic schedules.",
-    color: "bg-site-secondary",
-    ringColor: "ring-site-secondary/20",
+    accent: "border-l-site-secondary",
+    badge: "bg-site-secondary",
   },
   {
     number: "03",
-    icon: BookOpen,
     title: "Practice what matters",
     text: "Stop doing random practice tests. Focus on the question types and concepts where you're losing points.",
-    color: "bg-site-primary",
-    ringColor: "ring-site-primary/20",
+    accent: "border-l-site-primary",
+    badge: "bg-site-primary",
   },
   {
     number: "04",
-    icon: Award,
     title: "Watch the numbers go up",
     text: "Track your progress week by week. Most students see real improvement within the first two weeks.",
-    color: "bg-site-accent",
-    ringColor: "ring-site-accent/20",
+    accent: "border-l-site-accent",
+    badge: "bg-site-accent",
   },
 ];
 
@@ -48,7 +42,7 @@ export default function HowItWorks() {
       />
 
       <div className="max-w-6xl mx-auto relative">
-        <div className="mb-16 md:mb-20">
+        <div className="mb-14 md:mb-18">
           <div className="inline-flex items-center gap-2 bg-site-highlight rounded-full px-4 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
@@ -62,48 +56,41 @@ export default function HowItWorks() {
           </h2>
 
           <p className="mt-4 text-site-muted text-lg leading-relaxed max-w-xl">
-            Four focused steps. No busywork. No guesswork. Just a clear path forward.
+            Four focused steps. No busywork. No guesswork.
           </p>
         </div>
 
         {/* Timeline */}
         <div className="relative">
           {/* Center vertical line */}
-          <div className="absolute left-1/2 top-3 bottom-3 w-px -translate-x-1/2 hidden md:block">
-            <div className="h-full w-px bg-gradient-to-b from-site-accent/40 via-site-secondary/30 to-site-accent/40" />
+          <div className="absolute left-1/2 top-4 bottom-4 w-px -translate-x-1/2 hidden md:block">
+            <div className="h-full w-px bg-gradient-to-b from-amber-400/40 via-blue-400/30 to-amber-400/40" />
           </div>
 
           {/* Mobile vertical line */}
-          <div className="absolute left-9 top-3 bottom-3 w-px bg-site-border md:hidden" />
+          <div className="absolute left-9 top-4 bottom-4 w-px bg-site-border md:hidden" />
 
           <div>
             {steps.map((step, index) => {
-              const Icon = step.icon;
               const isLeft = index % 2 === 0;
 
               return (
                 <div
                   key={step.number}
-                  className={`relative ${
-                    index < steps.length - 1 ? "mb-8 md:mb-10" : ""
-                  }`}
+                  className={`relative ${index < steps.length - 1 ? "mb-6 md:mb-10" : ""}`}
                 >
-                  {/* Desktop: Center number badge */}
-                  <div className="hidden md:flex absolute left-1/2 top-9 -translate-x-1/2 items-center justify-center z-10">
-                    <div
-                      className={`w-11 h-11 rounded-full ${step.color} border-[3px] border-site-background ring-2 ${step.ringColor} flex items-center justify-center shadow-md`}
-                    >
+                  {/* Desktop: Number badge on timeline */}
+                  <div className="hidden md:flex absolute left-1/2 top-10 -translate-x-1/2 items-center justify-center z-10">
+                    <div className={`w-10 h-10 rounded-full ${step.badge} ring-[2px] ring-white ring-offset-2 ring-offset-site-background flex items-center justify-center shadow-md`}>
                       <span className="text-white text-sm font-mono font-bold">
                         {step.number}
                       </span>
                     </div>
                   </div>
 
-                  {/* Mobile: Left number badge */}
-                  <div className="md:hidden absolute left-9 top-9 -translate-x-1/2 z-10">
-                    <div
-                      className={`w-9 h-9 rounded-full ${step.color} flex items-center justify-center shadow-md`}
-                    >
+                  {/* Mobile: Number badge */}
+                  <div className="md:hidden absolute left-9 top-10 -translate-x-1/2 z-10">
+                    <div className={`w-8 h-8 rounded-full ${step.badge} ring-[4px] ring-white flex items-center justify-center shadow-md`}>
                       <span className="text-white text-xs font-mono font-bold">
                         {step.number}
                       </span>
@@ -112,36 +99,24 @@ export default function HowItWorks() {
 
                   {/* Card Container */}
                   <div
-                    className={`md:w-[calc(50%-2.75rem)] ${
-                      isLeft
-                        ? "md:mr-auto md:pr-6"
-                        : "md:ml-auto md:pl-6"
-                    } pl-20 md:pl-0`}
+                    className={`md:w-[calc(50%-2.5rem)] ${isLeft ? "md:mr-auto md:pr-5" : "md:ml-auto md:pl-5"
+                      } pl-20 md:pl-0`}
                   >
+                    {/* Connector line */}
                     <div
-                      className={`hidden md:block absolute top-9 h-px w-8 bg-site-border ${
-                        isLeft
-                          ? "right-[calc(50%+1.375rem)]"
-                          : "left-[calc(50%+1.375rem)]"
-                      }`}
+                      className={`hidden md:block absolute top-10 h-px w-8 bg-site-border ${isLeft
+                          ? "right-[calc(50%+1.25rem)]"
+                          : "left-[calc(50%+1.25rem)]"
+                        }`}
                     />
 
-                    <div className="group relative bg-white rounded-2xl border border-site-border p-6 md:p-7 hover:border-site-accent/25 hover:shadow-lg hover:shadow-site-accent/[0.06] transition-all duration-300">
-                      <div className="flex items-start gap-4">
-                        {/* Icon */}
-                        <div className="w-11 h-11 rounded-xl bg-site-highlight flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                          <Icon className="w-5 h-5 text-site-secondary" />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-bold text-site-text group-hover:text-site-primary transition-colors leading-snug">
-                            {step.title}
-                          </h3>
-                          <p className="mt-2 text-[15px] text-site-muted leading-relaxed">
-                            {step.text}
-                          </p>
-                        </div>
-                      </div>
+                    <div className={`group relative bg-white rounded-2xl border border-site-border border-l-4 ${step.accent} p-5 md:p-6 hover:shadow-lg hover:shadow-site-primary/[0.04] hover:-translate-y-0.5 transition-all duration-300`}>
+                      <h3 className="text-base font-bold text-site-text group-hover:text-site-primary transition-colors leading-snug">
+                        {step.title}
+                      </h3>
+                      <p className="mt-1.5 text-[14px] text-site-muted leading-relaxed">
+                        {step.text}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -75,13 +75,13 @@ export default function SatSections() {
                 key={section.title}
                 className="group relative bg-white rounded-2xl border border-site-border p-8 md:p-10 hover:shadow-xl hover:shadow-site-primary/[0.04] hover:-translate-y-1 transition-all duration-300"
               >
-
                 <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br ${section.lightBg} via-transparent to-transparent`} />
 
                 <div className="relative">
+                  {/* Icon + stat */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-xl ${section.color} flex items-center justify-center shadow-sm`}>
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className={`w-11 h-11 rounded-xl ${section.color} flex items-center justify-center shadow-sm`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-xs font-mono font-bold text-site-muted bg-site-highlight rounded-lg px-3 py-1.5">
                       {section.stat}
@@ -91,7 +91,7 @@ export default function SatSections() {
                   <h3 className="text-2xl font-black text-site-text group-hover:text-site-primary transition-colors">
                     {section.title}
                   </h3>
-                  <p className="text-sm text-site-accent font-medium mt-1">
+                  <p className="text-sm text-site-muted font-medium mt-1">
                     {section.subtitle}
                   </p>
                   <p className="mt-3 text-site-muted leading-relaxed text-[15px]">
@@ -101,7 +101,7 @@ export default function SatSections() {
                   <ul className="mt-7 space-y-3">
                     {section.points.map((point) => (
                       <li key={point} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-site-success shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-site-success shrink-0 mt-0.5" />
                         <span className="text-sm text-site-text leading-relaxed">
                           {point}
                         </span>
@@ -109,13 +109,12 @@ export default function SatSections() {
                     ))}
                   </ul>
 
-                  {/* CTA */}
                   <Link
                     href={section.href}
-                    className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-site-primary group/link hover:text-site-secondary transition-colors"
+                    className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-site-text group-hover:text-site-primary transition-colors"
                   >
                     {section.button}
-                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>

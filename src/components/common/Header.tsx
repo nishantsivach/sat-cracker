@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
@@ -17,14 +17,17 @@ import {
   Target,
   WandSparkles,
   BookOpen,
+  BarChart3,
 } from "lucide-react";
-import { Logo } from "./Logo";
+import Image from "next/image";
 
 export function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const logoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -40,46 +43,66 @@ export function Header() {
       }
     );
 
-    return () => subscription.subscription.unsubscribe();
+    // Close popover on outside click
+    const handleClickOutside = (e: MouseEvent) => {
+      if (logoutRef.current && !logoutRef.current.contains(e.target as Node)) {
+        setShowLogoutConfirm(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      subscription.subscription.unsubscribe();
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
+    setShowLogoutConfirm(false);
     setMobileMenuOpen(false);
     router.push("/");
     router.refresh();
   }
 
   const navItems = [
-  { href: "/", icon: <Home className="w-4 h-4" />, text: "Home" },
-  {
-    href: "/courses",
-    icon: <BookOpen className="w-4 h-4" />,
-    text: "Courses",
-  },
-  {
-    href: "/practice",
-    icon: <Target className="w-4 h-4" />,
-    text: "Practice",
-  },
-  {
-    href: "/sat",
-    icon: <GraduationCap className="w-4 h-4" />,
-    text: "SAT Guide",
-  },
-  {
-    href: "/blogs",
-    icon: <FileText className="w-4 h-4" />,
-    text: "Blog",
-  },
-];
+    { href: "/", icon: <Home className="w-4 h-4" />, text: "Home" },
+    {
+      href: "/courses",
+      icon: <BookOpen className="w-4 h-4" />,
+      text: "Courses",
+    },
+    {
+      href: "/practice",
+      icon: <Target className="w-4 h-4" />,
+      text: "Practice",
+    },
+    {
+      href: "/sat",
+      icon: <GraduationCap className="w-4 h-4" />,
+      text: "SAT Guide",
+    },
+    {
+      href: "/blogs",
+      icon: <FileText className="w-4 h-4" />,
+      text: "Blog",
+    },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-b border-site-border">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
         {/* Logo */}
-        <Logo />
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Image
+            src="/logo.png"
+            alt="SATCracker"
+            width={180}
+            height={48}
+            className="h-12 w-auto"
+          />
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1">
@@ -100,6 +123,14 @@ export function Header() {
               {user ? (
                 <div className="flex items-center gap-1 ml-1">
                   <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium text-site-muted hover:text-site-primary hover:bg-site-highlight transition-all"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+
+                  <Link
                     href="/profile"
                     className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium text-site-muted hover:text-site-primary hover:bg-site-highlight transition-all"
                   >
@@ -108,12 +139,42 @@ export function Header() {
                     </div>
                     Profile
                   </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-site-muted hover:text-red-600 hover:bg-red-50 transition-all"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
+
+                  {/* Logout with confirmation popover */}
+                  <div className="relative" ref={logoutRef}>
+                    <button
+                      onClick={() => setShowLogoutConfirm(!showLogoutConfirm)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-site-muted hover:text-red-600 hover:bg-red-50 transition-all"
+                    >
+                      <LogOut className="w-4 h-4" /> Logout
+                    </button>
+
+                    {/* Confirmation popover */}
+                    {showLogoutConfirm && (
+                      <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl border border-site-border shadow-xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <p className="text-sm font-semibold text-site-text mb-1">
+                          Log out of SATCracker?
+                        </p>
+                        <p className="text-xs text-site-muted mb-4">
+                          You&apos;ll need to log back in to access your progress and practice data.
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setShowLogoutConfirm(false)}
+                            className="flex-1 px-3 py-2 rounded-lg text-sm font-medium text-site-text border border-site-border hover:bg-site-highlight transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleLogout}
+                            className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors"
+                          >
+                            Log out
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 ml-2">
@@ -203,6 +264,19 @@ export function Header() {
                 {user ? (
                   <>
                     <Link
+                      href="/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-3 rounded-xl text-site-text hover:bg-site-highlight transition-colors"
+                    >
+                      <span className="flex items-center gap-3 text-sm font-medium">
+                        <span className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center">
+                          <BarChart3 className="w-4 h-4" />
+                        </span>
+                        Dashboard
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-site-muted" />
+                    </Link>
+                    <Link
                       href="/profile"
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center justify-between px-3 py-3 rounded-xl text-site-text hover:bg-site-highlight transition-colors"
@@ -215,7 +289,10 @@ export function Header() {
                       </span>
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
                       className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors text-sm font-medium mt-1"
                     >
                       <LogOut className="w-4 h-4" />

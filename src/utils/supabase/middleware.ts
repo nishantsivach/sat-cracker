@@ -1,9 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-// Routes that require a signed-in user. Add to this list as more gated
-// pages (dashboard, mock-tests, etc.) are built in later phases.
-const PROTECTED_ROUTES = ["/profile"];
+const PROTECTED_ROUTES = ["/profile", "/dashboard"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -27,8 +25,6 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // Refresh the session if expired — required for Server Components, which
-  // can't set cookies themselves.
   const {
     data: { user },
   } = await supabase.auth.getUser();
