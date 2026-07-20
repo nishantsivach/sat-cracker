@@ -1,8 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-
 const PROTECTED_ROUTES = ["/profile", "/dashboard", "/mock-tests"];
+const ADMIN_ROUTE_PREFIX = "/admin";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -26,20 +26,34 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isProtected = PROTECTED_ROUTES.some((route) =>
-    request.nextUrl.pathname.startsWith(route),
-  );
+  const isAdminRoute = request.nextUrl.pathname.startsWith(ADMIN_ROUTE_PREFIX);
+  const isProtected =
+    isAdminRoute ||
+    PROTECTED_ROUTES.some((route) => request.nextUrl.pathname.startsWith(route));
 
   if (isProtected && !user) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectTo", request.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if (isAdminRoute && user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role !== "admin") {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/";
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   return response;
