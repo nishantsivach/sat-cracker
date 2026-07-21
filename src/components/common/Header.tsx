@@ -18,6 +18,7 @@ import {
   WandSparkles,
   BookOpen,
   BarChart3,
+  ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -25,6 +26,7 @@ export function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -33,8 +35,22 @@ export function Header() {
   useEffect(() => {
     const supabase = createClient();
 
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       setUser(data.user);
+
+      if (data.user) {
+        try {
+          const res = await fetch("/api/admin/me");
+
+          if (res.ok) {
+            const json = await res.json();
+            setIsAdmin(json.isAdmin);
+          }
+        } catch {
+          setIsAdmin(false);
+        }
+      }
+
       setAuthLoading(false);
     });
 
@@ -81,7 +97,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-b border-site-border">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <Image src="/logo.png" alt="SATCracker" width={180} height={48} className="h-12 w-auto" />
+          <Image src="/logo.svg" alt="SATCracker" width={180} height={48} className="h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -118,6 +134,16 @@ export function Header() {
                           <p className="px-3 py-2 text-xs text-site-muted truncate border-b border-site-border mb-1">
                             {user.email}
                           </p>
+                          {isAdmin && (
+                            <Link
+                              href="/admin"
+                              onClick={() => setShowAccountMenu(false)}
+                              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-site-text hover:bg-site-highlight transition-colors"
+                            >
+                              <ShieldCheck className="w-4 h-4 text-site-muted" />
+                              Admin Panel
+                            </Link>
+                          )}
                           <Link
                             href="/dashboard"
                             onClick={() => setShowAccountMenu(false)}
@@ -254,6 +280,16 @@ export function Header() {
               <div className="pt-2 mt-2 border-t border-site-border">
                 {user ? (
                   <>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setShowAccountMenu(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-site-text hover:bg-site-highlight transition-colors"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-site-muted" />
+                        Admin Panel
+                      </Link>
+                    )}
                     <Link
                       href="/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
