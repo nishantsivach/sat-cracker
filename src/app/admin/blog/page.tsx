@@ -1,9 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
-import MockTestsList from "./MockTestsList";
+import BlogList from "./BlogList";
 
 const PAGE_SIZE = 20;
 
-export default async function AdminMockTestsPage({
+export default async function AdminBlogPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string; search?: string }>;
@@ -13,10 +13,8 @@ export default async function AdminMockTestsPage({
   const supabase = await createClient();
 
   let query = supabase
-    .from("mock_test")
-    .select("id, title, duration_minutes, is_published, created_at, mock_test_question(count)", {
-      count: "exact",
-    })
+    .from("blog_content")
+    .select("id, title, slug, is_published, created_at", { count: "exact" })
     .order("created_at", { ascending: false });
 
   if (search) query = query.ilike("title", `%${search}%`);
@@ -24,14 +22,9 @@ export default async function AdminMockTestsPage({
   const from = (currentPage - 1) * PAGE_SIZE;
   const { data, count } = await query.range(from, from + PAGE_SIZE - 1);
 
-  const tests = (data ?? []).map((t) => ({
-    ...t,
-    question_count: Array.isArray(t.mock_test_question) ? t.mock_test_question[0]?.count ?? 0 : 0,
-  }));
-
   return (
-    <MockTestsList
-      tests={tests}
+    <BlogList
+      posts={data ?? []}
       totalCount={count ?? 0}
       currentPage={currentPage}
       pageSize={PAGE_SIZE}

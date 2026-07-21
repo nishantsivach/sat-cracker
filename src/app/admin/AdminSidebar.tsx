@@ -19,10 +19,10 @@ const NAV_ITEMS = [
   { href: "/admin/courses", label: "Courses", icon: BookOpen, enabled: true },
   { href: "/admin/questions", label: "Questions", icon: HelpCircle, enabled: true },
   { href: "/admin/mock-tests", label: "Mock Tests", icon: ClipboardList, enabled: true },
-  { href: "/admin/seo-content", label: "SEO Content", icon: FileText, enabled: false },
-  { href: "/admin/topic-guides", label: "Topic Guides", icon: Map, enabled: false },
-  { href: "/admin/colleges", label: "Colleges", icon: GraduationCap, enabled: false },
-  { href: "/admin/blog", label: "Blog", icon: Newspaper, enabled: false },
+  { href: "/admin/seo-content", label: "SEO Content", icon: FileText, enabled: true },
+  { href: "/admin/topic-guides", label: "Topic Guides", icon: Map, enabled: true },
+  { href: "/admin/colleges", label: "Colleges", icon: GraduationCap, enabled: true },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper, enabled: true },
 ];
 
 export default function AdminSidebar() {

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { BarChart3 } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
+import Image from "next/image";
 
 export default async function AdminLayout({
   children,
@@ -31,12 +31,7 @@ export default async function AdminLayout({
         <div className="px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-site-primary flex items-center justify-center">
-                <BarChart3 className="w-3.5 h-3.5 text-site-accent" />
-              </div>
-              <span className="text-sm font-bold text-site-primary">
-                SAT<span className="text-site-accent">Cracker</span>
-              </span>
+              <Image src="/logo.svg" alt="SATCracker" width={180} height={48} className="h-8 w-auto" />
             </div>
             <span className="w-px h-5 bg-site-border" />
             <span className="text-[10px] font-bold uppercase tracking-wider bg-site-accent/10 text-site-accent px-2.5 py-1 rounded-full">

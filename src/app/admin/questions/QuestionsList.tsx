@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Plus, Pencil, Trash2, Search, HelpCircle, AlertTriangle } from "lucide-react";
+import Pagination from "@/components/common/Pagination";
 
 type Question = {
   id: string;
@@ -15,7 +17,7 @@ type Question = {
 };
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  easy: "bg-green-50 text-site-success border-green-200",
+  easy: "bg-green-50 text-green-700 border-green-200",
   medium: "bg-amber-50 text-amber-700 border-amber-200",
   hard: "bg-red-50 text-red-600 border-red-200",
 };
@@ -25,30 +27,59 @@ const SECTION_LABELS: Record<string, string> = {
   "reading-writing": "Reading & Writing",
 };
 
-export default function QuestionsList({ initialQuestions }: { initialQuestions: Question[] }) {
-  const [questions, setQuestions] = useState(initialQuestions);
-  const [search, setSearch] = useState("");
-  const [sectionFilter, setSectionFilter] = useState<string>("all");
+export default function QuestionsList({
+  questions,
+  totalCount,
+  currentPage,
+  pageSize,
+  search: initialSearch,
+  section: initialSection,
+}: {
+  questions: Question[];
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  search: string;
+  section: string;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [search, setSearch] = useState(initialSearch);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [localQuestions, setLocalQuestions] = useState(questions);
 
-  const filtered = questions.filter((q) => {
-    const matchesSearch = q.stem.toLowerCase().includes(search.toLowerCase());
-    const matchesSection = sectionFilter === "all" || q.section === sectionFilter;
-    return matchesSearch && matchesSection;
-  });
+  useEffect(() => setLocalQuestions(questions), [questions]);
+
+  const navigate = (nextSearch: string, nextSection: string) => {
+    const params = new URLSearchParams();
+    if (nextSearch) params.set("search", nextSearch);
+    if (nextSection !== "all") params.set("section", nextSection);
+    params.set("page", "1");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    if (search === initialSearch) return;
+    const timeout = setTimeout(() => navigate(search, initialSection), 400);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const deleteQuestion = async (id: string) => {
     setBusyId(id);
     try {
       const res = await fetch(`/api/admin/questions/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      setQuestions((prev) => prev.filter((q) => q.id !== id));
+      setLocalQuestions((prev) => prev.filter((q) => q.id !== id));
+      router.refresh();
     } finally {
       setBusyId(null);
       setDeleteTarget(null);
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   return (
     <div>
@@ -57,7 +88,7 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
         <div>
           <h1 className="text-2xl font-bold text-site-text">Questions</h1>
           <p className="text-sm text-site-muted mt-0.5">
-            {questions.length} question{questions.length !== 1 ? "s" : ""} total
+            {totalCount} question{totalCount !== 1 ? "s" : ""} total
           </p>
         </div>
         <Link
@@ -81,8 +112,8 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
           />
         </div>
         <select
-          value={sectionFilter}
-          onChange={(e) => setSectionFilter(e.target.value)}
+          value={initialSection}
+          onChange={(e) => navigate(search, e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-site-border bg-white text-site-text text-sm focus:outline-none focus:border-site-accent/40 focus:ring-4 focus:ring-site-accent/10 transition-all cursor-pointer"
         >
           <option value="all">All sections</option>
@@ -114,7 +145,7 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
             </tr>
           </thead>
           <tbody className="divide-y divide-site-border">
-            {filtered.length === 0 && (
+            {localQuestions.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-5 py-12 text-center">
                   <div className="flex flex-col items-center gap-3">
@@ -122,7 +153,7 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
                       <HelpCircle className="w-6 h-6 text-site-muted" />
                     </div>
                     <p className="text-site-muted text-sm">
-                      {questions.length === 0
+                      {totalCount === 0
                         ? "No questions yet — add your first one."
                         : "No questions match your filters."}
                     </p>
@@ -130,7 +161,7 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
                 </td>
               </tr>
             )}
-            {filtered.map((q) => (
+            {localQuestions.map((q) => (
               <tr key={q.id} className="hover:bg-site-highlight/40 transition-colors">
                 <td className="px-5 py-3.5 max-w-md">
                   <p className="font-medium text-site-text truncate" title={q.stem}>
@@ -178,6 +209,19 @@ export default function QuestionsList({ initialQuestions }: { initialQuestions: 
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="mt-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/admin/questions"
+          searchParams={{
+            search: search || undefined,
+            section: initialSection !== "all" ? initialSection : undefined,
+          }}
+        />
       </div>
 
       {/* Delete confirmation popover */}

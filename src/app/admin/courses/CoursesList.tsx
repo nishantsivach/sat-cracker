@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Plus, Pencil, Trash2, Search, ExternalLink, BookOpen, AlertTriangle } from "lucide-react";
+import Pagination from "@/components/common/Pagination";
 
 type Course = {
   id: string;
@@ -13,22 +15,44 @@ type Course = {
   created_at: string;
 };
 
-export default function CoursesList({ initialCourses }: { initialCourses: Course[] }) {
-  const [courses, setCourses] = useState(initialCourses);
-  const [search, setSearch] = useState("");
-  const [confirmingId, setConfirmingId] = useState<string | null>(null);
+export default function CoursesList({
+  courses,
+  totalCount,
+  currentPage,
+  pageSize,
+  search: initialSearch,
+}: {
+  courses: Course[];
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  search: string;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [search, setSearch] = useState(initialSearch);
+  const [localCourses, setLocalCourses] = useState(courses);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  const filtered = courses.filter(
-    (c) =>
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.slug.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => setLocalCourses(courses), [courses]);
+
+  useEffect(() => {
+    if (search === initialSearch) return;
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      params.set("page", "1");
+      router.push(`${pathname}?${params.toString()}`);
+    }, 400);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const togglePublish = async (course: Course) => {
     setBusyId(course.id);
     const nextValue = !course.is_published;
-    setCourses((prev) =>
+    setLocalCourses((prev) =>
       prev.map((c) => (c.id === course.id ? { ...c, is_published: nextValue } : c))
     );
     try {
@@ -44,7 +68,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
       });
       if (!res.ok) throw new Error();
     } catch {
-      setCourses((prev) =>
+      setLocalCourses((prev) =>
         prev.map((c) =>
           c.id === course.id ? { ...c, is_published: course.is_published } : c
         )
@@ -59,12 +83,15 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
     try {
       const res = await fetch(`/api/admin/courses/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      setCourses((prev) => prev.filter((c) => c.id !== id));
+      setLocalCourses((prev) => prev.filter((c) => c.id !== id));
+      router.refresh();
     } finally {
       setBusyId(null);
-      setConfirmingId(null);
+      setDeleteTarget(null);
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   return (
     <div>
@@ -73,7 +100,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
         <div>
           <h1 className="text-2xl font-bold text-site-text">Courses</h1>
           <p className="text-sm text-site-muted mt-0.5">
-            {courses.length} course{courses.length !== 1 ? "s" : ""} total
+            {totalCount} course{totalCount !== 1 ? "s" : ""} total
           </p>
         </div>
         <Link
@@ -91,7 +118,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by title or slug..."
+          placeholder="Search by title..."
           className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-site-border bg-white text-site-text placeholder:text-site-muted/60 focus:outline-none focus:border-site-accent/40 focus:ring-4 focus:ring-site-accent/10 transition-all text-sm"
         />
       </div>
@@ -116,7 +143,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
             </tr>
           </thead>
           <tbody className="divide-y divide-site-border">
-            {filtered.length === 0 && (
+            {localCourses.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-5 py-12 text-center">
                   <div className="flex flex-col items-center gap-3">
@@ -124,7 +151,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
                       <BookOpen className="w-6 h-6 text-site-muted" />
                     </div>
                     <p className="text-site-muted text-sm">
-                      {courses.length === 0
+                      {totalCount === 0
                         ? "No courses yet — create your first one."
                         : "No courses match your search."}
                     </p>
@@ -132,7 +159,7 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
                 </td>
               </tr>
             )}
-            {filtered.map((course) => (
+            {localCourses.map((course) => (
               <tr key={course.id} className="hover:bg-site-highlight/40 transition-colors">
                 <td className="px-5 py-3.5">
                   <p className="font-semibold text-site-text">{course.title}</p>
@@ -149,10 +176,10 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
                   <button
                     onClick={() => togglePublish(course)}
                     disabled={busyId === course.id}
-                    className={`text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors disabled:opacity-50 cursor-pointer ${
+                    className={`text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors disabled:opacity-50 cursor-pointer border ${
                       course.is_published
-                        ? "bg-green-50 text-site-success border border-green-200 hover:bg-green-100"
-                        : "bg-site-highlight text-site-muted border border-site-border hover:bg-site-border"
+                        ? "bg-green-50 text-site-success border-green-200 hover:bg-green-100"
+                        : "bg-site-highlight text-site-muted border-site-border hover:bg-site-border"
                     }`}
                   >
                     {course.is_published ? "Published" : "Draft"}
@@ -176,31 +203,13 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
                     >
                       <Pencil className="w-4 h-4" />
                     </Link>
-                    {confirmingId === course.id ? (
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => deleteCourse(course.id)}
-                          disabled={busyId === course.id}
-                          className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 disabled:opacity-50 cursor-pointer"
-                        >
-                          Confirm
-                        </button>
-                        <button
-                          onClick={() => setConfirmingId(null)}
-                          className="text-[11px] px-2.5 py-1 rounded-lg text-site-muted hover:bg-site-highlight cursor-pointer"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setConfirmingId(course.id)}
-                        title="Delete"
-                        className="p-2 rounded-lg text-site-muted hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
+                    <button
+                      onClick={() => setDeleteTarget(course.id)}
+                      title="Delete"
+                      className="p-2 rounded-lg text-site-muted hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -209,8 +218,18 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
         </table>
       </div>
 
+      {/* Pagination */}
+      <div className="mt-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/admin/courses"
+          searchParams={{ search: search || undefined }}
+        />
+      </div>
+
       {/* Delete confirmation popover */}
-      {confirmingId && (
+      {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div className="bg-white rounded-2xl border border-site-border shadow-2xl p-6 w-full max-w-sm mx-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-start gap-3 mb-4">
@@ -226,14 +245,14 @@ export default function CoursesList({ initialCourses }: { initialCourses: Course
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => setConfirmingId(null)}
+                onClick={() => setDeleteTarget(null)}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-site-text border border-site-border hover:bg-site-highlight transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                onClick={() => deleteCourse(confirmingId)}
-                disabled={busyId === confirmingId}
+                onClick={() => deleteCourse(deleteTarget)}
+                disabled={busyId === deleteTarget}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Delete

@@ -14,12 +14,35 @@ import {
   BookOpen,
 } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
 
 type PageProps = {
   params: Promise<{
     slug: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("blog_content")
+    .select("title, meta_title, meta_description")
+    .eq("slug", slug)
+    .single();
+
+  if (!data) {
+    return {};
+  }
+
+  return {
+    title: data.meta_title || data.title,
+    description: data.meta_description || "",
+  };
+}
 
 export default async function BlogPost({ params }: PageProps) {
   const supabase = await createClient();
