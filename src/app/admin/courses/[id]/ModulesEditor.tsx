@@ -8,15 +8,21 @@ import {
   ChevronRight,
   Eye,
   EyeOff,
+  Video,
+  X,
+  Loader2,
   GripVertical,
   BookOpen,
   AlertTriangle,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { VideoPlayer } from "@/components";
 
 type Lesson = {
   id: string;
   title: string;
   content: string | null;
+  video_path: string | null;
   free_preview: boolean;
   order: number;
 };
@@ -103,7 +109,14 @@ export default function ModulesEditor({
               ...m,
               lesson: [
                 ...m.lesson,
-                { id: data.id, title: title.trim(), content: "", free_preview: false, order },
+                {
+                  id: data.id,
+                  title: title.trim(),
+                  content: "",
+                  video_path: null,
+                  free_preview: false,
+                  order,
+                },
               ],
             }
           : m
@@ -129,7 +142,9 @@ export default function ModulesEditor({
   const deleteLesson = async (moduleId: string, lessonId: string) => {
     setModules((prev) =>
       prev.map((m) =>
-        m.id === moduleId ? { ...m, lesson: m.lesson.filter((l) => l.id !== lessonId) } : m
+        m.id === moduleId
+          ? { ...m, lesson: m.lesson.filter((l) => l.id !== lessonId) }
+          : m
       )
     );
     await fetch(`/api/admin/lessons/${lessonId}`, { method: "DELETE" }).catch(() => {});
@@ -154,7 +169,6 @@ export default function ModulesEditor({
           key={mod.id}
           className="bg-white border border-site-border rounded-2xl overflow-hidden"
         >
-          {/* Module header */}
           <div className="flex items-center gap-3 px-5 py-4 bg-site-highlight/50">
             <button
               onClick={() => toggleExpanded(mod.id)}
@@ -190,7 +204,6 @@ export default function ModulesEditor({
             </button>
           </div>
 
-          {/* Lessons */}
           {expanded[mod.id] && (
             <div className="p-5 space-y-3 border-t border-site-border">
               {mod.lesson.length === 0 && (
@@ -212,7 +225,6 @@ export default function ModulesEditor({
         </div>
       ))}
 
-      {/* Add module */}
       <div className="flex items-center gap-3 pt-2">
         <input
           value={newModuleTitle}
@@ -231,7 +243,6 @@ export default function ModulesEditor({
         </button>
       </div>
 
-      {/* Delete confirmation popover */}
       {deletePopover && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div className="bg-white rounded-2xl border border-site-border shadow-2xl p-6 w-full max-w-sm mx-4 animate-in fade-in zoom-in-95 duration-200">
@@ -277,8 +288,51 @@ function LessonRow({
   onDelete: () => void;
 }) {
   const [confirming, setConfirming] = useState(false);
+  const [confirmRemoveVideo, setConfirmRemoveVideo] = useState(false);
   const [title, setTitle] = useState(lesson.title);
   const [content, setContent] = useState(lesson.content ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [removingVideo, setRemovingVideo] = useState(false);
+
+  const videoUrl = lesson.video_path
+    ? createClient().storage.from("lesson-videos").getPublicUrl(lesson.video_path).data.publicUrl
+    : null;
+
+  const handleVideoSelect = async (file: File) => {
+    setUploading(true);
+    setUploadError(null);
+    try {
+      const supabase = createClient();
+      const ext = file.name.split(".").pop() || "mp4";
+      const path = `${lesson.id}/${crypto.randomUUID()}.${ext}`;
+
+      const { error } = await supabase.storage.from("lesson-videos").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) throw new Error(error.message);
+
+      onUpdate({ video_path: path });
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeVideo = async () => {
+    if (!lesson.video_path) return;
+    setRemovingVideo(true);
+    try {
+      const supabase = createClient();
+      await supabase.storage.from("lesson-videos").remove([lesson.video_path]);
+      onUpdate({ video_path: null });
+    } finally {
+      setRemovingVideo(false);
+      setConfirmRemoveVideo(false);
+    }
+  };
 
   return (
     <div className="border border-site-border rounded-xl p-4 bg-site-background">
@@ -325,6 +379,77 @@ function LessonRow({
           </button>
         )}
       </div>
+
+      {/* Video */}
+      <div className="mb-3">
+        {videoUrl ? (
+          <div className="relative rounded-xl overflow-hidden border border-site-border">
+            <VideoPlayer src={videoUrl} />
+            <div className="absolute top-2 right-2 z-10">
+              {confirmRemoveVideo ? (
+                <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-sm rounded-lg p-1.5">
+                  <button
+                    onClick={removeVideo}
+                    disabled={removingVideo}
+                    className="text-[11px] font-bold px-2.5 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+                  >
+                    {removingVideo ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      "Remove"
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setConfirmRemoveVideo(false)}
+                    className="text-[11px] px-2 py-1 rounded-md text-white/80 hover:bg-white/20 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setConfirmRemoveVideo(true)}
+                  className="p-2 rounded-lg bg-black/60 text-white hover:bg-red-500/80 transition-colors cursor-pointer"
+                  title="Remove video"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <label className="flex items-center justify-center gap-2 border-2 border-dashed border-site-border rounded-xl py-6 text-xs text-site-muted hover:border-site-accent/40 hover:text-site-accent cursor-pointer transition-colors">
+            {uploading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <Video className="w-4 h-4" />
+                Add a video for this lesson
+              </>
+            )}
+            <input
+              type="file"
+              accept="video/*"
+              className="hidden"
+              disabled={uploading}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleVideoSelect(file);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
+        {uploadError && (
+          <div className="p-2.5 bg-red-50 border border-red-200 rounded-xl mt-1.5">
+            <p className="text-xs text-red-600">{uploadError}</p>
+          </div>
+        )}
+      </div>
+
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}

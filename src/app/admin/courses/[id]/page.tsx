@@ -10,9 +10,9 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
   const { data: course } = await supabase.from("course").select("*").eq("id", id).single();
   if (!course) notFound();
 
-  const { data: modules } = await supabase
+ const { data: modules } = await supabase
     .from("module")
-    .select("id, title, order, lesson(id, title, content, free_preview, order)")
+    .select("id, title, order, lesson(id, title, content, video_path, free_preview, order)")
     .eq("course_id", id)
     .order("order", { ascending: true })
     .order("order", { ascending: true, foreignTable: "lesson" });
