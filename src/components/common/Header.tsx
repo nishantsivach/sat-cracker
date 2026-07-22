@@ -19,6 +19,7 @@ import {
   BookOpen,
   BarChart3,
   ShieldCheck,
+  CreditCard,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -88,6 +89,11 @@ export function Header() {
     { href: "/practice", icon: <Target className="w-4 h-4" />, text: "Practice" },
     { href: "/mock-tests", icon: <BarChart3 className="w-4 h-4" />, text: "Mock Tests" },
     { href: "/sat", icon: <GraduationCap className="w-4 h-4" />, text: "SAT Guide" },
+    {
+      href: "/pricing",
+      icon: <CreditCard className="w-4 h-4" />,
+      text: "Pricing",
+    },
     { href: "/blogs", icon: <FileText className="w-4 h-4" />, text: "Blog" },
   ];
 

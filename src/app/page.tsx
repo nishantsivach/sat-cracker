@@ -11,6 +11,7 @@ import {
   FAQ,
   FinalCTA,
 } from "@/components/landing";
+import PremiumSection from "@/components/landing/PremiumSection";
 
 export default async function LandingPage() {
   const supabase = await createClient();
@@ -32,6 +33,8 @@ export default async function LandingPage() {
       <SatSections />
 
       <Features />
+
+      <PremiumSection />
 
       <Blogs blogs={blogs ?? []} />
 
