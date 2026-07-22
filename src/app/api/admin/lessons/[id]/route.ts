@@ -8,10 +8,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const admin = await requireAdmin(supabase);
   if (!admin) return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
 
-  const { title, content, free_preview, order } = await req.json();
+  const { title, content, free_preview, order, video_path } = await req.json();
   const { error } = await supabase
     .from("lesson")
-    .update({ title, content, free_preview, order })
+    .update({ title, content, free_preview, order, video_path })
     .eq("id", id);
 
   if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });

@@ -1,4 +1,4 @@
-import { Layout } from "@/components";
+import { Layout, VideoPlayer } from "@/components";
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default async function LessonPage({ params }: PageProps) {
   // Include 'order' in the select
   const { data: lesson } = await supabase
     .from("lesson")
-    .select("id, title, content, free_preview, module_id, order")
+    .select("id, title, content,video_path, free_preview, module_id, order")
     .eq("id", lessonId)
     .single();
 
@@ -97,6 +97,13 @@ export default async function LessonPage({ params }: PageProps) {
       {/* Content */}
       {hasAccess ? (
         <section className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+          {lesson.video_path && (
+            <div className="mb-8">
+              <VideoPlayer
+                src={supabase.storage.from("lesson-videos").getPublicUrl(lesson.video_path).data.publicUrl}
+              />
+            </div>
+          )}
           {/* Article content */}
           <article className="prose prose-lg max-w-none prose-headings:text-site-text prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-site-text prose-p:leading-relaxed prose-p:text-[15px] prose-strong:text-site-primary prose-a:text-site-secondary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-site-accent prose-blockquote:text-site-muted prose-blockquote:italic prose-li:text-site-text prose-li:leading-relaxed prose-code:bg-site-highlight prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm prose-code:font-normal prose-pre:bg-site-primary prose-pre:text-white/90 prose-img:rounded-2xl">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
