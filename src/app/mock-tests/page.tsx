@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Layout } from "@/components";
 import Link from "next/link";
 import { Clock, FileText, ArrowRight, Target, Zap } from "lucide-react";
+import { checkIsPremium } from "@/utils/supabase/api/subscription";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -10,10 +11,15 @@ export const metadata: Metadata = {
 
 export default async function MockTestsPage() {
   const supabase = await createClient();
+   const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const isPremium = user ? await checkIsPremium(supabase, user.id) : false;
 
   const { data: tests, error } = await supabase
     .from("mock_test")
-    .select("id, title, duration_minutes, mock_test_question(count)")
+    .select("id, title, duration_minutes, is_premium, mock_test_question(count)")
     .eq("is_published", true)
     .order("created_at", { ascending: true });
 
@@ -107,9 +113,16 @@ export default async function MockTestsPage() {
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <h2 className="font-bold text-site-text group-hover:text-site-primary transition-colors truncate">
-                        {test.title}
-                      </h2>
+                      <div className="flex items-center gap-2">
+                        <h2 className="font-bold text-site-text group-hover:text-site-primary transition-colors truncate">
+                          {test.title}
+                        </h2>
+                        {test.is_premium && !isPremium && (
+                          <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
+                            Premium
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center gap-4 text-xs text-site-muted mt-1">
                         <span className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5" />

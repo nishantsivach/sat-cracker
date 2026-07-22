@@ -14,7 +14,7 @@ export default async function AdminMockTestsPage({
 
   let query = supabase
     .from("mock_test")
-    .select("id, title, duration_minutes, is_published, created_at, mock_test_question(count)", {
+    .select("id, title, duration_minutes, is_published, is_premium, created_at, mock_test_question(count)", {
       count: "exact",
     })
     .order("created_at", { ascending: false });

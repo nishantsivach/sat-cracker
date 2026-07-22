@@ -11,7 +11,9 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
+  Crown,
 } from "lucide-react";
+import { checkIsPremium } from "@/utils/supabase/api/subscription";
 
 type PageProps = { params: Promise<{ slug: string; lessonId: string }> };
 
@@ -27,10 +29,9 @@ export default async function LessonPage({ params }: PageProps) {
 
   if (!course) notFound();
 
-  // Include 'order' in the select
   const { data: lesson } = await supabase
     .from("lesson")
-    .select("id, title, content,video_path, free_preview, module_id, order")
+    .select("id, title, content, video_path, free_preview, module_id, order")
     .eq("id", lessonId)
     .single();
 
@@ -40,9 +41,9 @@ export default async function LessonPage({ params }: PageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const hasAccess = lesson.free_preview || Boolean(user);
+  const isPremium = user ? await checkIsPremium(supabase, user.id) : false;
+  const hasAccess = lesson.free_preview || isPremium;
 
-  // Get next lesson in the same module
   const { data: nextLesson } = await supabase
     .from("lesson")
     .select("id, title, free_preview")
@@ -52,7 +53,6 @@ export default async function LessonPage({ params }: PageProps) {
     .limit(1)
     .maybeSingle();
 
-
   return (
     <Layout>
       {/* Hero */}
@@ -60,17 +60,16 @@ export default async function LessonPage({ params }: PageProps) {
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
+            backgroundImage: "radial-gradient(circle, white 1.5px, transparent 1.5px)",
             backgroundSize: "24px 24px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
-        <div className="relative max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <div className="relative max-w-3xl mx-auto px-6 py-14 md:py-18">
           <Link
             href={`/courses/${course.slug}`}
-            className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm transition-colors mb-5"
+            className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm transition-colors mb-5 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to {course.title}
@@ -96,35 +95,38 @@ export default async function LessonPage({ params }: PageProps) {
 
       {/* Content */}
       {hasAccess ? (
-        <section className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <section className="max-w-3xl mx-auto px-6 py-12">
+          {/* Video */}
           {lesson.video_path && (
-            <div className="mb-8">
+            <div className="mb-10">
               <VideoPlayer
                 src={supabase.storage.from("lesson-videos").getPublicUrl(lesson.video_path).data.publicUrl}
               />
             </div>
           )}
-          {/* Article content */}
-          <article className="prose prose-lg max-w-none prose-headings:text-site-text prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-site-text prose-p:leading-relaxed prose-p:text-[15px] prose-strong:text-site-primary prose-a:text-site-secondary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-site-accent prose-blockquote:text-site-muted prose-blockquote:italic prose-li:text-site-text prose-li:leading-relaxed prose-code:bg-site-highlight prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm prose-code:font-normal prose-pre:bg-site-primary prose-pre:text-white/90 prose-img:rounded-2xl">
+
+          {/* Article */}
+          <article className="prose prose-lg max-w-none prose-headings:text-site-text prose-headings:font-bold prose-h2:text-xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3 prose-p:text-site-text prose-p:leading-relaxed prose-p:text-[15px] prose-strong:text-site-primary prose-a:text-site-secondary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-site-accent prose-blockquote:text-site-muted prose-blockquote:italic prose-li:text-site-text prose-li:leading-relaxed prose-code:bg-site-highlight prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm prose-code:font-normal prose-pre:bg-site-primary prose-pre:text-white/90 prose-img:rounded-2xl">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {lesson.content}
             </ReactMarkdown>
           </article>
 
+          {/* Bottom navigation */}
           <div className="mt-16 pt-10 border-t border-site-border">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <Link
                 href={`/courses/${course.slug}`}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-site-secondary hover:text-site-primary transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-site-secondary hover:text-site-primary transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Back to course overview
+                Back to course
               </Link>
 
               {nextLesson ? (
                 <Link
                   href={`/courses/${course.slug}/${nextLesson.id}`}
-                  className="group inline-flex items-center gap-2 bg-site-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-site-primary/95 transition-colors"
+                  className="group inline-flex items-center gap-2 bg-site-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-site-primary/95 transition-colors cursor-pointer"
                 >
                   Next lesson
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -132,11 +134,12 @@ export default async function LessonPage({ params }: PageProps) {
               ) : (
                 <div className="flex items-center gap-2 text-sm text-site-muted">
                   <CheckCircle2 className="w-4 h-4 text-site-success" />
-                  You&apos;ve completed this module!
+                  Module complete
                 </div>
               )}
             </div>
 
+            {/* Next lesson preview */}
             {nextLesson && (
               <div className="mt-4 p-4 bg-site-highlight rounded-xl border border-site-border flex items-center justify-between">
                 <div className="flex items-center gap-3 min-w-0">
@@ -148,9 +151,7 @@ export default async function LessonPage({ params }: PageProps) {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs text-site-muted font-medium">
-                      Up next
-                    </p>
+                    <p className="text-xs text-site-muted font-medium">Up next</p>
                     <p className="text-sm font-semibold text-site-text truncate">
                       {nextLesson.title}
                     </p>
@@ -166,42 +167,61 @@ export default async function LessonPage({ params }: PageProps) {
           </div>
         </section>
       ) : (
-
-        <section className="max-w-3xl mx-auto px-6 py-16">
+        /* Locked state */
+        <section className="max-w-lg mx-auto px-6 py-14">
           <div className="bg-white rounded-2xl border border-site-border p-8 md:p-10 text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-6">
-              <Lock className="w-7 h-7 text-site-muted" />
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-6">
+              <Lock className="w-6 h-6 text-site-muted" />
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold text-site-text mb-3">
-              This lesson is locked
-            </h2>
-            <p className="text-site-muted max-w-md mx-auto leading-relaxed">
-              Create a free account to access this lesson and start tracking
-              your progress. No credit card needed.
-            </p>
-
-            <div className="mt-8 space-y-3 max-w-xs mx-auto">
-              <Link
-                href={`/signup?redirectTo=/courses/${course.slug}/${lesson.id}`}
-                className="flex items-center justify-center gap-2 w-full bg-site-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-site-primary/95 transition-colors"
-              >
-                Create free account
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href={`/courses/${course.slug}`}
-                className="flex items-center justify-center gap-2 w-full border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to course
-              </Link>
-            </div>
-
-            <p className="mt-6 text-xs text-site-muted">
-              Try the free preview lessons first to see if this course is right
-              for you.
-            </p>
+            {user ? (
+              <>
+                <h2 className="text-xl font-bold text-site-text mb-2">Premium lesson</h2>
+                <p className="text-sm text-site-muted max-w-sm mx-auto leading-relaxed mb-8">
+                  Upgrade to Premium to unlock all lessons, unlimited AI tutoring, and full mock tests.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Link
+                    href="/pricing"
+                    className="inline-flex items-center justify-center gap-2 bg-site-accent text-site-primary px-6 py-3 rounded-xl font-bold text-sm hover:brightness-105 transition-all cursor-pointer"
+                  >
+                    <Crown className="w-4 h-4" />
+                    View plans
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href={`/courses/${course.slug}`}
+                    className="inline-flex items-center justify-center gap-2 border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to course
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-bold text-site-text mb-2">Sign in to continue</h2>
+                <p className="text-sm text-site-muted max-w-sm mx-auto leading-relaxed mb-8">
+                  Create a free account or sign in to access this lesson.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Link
+                    href={`/signup?redirectTo=/courses/${course.slug}/${lesson.id}`}
+                    className="inline-flex items-center justify-center gap-2 bg-site-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-site-primary/95 transition-colors cursor-pointer"
+                  >
+                    Create free account
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href={`/courses/${course.slug}`}
+                    className="inline-flex items-center justify-center gap-2 border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to course
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </section>
       )}

@@ -1,7 +1,15 @@
 import PlanCard from "./PlanCard";
 import { plans } from "./data";
 
-export default function PricingCards() {
+interface PricingCardsProps {
+  currentPlan: string;
+}
+
+
+export default function PricingCards({
+  currentPlan,
+}: PricingCardsProps) {
+
   return (
     <section id="plans" className="py-28 bg-site-background">
       <div className="mx-auto max-w-7xl px-6">
@@ -27,7 +35,7 @@ export default function PricingCards() {
 
         <div className="grid gap-6 lg:grid-cols-3 max-w-5xl mx-auto">
           {plans.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} />
+            <PlanCard key={plan.id} plan={plan} currentPlan={currentPlan} />
           ))}
         </div>
 

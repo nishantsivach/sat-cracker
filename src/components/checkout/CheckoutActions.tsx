@@ -22,10 +22,38 @@ export default function CheckoutActions({ plan }: CheckoutActionsProps) {
   const [loading, setLoading] = useState(false);
 
   const handleContinue = async () => {
+  try {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    const response = await fetch("/api/checkout/complete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        plan: plan.id,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Checkout failed");
+    }
+
     router.push(`/checkout/success?plan=${plan.id}`);
-  };
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      error instanceof Error
+        ? error.message
+        : "Something went wrong."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="rounded-2xl border border-site-border bg-white p-6 md:p-7">

@@ -6,6 +6,8 @@ import {
   PricingFAQ,
   PricingCTA,
 } from "@/components/pricing";
+import { getSubscription } from "@/utils/supabase/api/subscription";
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata = {
   title: "SAT Pricing | Premium SAT Prep Plans | SATCracker",
@@ -13,11 +15,23 @@ export const metadata = {
     "Compare SATCracker Free and Premium plans. Unlock unlimited AI SAT tutoring, full SAT courses, practice tests, and advanced analytics.",
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+
+    const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const subscription = user
+    ? await getSubscription(supabase, user.id)
+    : null;
+
+
   return (
     <Layout>
       <PricingHero />
-      <PricingCards />
+      <PricingCards currentPlan={subscription?.plan ?? "free"} />
       <PricingComparison />
       <PricingFAQ />
       <PricingCTA />

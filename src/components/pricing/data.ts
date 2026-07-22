@@ -18,7 +18,7 @@ export const plans = [
     ],
   },
   {
-    id: "monthly",
+    id: "premium_monthly",
     name: "Premium Monthly",
     price: "$XX",
     period: "/month",
@@ -36,7 +36,7 @@ export const plans = [
     ],
   },
   {
-    id: "yearly",
+    id: "premium_yearly",
     name: "Premium Yearly",
     price: "$XXX",
     period: "/year",

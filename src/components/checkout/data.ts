@@ -7,16 +7,16 @@ export const checkoutPlans = {
     description: "Perfect for getting started.",
   },
 
-  monthly: {
-    id: "monthly",
+  premium_monthly: {
+    id: "premium_monthly",
     name: "Premium Monthly",
     price: 19,
     period: "/month",
     description: "Unlimited access billed monthly.",
   },
 
-  yearly: {
-    id: "yearly",
+  premium_yearly: {
+    id: "premium_yearly",
     name: "Premium Yearly",
     price: 149,
     period: "/year",
