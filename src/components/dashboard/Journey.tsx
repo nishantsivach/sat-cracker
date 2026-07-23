@@ -1,18 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Calendar, Flame, Target, TrendingUp, Zap } from "lucide-react";
+import { ArrowRight, Calendar, Flame, Target, TrendingUp, TrendingDown, Minus, Zap } from "lucide-react";
 
 type Props = {
   overallAccuracy: number;
   totalAttempts: number;
   streak: number;
   weakestTopic?: string;
+  weeklyAttempts: number;
+  thisWeekAccuracy: number | null;
+  lastWeekAccuracy: number | null;
 };
 
-export default function Journey({ overallAccuracy, totalAttempts, streak, weakestTopic }: Props) {
-  const estimatedScore = Math.min(1600, Math.round(900 + overallAccuracy * 7.5));
-  const weeklyGoal = Math.min(100, Math.round((totalAttempts / 300) * 100));
+export default function Journey({
+  streak,
+  weakestTopic,
+  weeklyAttempts,
+  thisWeekAccuracy,
+  lastWeekAccuracy,
+}: Props) {
+  const weeklyGoal = Math.min(100, Math.round((weeklyAttempts / 100) * 100));
+
+  const delta =
+    thisWeekAccuracy !== null && lastWeekAccuracy !== null ? thisWeekAccuracy - lastWeekAccuracy : null;
 
   return (
     <section className="max-w-5xl mx-auto px-6 mt-10 mb-16">
@@ -36,9 +47,41 @@ export default function Journey({ overallAccuracy, totalAttempts, streak, weakes
 
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-sm">
-                  <TrendingUp className="w-5 h-5 text-site-accent mb-3" />
-                  <p className="text-xs text-white/40">Est. SAT Score</p>
-                  <p className="text-3xl font-black mt-1">{estimatedScore}</p>
+                  <div className="flex items-center justify-between mb-3">
+                    {delta === null ? (
+                      <Minus className="w-5 h-5 text-white/40" />
+                    ) : delta > 0 ? (
+                      <TrendingUp className="w-5 h-5 text-green-400" />
+                    ) : delta < 0 ? (
+                      <TrendingDown className="w-5 h-5 text-red-400" />
+                    ) : (
+                      <Minus className="w-5 h-5 text-site-accent" />
+                    )}
+                    {delta !== null && (
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          delta > 0
+                            ? "bg-green-500/15 text-green-300"
+                            : delta < 0
+                              ? "bg-red-500/15 text-red-300"
+                              : "bg-white/10 text-white/50"
+                        }`}
+                      >
+                        {delta > 0 ? "+" : ""}
+                        {delta}% vs last week
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-white/40">This week&apos;s accuracy</p>
+                  <p className="text-3xl font-black mt-1">
+                    {thisWeekAccuracy !== null ? `${thisWeekAccuracy}%` : "—"}
+                  </p>
+                  {thisWeekAccuracy === null && (
+                    <p className="text-[11px] text-white/30 mt-1">Practice this week to see your trend</p>
+                  )}
+                  {thisWeekAccuracy !== null && lastWeekAccuracy === null && (
+                    <p className="text-[11px] text-white/30 mt-1">First week of tracking — keep going!</p>
+                  )}
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-sm">
                   <Flame className="w-5 h-5 text-orange-400 mb-3" />

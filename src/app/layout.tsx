@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "All things SAT",
-  description: "Crack your SAT Exams",
+  title: {
+    default: "SATCracker — AI-Powered SAT Prep | Practice Smarter",
+    template: "%s | SATCracker",
+  },
+  description:
+    "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking. Join 25,000+ students prepping smarter with SATCracker.",
 };
 
 export default function RootLayout({
@@ -31,13 +35,13 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtag/js?id=G-C28NLF769V"
           strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics-1" strategy="afterInteractive">
           {`
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', 'G-C28NLF769V');
-                `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-C28NLF769V');
+          `}
         </Script>
 
         <Script
@@ -45,13 +49,13 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtag/js?id=G-MR80C1GSQC"
         />
 
-        <Script id="google-analytics">
+        <Script id="google-analytics-2">
           {`
-                 window.dataLayer = window.dataLayer || [];
-                 function gtag(){dataLayer.push(arguments);}
-                 gtag('js', new Date());
-                 gtag('config', 'G-MR80C1GSQC');
-               `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MR80C1GSQC');
+          `}
         </Script>
       </head>
       <body

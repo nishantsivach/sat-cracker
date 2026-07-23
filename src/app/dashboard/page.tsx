@@ -92,6 +92,60 @@ export default async function DashboardPage() {
     (r) => r.last_practiced_at && new Date(r.last_practiced_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length;
 
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const { data: weekAttempts } = await supabase
+    .from("attempt")
+    .select("created_at")
+    .eq("user_id", user.id)
+    .gte("created_at", sevenDaysAgo.toISOString());
+
+  const weekdayOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const countByDay = new Map(weekdayOrder.map((d) => [d, 0]));
+  (weekAttempts ?? []).forEach((a) => {
+    const day = new Date(a.created_at).toLocaleDateString("en-US", { weekday: "short" });
+    countByDay.set(day, (countByDay.get(day) ?? 0) + 1);
+  });
+  const weeklyActivity = weekdayOrder.map((day) => ({
+    day,
+    value: Math.min(100, countByDay.get(day)! * 5),
+  }));
+  const weeklyAttemptsCount = weekAttempts?.length ?? 0;
+
+  const fourteenDaysAgo = new Date();
+  fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+
+  const { data: lastTwoWeeksAttempts } = await supabase
+    .from("attempt")
+    .select("created_at, is_correct")
+    .eq("user_id", user.id)
+    .gte("created_at", fourteenDaysAgo.toISOString());
+
+  const thisWeekAttempts = (lastTwoWeeksAttempts ?? []).filter(
+    (a) => new Date(a.created_at) >= sevenDaysAgo,
+  );
+  const lastWeekAttemptsList = (lastTwoWeeksAttempts ?? []).filter(
+    (a) => new Date(a.created_at) < sevenDaysAgo,
+  );
+
+  const accuracyOf = (list: { is_correct: boolean }[]) =>
+    list.length > 0 ? Math.round((list.filter((a) => a.is_correct).length / list.length) * 100) : null;
+
+  const thisWeekAccuracy = accuracyOf(thisWeekAttempts);
+  const lastWeekAccuracy = accuracyOf(lastWeekAttemptsList);
+
+
+  const sectionTotals = rows.reduce<Record<string, number>>((acc, r) => {
+    acc[r.topicSection] = (acc[r.topicSection] ?? 0) + r.attempts_count;
+    return acc;
+  }, {});
+  const sectionSum = Object.values(sectionTotals).reduce((a, b) => a + b, 0);
+  const distribution = Object.entries(sectionTotals).map(([section, count]) => ({
+    name: section === "math" ? "Math" : section === "reading-writing" ? "Reading & Writing" : section,
+    value: sectionSum > 0 ? Math.round((count / sectionSum) * 100) : 0,
+  }));
+
   const firstName = user.email?.split("@")[0] ?? "there";
 
   const chartData = [
@@ -128,11 +182,11 @@ export default async function DashboardPage() {
       </FadeIn>
 
       <FadeIn delay={0.15}>
-        <Analytics chartData={chartData} />
+        <Analytics chartData={chartData} weeklyActivity={weeklyActivity} />
       </FadeIn>
 
       <FadeIn delay={0.2}>
-        <TopicAnalytics weakest={weakest} strongest={strongest} />
+        <TopicAnalytics weakest={weakest} strongest={strongest} distribution={distribution}  />
       </FadeIn>
 
       <FadeIn delay={0.25}>
@@ -159,6 +213,9 @@ export default async function DashboardPage() {
           totalAttempts={totalAttempts ?? 0}
           streak={recentDays}
           weakestTopic={weakest[0]?.topicName}
+          weeklyAttempts={weeklyAttemptsCount}
+          thisWeekAccuracy={thisWeekAccuracy}
+          lastWeekAccuracy={lastWeekAccuracy}
         />
       </FadeIn>
     </Layout>

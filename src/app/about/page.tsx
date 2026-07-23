@@ -31,24 +31,46 @@ export default function AboutPage() {
           </div>
 
           <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-3">
-            We&apos;re building the
+            We built this because
             <br />
-            <span className="text-site-accent">smartest way to prep.</span>
+            <span className="text-site-accent">SAT prep is broken.</span>
           </h1>
           <p className="text-white/60 leading-relaxed max-w-xl text-[15px]">
-            SATCracker was built for students who want to stop guessing and start improving. No fluff, no busywork — just targeted practice that works.
+            Most platforms charge a fortune for recycled content. Others give you answer keys without telling you why you got something wrong. We took a different approach.
           </p>
         </div>
       </section>
 
       {/* Content */}
       <section className="max-w-3xl mx-auto px-6 py-12">
-        {/* Mission */}
+        {/* The problem */}
         <div className="mb-12">
-          <h2 className="text-sm font-bold text-site-text mb-4">Our mission</h2>
-          <p className="text-site-text leading-relaxed text-[15px]">
-            Most SAT prep is either too expensive or too generic. We believe every student deserves access to personalized, AI-powered preparation that actually explains the &quot;why&quot; behind every answer — not just whether you got it right or wrong.
-          </p>
+          <h2 className="text-sm font-bold text-site-text mb-4">The problem with most SAT prep</h2>
+          <div className="space-y-3 text-[15px] text-site-text leading-relaxed">
+            <p>
+              Walk into any bookstore and you&apos;ll find dozens of SAT prep books. Most of them are 500+ pages of dense content that hasn&apos;t changed meaningfully in years. Online platforms aren&apos;t much better — video lectures that take hours, generic practice sets, and score reports that tell you what you got wrong but not why.
+            </p>
+            <p>
+              The result? Students spend months &ldquo;prepping&rdquo; without actually improving. They memorize tricks instead of understanding concepts. They do hundreds of practice questions but keep making the same mistakes.
+            </p>
+          </div>
+        </div>
+
+        {/* Our approach */}
+        <div className="mb-12">
+          <h2 className="text-sm font-bold text-site-text mb-4">How we&apos;re different</h2>
+          <div className="space-y-3 text-[15px] text-site-text leading-relaxed">
+            <p>
+              We built SATCracker around one idea:{" "}
+              <span className="font-semibold">
+                understanding your mistakes is more important than practicing more questions.
+              </span>{" "}
+              Our AI doesn&apos;t just mark answers right or wrong — it explains the reasoning in plain English, spots patterns in your errors, and tells you exactly what to work on next.
+            </p>
+            <p>
+              No gimmicks. No &ldquo;secret strategies.&rdquo; Just targeted practice with explanations that actually make sense.
+            </p>
+          </div>
         </div>
 
         {/* Stats */}
@@ -68,14 +90,11 @@ export default function AboutPage() {
           ))}
         </div>
 
-        {/* Story */}
+        {/* Who we are */}
         <div className="mb-12">
-          <h2 className="text-sm font-bold text-site-text mb-4">How it started</h2>
-          <p className="text-site-text leading-relaxed text-[15px] mb-4">
-            SATCracker started with a simple observation: students were spending hundreds of hours on SAT prep but not seeing proportional score improvements. The problem wasn&apos;t effort — it was efficiency.
-          </p>
-          <p className="text-site-text leading-relaxed text-[15px]">
-            By combining AI that actually explains concepts with adaptive practice that targets weak spots, we help students spend less time studying and more time improving. Every feature is built around one question: &quot;Does this actually help students score higher?&quot;
+          <h2 className="text-sm font-bold text-site-text mb-4">Who&apos;s behind this</h2>
+          <p className="text-[15px] text-site-text leading-relaxed">
+            We&apos;re a small team of engineers and educators who&apos;ve been on both sides of the SAT — as students who stressed about scores and as tutors who helped others improve. We got tired of seeing students pay hundreds of dollars for prep that didn&apos;t deliver, so we built what we wish we&apos;d had.
           </p>
         </div>
 
@@ -83,9 +102,9 @@ export default function AboutPage() {
         <div className="bg-site-primary rounded-2xl p-6 md:p-8 text-center text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-site-accent/8 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
           <div className="relative">
-            <h2 className="text-sm font-bold mb-2">Ready to start improving?</h2>
+            <h2 className="text-sm font-bold mb-2">See if it works for you</h2>
             <p className="text-white/50 text-xs mb-5">
-              Join thousands of students who&apos;ve already made the switch to smarter prep.
+              The first few practice sessions are free. No credit card, no commitment.
             </p>
             <div className="flex items-center justify-center gap-3">
               <Link

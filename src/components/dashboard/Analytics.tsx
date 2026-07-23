@@ -4,23 +4,13 @@ import { Activity, TrendingUp } from "lucide-react";
 import AccuracyChart from "./charts/AccuracyChart";
 
 type Props = {
-  chartData: {
-    day: string;
-    accuracy: number;
-  }[];
+  chartData: { day: string; accuracy: number }[];
+  weeklyActivity: { day: string; value: number }[];
 };
 
-const weeklyData = [
-  { day: "Mon", value: 80 },
-  { day: "Tue", value: 30 },
-  { day: "Wed", value: 100 },
-  { day: "Thu", value: 60 },
-  { day: "Fri", value: 75 },
-  { day: "Sat", value: 15 },
-  { day: "Sun", value: 0 },
-];
 
-export default function Analytics({ chartData }: Props) {
+
+export default function Analytics({ chartData, weeklyActivity }: Props) {
   return (
     <section className="max-w-5xl mx-auto px-6 mt-10">
       <div className="grid lg:grid-cols-3 gap-5">
@@ -58,7 +48,7 @@ export default function Analytics({ chartData }: Props) {
           </div>
 
           <div className="space-y-3">
-            {weeklyData.map(({ day, value }) => (
+            {weeklyActivity.map(({ day, value }) => (
               <div key={day} className="group">
                 <div className="flex justify-between text-xs mb-1.5">
                   <span className="text-site-muted font-medium group-hover:text-site-text transition-colors">

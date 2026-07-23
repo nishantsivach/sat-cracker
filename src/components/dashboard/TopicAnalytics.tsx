@@ -12,14 +12,11 @@ type Topic = {
 type Props = {
   weakest: Topic[];
   strongest: Topic[];
+  distribution: { name: string; value: number }[];
 };
 
-export default function TopicAnalytics({ weakest, strongest }: Props) {
-  const chartData = [
-    { name: "Math", value: 48 },
-    { name: "Reading", value: 34 },
-    { name: "Writing", value: 18 },
-  ];
+export default function TopicAnalytics({ weakest, strongest, distribution }: Props) {
+
 
   return (
     <section className="max-w-5xl mx-auto px-6 mt-10">
@@ -39,11 +36,11 @@ export default function TopicAnalytics({ weakest, strongest }: Props) {
           </div>
 
           <div className="flex justify-center mb-5">
-            <TopicDistribution data={chartData} />
+            <TopicDistribution data={distribution} />
           </div>
 
           <div className="space-y-2.5 pt-5 border-t border-site-border/40">
-            {chartData.map((item) => (
+            {distribution.map((item) => (
               <div key={item.name} className="flex items-center gap-3 text-xs">
                 <div
                   className="w-3 h-3 rounded-full shadow-sm shrink-0"

@@ -12,37 +12,64 @@ import {
   FinalCTA,
 } from "@/components/landing";
 import PremiumSection from "@/components/landing/PremiumSection";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SATCracker — AI-Powered SAT Prep | Practice Smarter",
+  description:
+    "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking. 25,000+ students already prep smarter with SATCracker.",
+};
 
 export default async function LandingPage() {
   const supabase = await createClient();
 
-  const { data: blogs } = await supabase
+ const { data: rawBlogs } = await supabase
     .from("blog_content")
     .select("title, slug, content, created_at")
-    .order("created_at", {
-      ascending: false,
-    })
+    .order("created_at", { ascending: false })
     .limit(3);
+
+  const blogs = (rawBlogs ?? []).map((b) => ({
+    ...b,
+    content: b.content.slice(0, 300),
+  }));
 
   return (
     <Layout>
       <Hero />
 
-      <HowItWorks />
+      <RevealOnScroll>
+        <HowItWorks />
+      </RevealOnScroll>
 
-      <SatSections />
+      <RevealOnScroll>
+        <SatSections />
+      </RevealOnScroll>
 
-      <Features />
+      <RevealOnScroll>
+        <Features />
+      </RevealOnScroll>
 
-      <PremiumSection />
+      <RevealOnScroll>
+        <PremiumSection />
+      </RevealOnScroll>
 
-      <Blogs blogs={blogs ?? []} />
+      <RevealOnScroll>
+        <Blogs blogs={blogs} />
+      </RevealOnScroll>
 
-      <Testimonials />
+      <RevealOnScroll>
+        <Testimonials />
+      </RevealOnScroll>
 
-      <FAQ />
+      <RevealOnScroll>
+        <FAQ />
+      </RevealOnScroll>
 
-      <FinalCTA />
+      <RevealOnScroll>
+        <FinalCTA />
+      </RevealOnScroll>
     </Layout>
   );
 }
