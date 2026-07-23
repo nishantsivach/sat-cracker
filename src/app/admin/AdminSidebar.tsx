@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Newspaper,
   ChevronRight,
+  CreditCard,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
   { href: "/admin/topic-guides", label: "Topic Guides", icon: Map, enabled: true },
   { href: "/admin/colleges", label: "Colleges", icon: GraduationCap, enabled: true },
   { href: "/admin/blog", label: "Blog", icon: Newspaper, enabled: true },
+  { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard, enabled: true },
 ];
 
 export default function AdminSidebar() {

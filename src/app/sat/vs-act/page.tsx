@@ -8,11 +8,10 @@ import {
   ArrowLeft,
   CheckCircle2,
   HelpCircle,
-  Brain,
-  Beaker,
   Calculator,
   Clock,
   BarChart3,
+  Beaker,
 } from "lucide-react";
 
 type ComparisonRow = { feature: string; sat: string; act: string };
@@ -20,7 +19,7 @@ type Faq = { q: string; a: string };
 
 const iconMap: Record<string, React.ReactNode> = {
   "Total Time": <Clock className="w-4 h-4" />,
-  Sections: <Brain className="w-4 h-4" />,
+  Sections: <BarChart3 className="w-4 h-4" />,
   Math: <Calculator className="w-4 h-4" />,
   Science: <Beaker className="w-4 h-4" />,
   Scoring: <CheckCircle2 className="w-4 h-4" />,
@@ -67,14 +66,13 @@ export default async function SatVsActPage() {
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-18">
           <Link
@@ -88,9 +86,7 @@ export default async function SatVsActPage() {
           <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-3">
             {page.title || "SAT vs ACT"}
           </h1>
-          <p className="text-white/50 text-sm">
-            Which test actually fits you?
-          </p>
+          <p className="text-white/50 text-sm">Which test actually fits you?</p>
 
           {page.intro && (
             <p className="mt-5 text-white/60 leading-relaxed max-w-2xl text-[15px]">
@@ -101,44 +97,42 @@ export default async function SatVsActPage() {
       </section>
 
       {/* Content */}
-      <section className="max-w-4xl mx-auto px-6 py-14">
+      <section className="max-w-4xl mx-auto px-6 py-12">
         {/* Quick verdict */}
         {(chooseSat.length > 0 || chooseAct.length > 0) && (
-          <div className="grid sm:grid-cols-2 gap-4 mb-12">
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
             {chooseSat.length > 0 && (
-              <div className="bg-white rounded-2xl border border-site-border p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-site-highlight flex items-center justify-center">
-                    <Brain className="w-5 h-5 text-site-secondary" />
-                  </div>
-                  <h2 className="font-bold text-site-text">Pick the SAT if you</h2>
+              <div className="group relative bg-white rounded-3xl border border-site-border/60 p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden">
+                {/* Left accent line */}
+                <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-r-full bg-site-secondary opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="pl-2">
+                  <h2 className="text-sm font-bold text-site-text mb-4">Pick the SAT if you</h2>
+                  <ul className="space-y-2">
+                    {chooseSat.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-site-text">
+                        <CheckCircle2 className="w-4 h-4 text-site-accent mt-0.5 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2 text-sm text-site-muted">
-                  {chooseSat.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-site-accent mt-0.5 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
               </div>
             )}
             {chooseAct.length > 0 && (
-              <div className="bg-white rounded-2xl border border-site-border p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-site-highlight flex items-center justify-center">
-                    <Beaker className="w-5 h-5 text-site-accent" />
-                  </div>
-                  <h2 className="font-bold text-site-text">Pick the ACT if you</h2>
+              <div className="group relative bg-white rounded-3xl border border-site-border/60 p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden">
+                {/* Left accent line */}
+                <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-r-full bg-site-accent opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="pl-2">
+                  <h2 className="text-sm font-bold text-site-text mb-4">Pick the ACT if you</h2>
+                  <ul className="space-y-2">
+                    {chooseAct.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-site-text">
+                        <CheckCircle2 className="w-4 h-4 text-site-accent mt-0.5 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2 text-sm text-site-muted">
-                  {chooseAct.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-site-accent mt-0.5 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
               </div>
             )}
           </div>
@@ -146,37 +140,26 @@ export default async function SatVsActPage() {
 
         {/* Comparison table */}
         {comparisonTable.length > 0 && (
-          <div className="mb-12">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-site-text">
-                Side-by-side comparison
-              </h2>
-              <p className="text-sm text-site-muted mt-1">
-                The details that actually matter
-              </p>
-            </div>
+          <div className="mb-10">
+            <h2 className="text-sm font-bold text-site-text mb-4">Side-by-side comparison</h2>
 
-            <div className="bg-white border border-site-border rounded-2xl overflow-hidden">
-              <div className="grid grid-cols-3 bg-site-highlight border-b border-site-border">
-                <div className="p-4 text-sm font-bold text-site-muted uppercase tracking-wider">
-                  Feature
-                </div>
-                <div className="p-4 text-sm font-bold text-site-secondary">SAT</div>
-                <div className="p-4 text-sm font-bold text-site-accent">ACT</div>
+            <div className="bg-white rounded-2xl border border-site-border/60 overflow-hidden shadow-sm">
+              <div className="grid grid-cols-3 bg-site-highlight border-b border-site-border/60">
+                <div className="p-4 text-xs font-bold text-site-muted uppercase tracking-wider">Feature</div>
+                <div className="p-4 text-xs font-bold text-site-secondary">SAT</div>
+                <div className="p-4 text-xs font-bold text-site-accent">ACT</div>
               </div>
 
               {comparisonTable.map((row, i) => (
                 <div
                   key={row.feature}
                   className={`grid grid-cols-3 ${
-                    i < comparisonTable.length - 1 ? "border-b border-site-border" : ""
-                  }`}
+                    i < comparisonTable.length - 1 ? "border-b border-site-border/40" : ""
+                  } hover:bg-site-highlight/30 transition-colors`}
                 >
                   <div className="p-4 flex items-center gap-2.5">
                     {iconMap[row.feature] ?? <BarChart3 className="w-4 h-4 text-site-muted" />}
-                    <span className="text-sm font-medium text-site-text">
-                      {row.feature}
-                    </span>
+                    <span className="text-sm font-medium text-site-text">{row.feature}</span>
                   </div>
                   <div className="p-4 text-sm text-site-text">{row.sat}</div>
                   <div className="p-4 text-sm text-site-text">{row.act}</div>
@@ -188,16 +171,14 @@ export default async function SatVsActPage() {
 
         {/* Key differences */}
         {keyDifferences.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-site-text mb-5">
-              Key differences
-            </h2>
-            <div className="bg-white rounded-2xl border border-site-border p-6">
-              <ul className="space-y-3">
+          <div className="mb-10">
+            <h2 className="text-sm font-bold text-site-text mb-4">Key differences</h2>
+            <div className="bg-white rounded-2xl border border-site-border/60 p-6 shadow-sm">
+              <ul className="space-y-2.5">
                 {keyDifferences.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
+                  <li key={item} className="flex items-start gap-3 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-site-accent mt-0.5 shrink-0" />
-                    <span className="text-sm text-site-text leading-relaxed">{item}</span>
+                    <span className="text-site-text leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -207,24 +188,19 @@ export default async function SatVsActPage() {
 
         {/* FAQ */}
         {faqs.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <HelpCircle className="w-5 h-5 text-site-accent" />
-              <h2 className="text-2xl font-bold text-site-text">
-                Common questions
-              </h2>
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-site-accent/10 flex items-center justify-center shadow-sm">
+                <HelpCircle className="w-4 h-4 text-site-accent" />
+              </div>
+              <h2 className="text-sm font-bold text-site-text">Common questions</h2>
             </div>
 
             <div className="space-y-3">
               {faqs.map((faq, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-2xl border border-site-border p-5 md:p-6"
-                >
-                  <h3 className="font-bold text-site-text mb-2">{faq.q}</h3>
-                  <p className="text-sm text-site-muted leading-relaxed">
-                    {faq.a}
-                  </p>
+                <div key={i} className="bg-white rounded-2xl border border-site-border/60 p-5 md:p-6 shadow-sm">
+                  <h3 className="text-sm font-bold text-site-text mb-2">{faq.q}</h3>
+                  <p className="text-xs text-site-muted leading-relaxed">{faq.a}</p>
                 </div>
               ))}
             </div>
@@ -232,14 +208,11 @@ export default async function SatVsActPage() {
         )}
 
         {/* Bottom CTA */}
-        <div className="bg-site-highlight rounded-2xl border border-site-border p-6 md:p-8">
+        <div className="bg-white rounded-2xl border border-site-border/60 p-6 md:p-8 shadow-sm">
           <div className="text-center max-w-md mx-auto">
-            <h2 className="text-xl font-bold text-site-text">
-              The best way to decide?
-            </h2>
-            <p className="text-sm text-site-muted mt-2 leading-relaxed">
-              Take a free practice test for both. Compare your scores. Go with
-              the one that feels better. Overthinking it is the only wrong move.
+            <h2 className="text-sm font-bold text-site-text">The best way to decide?</h2>
+            <p className="text-xs text-site-muted mt-2 leading-relaxed">
+              Take a free practice test for both. Compare your scores. Go with the one that feels better.
             </p>
             <div className="flex items-center justify-center gap-3 mt-5">
               <Link

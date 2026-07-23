@@ -29,9 +29,11 @@ export async function POST(req: NextRequest) {
   let activeConversationId: string | null = conversationId ?? null;
   let history: { role: "user" | "assistant"; content: string }[] = [];
 
+    let isPremium = false;
+
   if (user) {
-    const isPremium = await checkIsPremium(supabase, user.id);
-    
+    isPremium = await checkIsPremium(supabase, user.id);
+
     if (await hasReachedDailyLimit(supabase, user.id, isPremium)) {
       return new Response(
         JSON.stringify({ error: "Daily message limit reached. Upgrade to Premium for unlimited messages." }),
@@ -116,6 +118,7 @@ export async function POST(req: NextRequest) {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "X-Conversation-Id": activeConversationId ?? "",
+      "X-Is-Premium": String(isPremium),
     },
   });
 }

@@ -71,14 +71,13 @@ export default function SatFaqPage() {
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
         <div className="relative max-w-3xl mx-auto px-6 py-14 md:py-18">
           <Link
@@ -90,7 +89,7 @@ export default function SatFaqPage() {
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shadow-sm">
               <HelpCircle className="w-5 h-5 text-site-accent" />
             </div>
             <div>
@@ -106,23 +105,23 @@ export default function SatFaqPage() {
       </section>
 
       {/* FAQ Items */}
-      <section className="max-w-3xl mx-auto px-6 py-14">
+      <section className="max-w-3xl mx-auto px-6 py-12">
         {items.length === 0 ? (
           <div className="text-center py-16">
             <div className="w-16 h-16 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-5">
               <HelpCircle className="w-7 h-7 text-site-muted" />
             </div>
-            <p className="text-site-muted">No FAQs available yet.</p>
+            <p className="text-site-muted text-sm">No FAQs available yet.</p>
           </div>
         ) : (
           <div className="space-y-3" role="region" aria-label="Frequently asked questions">
             {items.map((faq, index) => (
               <div
                 key={index}
-                className={`rounded-2xl border transition-all duration-200 ${
+                className={`rounded-3xl border transition-all duration-200 ${
                   openIndex === index
-                    ? "bg-white border-site-accent/20 shadow-lg shadow-site-accent/5"
-                    : "bg-white/60 border-site-border hover:border-site-accent/20 hover:bg-white"
+                    ? "bg-white border-site-accent/20 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.06)]"
+                    : "bg-white/50 border-site-border/60 hover:border-site-accent/15 hover:bg-white hover:shadow-sm"
                 }`}
               >
                 <button
@@ -132,7 +131,7 @@ export default function SatFaqPage() {
                   className="w-full flex items-center justify-between p-5 md:p-6 text-left gap-4 cursor-pointer"
                 >
                   <span
-                    className={`text-base md:text-lg font-semibold transition-colors duration-200 ${
+                    className={`text-sm md:text-base font-bold transition-colors duration-200 ${
                       openIndex === index ? "text-site-primary" : "text-site-text"
                     }`}
                   >
@@ -140,10 +139,10 @@ export default function SatFaqPage() {
                   </span>
 
                   <span
-                    className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                    className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
                       openIndex === index
-                        ? "bg-site-accent text-white rotate-180"
-                        : "bg-site-highlight text-site-muted hover:bg-site-accent/10 hover:text-site-primary"
+                        ? "bg-site-accent text-white rotate-180 shadow-sm"
+                        : "bg-white border border-site-border/60 text-site-muted group-hover:text-site-primary group-hover:border-site-accent/30"
                     }`}
                     aria-hidden="true"
                   >
@@ -165,7 +164,7 @@ export default function SatFaqPage() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="px-5 md:px-6 pb-5 md:pb-6 text-[15px] text-site-muted leading-relaxed">
+                    <div className="px-5 md:px-6 pb-5 md:pb-6 text-[14px] text-site-muted leading-relaxed">
                       {faq.a}
                     </div>
                   </div>
@@ -176,14 +175,14 @@ export default function SatFaqPage() {
         )}
 
         {/* Bottom CTA */}
-        <div className="mt-10 p-6 bg-white rounded-2xl border border-site-border text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <MessageSquare className="w-4 h-4 text-site-accent" />
-            <p className="text-sm font-semibold text-site-text">
-              Still have questions?
-            </p>
+        <div className="mt-10 p-5 bg-white rounded-2xl border border-site-border/60 text-center shadow-sm">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="w-7 h-7 rounded-lg bg-site-accent/10 flex items-center justify-center">
+              <MessageSquare className="w-3.5 h-3.5 text-site-accent" />
+            </div>
+            <p className="text-sm font-semibold text-site-text">Still have questions?</p>
           </div>
-          <p className="text-sm text-site-muted mb-4">
+          <p className="text-xs text-site-muted mb-4">
             We read and reply to every message — no bots.
           </p>
           <div className="flex items-center justify-center gap-4">
