@@ -12,6 +12,7 @@ import {
   Pencil,
   Check,
   AlertTriangle,
+  Crown,
 } from "lucide-react";
 import { Layout } from "@/components";
 import { createClient } from "@/utils/supabase/client";
@@ -34,6 +35,8 @@ type Props = {
   initialConversations: ConversationSummary[];
   initialInput?: string;
   isLoggedIn: boolean;
+  initialIsPremium?: boolean;
+  initialMessagesUsedToday?: number;
 };
 
 const WELCOME_MESSAGE: Message = {
@@ -48,6 +51,8 @@ export function ChatClient({
   initialConversations,
   initialInput = "",
   isLoggedIn,
+  initialIsPremium = false,
+  initialMessagesUsedToday = 0,
 }: Props) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [conversations, setConversations] = useState<ConversationSummary[]>(initialConversations);
@@ -58,6 +63,8 @@ export function ChatClient({
   const [deleteTarget, setDeleteTarget] = useState<ConversationSummary | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [isPremium, setIsPremium] = useState(initialIsPremium);
+  const [messagesUsedToday, setMessagesUsedToday] = useState(initialMessagesUsedToday);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const messagesEndRef = useRef<ElementRef<"div">>(null);
   const deletePopoverRef = useRef<HTMLDivElement>(null);
@@ -155,8 +162,8 @@ export function ChatClient({
         url.searchParams.delete("selected");
         url.searchParams.delete("correct");
         url.searchParams.delete("topic");
-url.searchParams.delete("explanation");
-url.searchParams.delete("questionId");
+        url.searchParams.delete("explanation");
+        url.searchParams.delete("questionId");
         router.replace(url.pathname + (url.search ? `?${url.searchParams}` : ""), { scroll: false });
       }
     }
@@ -183,6 +190,9 @@ url.searchParams.delete("questionId");
       }
 
       const returnedConversationId = res.headers.get("X-Conversation-Id");
+      const premiumHeader = res.headers.get("X-Is-Premium");
+      if (premiumHeader !== null) setIsPremium(premiumHeader === "true");
+      if (!isPremium) setMessagesUsedToday((prev) => prev + 1);
 
       if (returnedConversationId) {
         if (isNewConversation) {
@@ -239,23 +249,61 @@ url.searchParams.delete("questionId");
     <Layout disableFooter>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Sidebar */}
           <div className="lg:col-span-3 xl:col-span-3">
-            <div className="bg-white rounded-2xl border border-site-border p-5 md:p-6 sticky top-20">
+            <div className="bg-white rounded-2xl border border-site-border/60 p-5 md:p-6 sticky top-20 shadow-sm">
+              {/* Header */}
               <div className="flex items-center gap-2 mb-5">
-                <div className="w-8 h-8 rounded-lg bg-site-primary flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-site-primary flex items-center justify-center shadow-sm">
                   <Sparkles className="w-4 h-4 text-site-accent" />
                 </div>
-                <h2 className="font-bold text-site-text">SAT AI Tutor</h2>
+                <h2 className="font-bold text-site-text text-sm">SAT AI Tutor</h2>
               </div>
 
+              {/* New chat */}
               <button
                 onClick={handleNewChat}
-                className="w-full flex items-center justify-center gap-2 bg-site-primary text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-site-primary/95 transition-colors mb-6 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-site-primary text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-site-primary/95 transition-colors mb-5 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 New chat
               </button>
 
+              {/* Usage meter */}
+              {isLoggedIn && !isPremium && (
+                <div className="px-1 py-2 mb-3">
+                  <div className="flex items-center justify-between text-xs text-site-muted mb-1.5">
+                    <span>Messages today</span>
+                    <span className={messagesUsedToday >= 20 ? "text-site-error font-semibold" : "font-medium text-site-text"}>
+                      {messagesUsedToday}/20
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-site-highlight overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${messagesUsedToday >= 20 ? "bg-site-error" : "bg-site-accent"}`}
+                      style={{ width: `${Math.min(100, (messagesUsedToday / 20) * 100)}%` }}
+                    />
+                  </div>
+                  {messagesUsedToday >= 20 && (
+                    <Link
+                      href="/pricing"
+                      className="text-[11px] font-semibold text-site-secondary hover:text-site-primary mt-1.5 inline-block cursor-pointer"
+                    >
+                      Upgrade for unlimited →
+                    </Link>
+                  )}
+                </div>
+              )}
+
+              {/* Premium badge */}
+              {isLoggedIn && isPremium && (
+                <div className="px-1 py-2 mb-3 flex items-center gap-1.5 text-xs font-semibold text-site-accent">
+                  <Crown className="w-3.5 h-3.5" />
+                  Unlimited messages (Premium)
+                </div>
+              )}
+
+              {/* Conversations */}
               {isLoggedIn && (
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-site-muted mb-3">
@@ -264,7 +312,7 @@ url.searchParams.delete("questionId");
                   {conversations.length === 0 ? (
                     <p className="text-xs text-site-muted px-1">Your conversations will show up here.</p>
                   ) : (
-                    <div className="space-y-0.5 max-h-[320px] overflow-y-auto">
+                    <div className="space-y-0.5 max-h-[280px] overflow-y-auto">
                       {conversations.map((c) => (
                         <div key={c.id} className="group relative">
                           {renamingId === c.id ? (
@@ -278,7 +326,7 @@ url.searchParams.delete("questionId");
                                   if (e.key === "Escape") setRenamingId(null);
                                 }}
                                 onBlur={() => commitRename(c.id)}
-                                className="flex-1 min-w-0 bg-white text-sm px-2 py-1 rounded-lg border border-site-border focus:outline-none"
+                                className="flex-1 min-w-0 bg-white text-sm px-2 py-1 rounded-lg border border-site-border/60 focus:outline-none"
                               />
                               <button
                                 onMouseDown={(e) => e.preventDefault()}
@@ -303,10 +351,7 @@ url.searchParams.delete("questionId");
                                 <span
                                   role="button"
                                   tabIndex={0}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    startRename(c);
-                                  }}
+                                  onClick={(e) => { e.stopPropagation(); startRename(c); }}
                                   className="p-1 rounded-md hover:bg-white text-site-muted hover:text-site-secondary transition-all cursor-pointer"
                                 >
                                   <Pencil className="w-3.5 h-3.5" />
@@ -314,10 +359,7 @@ url.searchParams.delete("questionId");
                                 <span
                                   role="button"
                                   tabIndex={0}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setDeleteTarget(c);
-                                  }}
+                                  onClick={(e) => { e.stopPropagation(); setDeleteTarget(c); }}
                                   className="p-1 rounded-md hover:bg-red-50 text-site-muted hover:text-site-error transition-all cursor-pointer"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
@@ -332,8 +374,9 @@ url.searchParams.delete("questionId");
                 </div>
               )}
 
+              {/* Not logged in */}
               {!isLoggedIn && (
-                <div className="pt-5 border-t border-site-border">
+                <div className="pt-5 border-t border-site-border/60">
                   <p className="text-xs text-site-muted">
                     <Link href="/signup" className="text-site-secondary font-semibold hover:underline cursor-pointer">
                       Sign up
@@ -343,7 +386,8 @@ url.searchParams.delete("questionId");
                 </div>
               )}
 
-              <div className="mt-6 pt-5 border-t border-site-border">
+              {/* Resources */}
+              <div className="mt-5 pt-5 border-t border-site-border/60">
                 <p className="text-xs font-bold uppercase tracking-wider text-site-muted mb-3">Resources</p>
                 <div className="space-y-1">
                   {[
@@ -365,11 +409,13 @@ url.searchParams.delete("questionId");
             </div>
           </div>
 
+          {/* Chat area */}
           <div className="lg:col-span-9 xl:col-span-9">
-            <div className="bg-white rounded-2xl border border-site-border overflow-hidden flex flex-col h-[650px] md:h-[700px] shadow-sm">
-              <div className="px-5 md:px-6 py-4 border-b border-site-border flex items-center justify-between bg-white/90">
+            <div className="bg-white rounded-2xl border border-site-border/60 overflow-hidden flex flex-col h-[650px] md:h-[700px] shadow-sm">
+              {/* Header */}
+              <div className="px-5 md:px-6 py-4 border-b border-site-border/60 flex items-center justify-between bg-white/90">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-site-primary flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-site-primary flex items-center justify-center shadow-sm">
                     <MessagesSquare className="w-4 h-4 text-site-accent" />
                   </div>
                   <div>
@@ -382,6 +428,7 @@ url.searchParams.delete("questionId");
                 </div>
               </div>
 
+              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-5 md:p-6">
                 {switchingConversation ? (
                   <div className="flex items-center justify-center h-full">
@@ -395,7 +442,7 @@ url.searchParams.delete("questionId");
                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                       >
                         {message.role === "system" && (
-                          <div className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center shrink-0 mr-3 mt-1">
+                          <div className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm">
                             <Sparkles className="w-4 h-4 text-site-accent" />
                           </div>
                         )}
@@ -416,7 +463,7 @@ url.searchParams.delete("questionId");
                     ))}
                     {isTyping && (
                       <div className="flex justify-start">
-                        <div className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center shrink-0 mr-3 mt-1">
+                        <div className="w-8 h-8 rounded-lg bg-site-highlight flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm">
                           <Sparkles className="w-4 h-4 text-site-accent" />
                         </div>
                         <div className="bg-site-highlight rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
@@ -430,6 +477,7 @@ url.searchParams.delete("questionId");
                 )}
               </div>
 
+              {/* Error */}
               {errorMsg && (
                 <div className="px-5 md:px-6 pb-2">
                   <p className="text-xs text-site-error bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -438,7 +486,8 @@ url.searchParams.delete("questionId");
                 </div>
               )}
 
-              <div className="border-t border-site-border p-4 md:p-5 bg-white/90">
+              {/* Input */}
+              <div className="border-t border-site-border/60 p-4 md:p-5 bg-white/90">
                 <form onSubmit={handleSendMessage} className="flex gap-3">
                   <input
                     type="text"
@@ -446,7 +495,7 @@ url.searchParams.delete("questionId");
                     onChange={(e) => setInput(e.target.value)}
                     disabled={isTyping}
                     placeholder="Ask anything about the SAT..."
-                    className="flex-1 px-4 py-3 rounded-xl border border-site-border bg-site-background text-site-text placeholder:text-site-muted focus:outline-none focus:border-site-accent/40 focus:ring-4 focus:ring-site-accent/10 transition-all disabled:opacity-60 text-sm"
+                    className="flex-1 px-4 py-3 rounded-xl border border-site-border/60 bg-site-background text-site-text placeholder:text-site-muted focus:outline-none focus:border-site-accent/40 focus:ring-4 focus:ring-site-accent/10 transition-all disabled:opacity-60 text-sm"
                   />
                   <button
                     type="submit"
@@ -462,11 +511,12 @@ url.searchParams.delete("questionId");
         </div>
       </div>
 
+      {/* Delete popover */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div
             ref={deletePopoverRef}
-            className="bg-white rounded-2xl border border-site-border shadow-2xl p-6 w-full max-w-sm mx-4 animate-in fade-in zoom-in-95 duration-200"
+            className="bg-white rounded-2xl border border-site-border/60 shadow-2xl p-6 w-full max-w-sm mx-4 animate-in fade-in zoom-in-95 duration-200"
           >
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
@@ -482,7 +532,7 @@ url.searchParams.delete("questionId");
             <div className="flex gap-2">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-site-text border border-site-border hover:bg-site-highlight transition-colors cursor-pointer"
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-site-text border border-site-border/60 hover:bg-site-highlight transition-colors cursor-pointer"
               >
                 Cancel
               </button>

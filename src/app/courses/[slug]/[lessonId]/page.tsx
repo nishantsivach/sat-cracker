@@ -58,13 +58,13 @@ export default async function LessonPage({ params }: PageProps) {
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
         <div className="relative max-w-3xl mx-auto px-6 py-14 md:py-18">
           <Link
@@ -113,7 +113,7 @@ export default async function LessonPage({ params }: PageProps) {
           </article>
 
           {/* Bottom navigation */}
-          <div className="mt-16 pt-10 border-t border-site-border">
+          <div className="mt-16 pt-10 border-t border-site-border/60">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <Link
                 href={`/courses/${course.slug}`}
@@ -141,9 +141,9 @@ export default async function LessonPage({ params }: PageProps) {
 
             {/* Next lesson preview */}
             {nextLesson && (
-              <div className="mt-4 p-4 bg-site-highlight rounded-xl border border-site-border flex items-center justify-between">
+              <div className="mt-4 p-4 bg-site-highlight rounded-xl border border-site-border/60 flex items-center justify-between">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shrink-0 shadow-sm">
                     {nextLesson.free_preview ? (
                       <PlayCircle className="w-4 h-4 text-green-600" />
                     ) : (
@@ -169,8 +169,8 @@ export default async function LessonPage({ params }: PageProps) {
       ) : (
         /* Locked state */
         <section className="max-w-lg mx-auto px-6 py-14">
-          <div className="bg-white rounded-2xl border border-site-border p-8 md:p-10 text-center">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-6">
+          <div className="bg-white rounded-3xl border border-site-border/60 p-8 md:p-10 text-center shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)]">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-6 shadow-sm">
               <Lock className="w-6 h-6 text-site-muted" />
             </div>
 
@@ -183,7 +183,7 @@ export default async function LessonPage({ params }: PageProps) {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link
                     href="/pricing"
-                    className="inline-flex items-center justify-center gap-2 bg-site-accent text-site-primary px-6 py-3 rounded-xl font-bold text-sm hover:brightness-105 transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 bg-site-accent text-site-primary px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-400 transition-all cursor-pointer"
                   >
                     <Crown className="w-4 h-4" />
                     View plans
@@ -191,7 +191,7 @@ export default async function LessonPage({ params }: PageProps) {
                   </Link>
                   <Link
                     href={`/courses/${course.slug}`}
-                    className="inline-flex items-center justify-center gap-2 border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 border border-site-border/60 px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back to course
@@ -214,7 +214,7 @@ export default async function LessonPage({ params }: PageProps) {
                   </Link>
                   <Link
                     href={`/courses/${course.slug}`}
-                    className="inline-flex items-center justify-center gap-2 border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 border border-site-border/60 px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back to course

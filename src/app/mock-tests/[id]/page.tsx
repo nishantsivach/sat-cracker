@@ -42,16 +42,16 @@ export default async function MockTestPage({ params }: PageProps) {
         {/* Hero */}
         <section className="bg-site-primary text-white relative overflow-hidden">
           <div
-            className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
-              backgroundImage: "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-              backgroundSize: "24px 24px",
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
             }}
           />
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
           <div className="relative max-w-2xl mx-auto px-6 py-14 md:py-18 text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-white/10 flex items-center justify-center mb-6">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-white/10 flex items-center justify-center mb-6 shadow-sm">
               <Lock className="w-7 h-7 text-site-accent" />
             </div>
 
@@ -66,25 +66,25 @@ export default async function MockTestPage({ params }: PageProps) {
 
         {/* Content */}
         <section className="max-w-lg mx-auto px-6 py-12">
-          <div className="bg-white rounded-2xl border border-site-border p-6 md:p-8 text-center">
-            <div className="w-12 h-12 mx-auto rounded-xl bg-site-accent/10 flex items-center justify-center mb-5">
+          <div className="bg-white rounded-3xl border border-site-border/60 p-6 md:p-8 text-center shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)]">
+            <div className="w-12 h-12 mx-auto rounded-xl bg-site-accent/10 flex items-center justify-center mb-5 shadow-sm">
               <Crown className="w-6 h-6 text-site-accent" />
             </div>
-            <h2 className="text-lg font-bold text-site-text mb-2">Unlock Premium</h2>
+            <h2 className="text-base font-bold text-site-text mb-2">Unlock Premium</h2>
             <p className="text-sm text-site-muted leading-relaxed mb-6">
               Get unlimited access to all mock tests, complete SAT courses, AI tutoring, and advanced analytics.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center gap-2 bg-site-accent text-site-primary px-6 py-3 rounded-xl font-bold text-sm hover:brightness-105 transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-site-accent text-site-primary px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-400 transition-all cursor-pointer"
               >
                 View plans
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/mock-tests"
-                className="inline-flex items-center justify-center gap-2 border border-site-border px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 border border-site-border/60 px-6 py-3 rounded-xl font-semibold text-sm text-site-text hover:bg-site-highlight transition-colors cursor-pointer"
               >
                 Back to mock tests
               </Link>
@@ -126,15 +126,15 @@ export default async function MockTestPage({ params }: PageProps) {
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
-        <div className="relative max-w-4xl mx-auto px-6 py-12 md:py-16">
+        <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-18">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-wider text-site-accent uppercase">
@@ -146,7 +146,7 @@ export default async function MockTestPage({ params }: PageProps) {
             {test.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-white/40">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
               {test.duration_minutes} minutes
@@ -171,6 +171,7 @@ export default async function MockTestPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Test client */}
       <section className="max-w-4xl mx-auto px-6 py-10">
         <MockTestClient
           mockTestId={test.id}
