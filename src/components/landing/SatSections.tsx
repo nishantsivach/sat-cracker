@@ -18,7 +18,8 @@ const sections = [
     href: "/sat/math",
     stat: "58 questions",
     color: "bg-site-secondary",
-    lightBg: "bg-site-secondary/5",
+    lightBg: "from-site-secondary/5",
+    accentBar: "from-site-secondary to-site-secondary/60",
   },
   {
     icon: BookOpen,
@@ -36,19 +37,21 @@ const sections = [
     href: "/sat/reading-writing",
     stat: "54 questions",
     color: "bg-site-accent",
-    lightBg: "bg-site-accent/5",
+    lightBg: "from-site-accent/5",
+    accentBar: "from-site-accent to-site-accent/60",
   },
 ];
 
 export default function SatSections() {
   return (
     <section className="py-28 px-6 bg-site-highlight relative overflow-hidden">
+      {/* Background decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 border border-site-accent/5 rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative">
         {/* Header */}
         <div className="max-w-2xl mb-16">
-          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               SAT Sections
@@ -73,17 +76,21 @@ export default function SatSections() {
             return (
               <div
                 key={section.title}
-                className="group relative bg-white rounded-2xl border border-site-border p-8 md:p-10 hover:shadow-xl hover:shadow-site-primary/[0.04] hover:-translate-y-1 transition-all duration-300"
+                className="group relative bg-white rounded-3xl border border-site-border/60 p-8 md:p-10 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
               >
-                <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br ${section.lightBg} via-transparent to-transparent`} />
+                {/* Top shine */}
+                <div className={`absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-${section.accentBar.split(" ")[1]}/20 to-transparent`} />
+                
+                {/* Hover gradient overlay */}
+                <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br ${section.lightBg} via-transparent to-transparent`} />
 
                 <div className="relative">
                   {/* Icon + stat */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className={`w-11 h-11 rounded-xl ${section.color} flex items-center justify-center shadow-sm`}>
+                    <div className={`w-11 h-11 rounded-xl ${section.color} flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-xs font-mono font-bold text-site-muted bg-site-highlight rounded-lg px-3 py-1.5">
+                    <span className="text-xs font-mono font-bold text-site-muted bg-site-highlight rounded-lg px-3 py-1.5 shadow-sm">
                       {section.stat}
                     </span>
                   </div>

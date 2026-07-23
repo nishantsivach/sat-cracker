@@ -5,17 +5,13 @@ interface PricingCardsProps {
   currentPlan: string;
 }
 
-
-export default function PricingCards({
-  currentPlan,
-}: PricingCardsProps) {
-
+export default function PricingCards({ currentPlan }: PricingCardsProps) {
   return (
     <section id="plans" className="py-28 bg-site-background">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Heading */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-site-highlight rounded-full px-4 py-1.5 mb-5 border border-site-border">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               Plans
@@ -33,13 +29,15 @@ export default function PricingCards({
           </p>
         </div>
 
+        {/* Pricing Cards */}
         <div className="grid gap-6 lg:grid-cols-3 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} currentPlan={currentPlan} />
           ))}
         </div>
 
-        <p className="mt-10 text-center text-sm text-site-muted">
+        {/* Trust note */}
+        <p className="mt-10 text-center text-xs text-site-muted">
           All plans include future improvements. Upgrade or cancel anytime.
         </p>
       </div>

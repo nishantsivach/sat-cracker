@@ -44,7 +44,7 @@ export default function PricingFAQ() {
       <div className="mx-auto max-w-3xl px-6">
         {/* Header */}
         <div className="mb-14">
-          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 border border-site-border shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <HelpCircle className="w-3.5 h-3.5 text-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               FAQ
@@ -67,10 +67,10 @@ export default function PricingFAQ() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className={`rounded-2xl border transition-all duration-200 ${
+              className={`rounded-3xl border transition-all duration-200 ${
                 openIndex === index
-                  ? "bg-white border-site-accent/20 shadow-lg shadow-site-accent/5"
-                  : "bg-white/60 border-site-border hover:border-site-accent/20 hover:bg-white"
+                  ? "bg-white border-site-accent/20 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.06)]"
+                  : "bg-white/50 border-site-border/60 hover:border-site-accent/15 hover:bg-white hover:shadow-sm"
               }`}
             >
               <button
@@ -80,7 +80,7 @@ export default function PricingFAQ() {
                 className="w-full flex items-center justify-between p-5 md:p-6 text-left gap-4 cursor-pointer"
               >
                 <span
-                  className={`text-base md:text-lg font-semibold transition-colors duration-200 ${
+                  className={`text-sm md:text-base font-bold transition-colors duration-200 ${
                     openIndex === index ? "text-site-primary" : "text-site-text"
                   }`}
                 >
@@ -88,10 +88,10 @@ export default function PricingFAQ() {
                 </span>
 
                 <span
-                  className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
                     openIndex === index
-                      ? "bg-site-accent text-white rotate-180"
-                      : "bg-site-highlight text-site-muted hover:bg-site-accent/10 hover:text-site-primary"
+                      ? "bg-site-accent text-white rotate-180 shadow-sm"
+                      : "bg-white border border-site-border/60 text-site-muted group-hover:text-site-primary group-hover:border-site-accent/30"
                   }`}
                   aria-hidden="true"
                 >
@@ -113,7 +113,7 @@ export default function PricingFAQ() {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[15px] text-site-muted leading-relaxed">
+                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[14px] text-site-muted leading-relaxed">
                     {faq.answer}
                   </div>
                 </div>

@@ -83,8 +83,9 @@ export default function PricingComparison() {
   return (
     <section className="bg-white py-28">
       <div className="mx-auto max-w-5xl px-6">
+        {/* Header */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-site-highlight rounded-full px-4 py-1.5 mb-5 border border-site-border">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               Compare
@@ -102,7 +103,8 @@ export default function PricingComparison() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-site-border overflow-hidden shadow-sm">
+        {/* Table */}
+        <div className="rounded-2xl border border-site-border/60 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -121,7 +123,7 @@ export default function PricingComparison() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-site-border">
+              <tbody className="divide-y divide-site-border/60">
                 {comparison.map((row, index) => (
                   <tr
                     key={row.feature}
@@ -148,6 +150,7 @@ export default function PricingComparison() {
           </div>
         </div>
 
+        {/* Note */}
         <p className="mt-6 text-center text-xs text-site-muted">
           Monthly and Yearly plans include the same features. Yearly billing saves you more.
         </p>
