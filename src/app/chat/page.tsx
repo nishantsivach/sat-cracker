@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getRecentConversation, listConversations, getMessageCountToday } from "@/utils/supabase/api/ai_conversation";
 import { ChatClient } from "./ChatClient";
 import { checkIsPremium } from "@/utils/supabase/api/subscription";
+import { Metadata } from "next";
 
 
 
@@ -19,6 +20,11 @@ type PageProps = {
     topic?: string;
     explanation?: string;
   }>;
+};
+
+export const metadata: Metadata = {
+  title: "AI SAT Tutor",
+  robots: { index: false, follow: false },
 };
 
 export default async function ChatPage({ searchParams }: PageProps) {

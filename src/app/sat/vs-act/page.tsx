@@ -13,6 +13,15 @@ import {
   BarChart3,
   Beaker,
 } from "lucide-react";
+import { cache } from "react";
+import { createBreadcrumbSchema, createFAQSchema, createMetadata, createWebPageSchema } from "@/lib/seo";
+import Script from "next/script";
+
+const getVsActPage = cache(async () => {
+  const supabase = await createClient();
+  return getContentPage(supabase, "comparison", "vs-act");
+});
+
 
 type ComparisonRow = { feature: string; sat: string; act: string };
 type Faq = { q: string; a: string };
@@ -27,10 +36,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export async function generateMetadata() {
-  const supabase = await createClient();
-  const page = await getContentPage(supabase, "comparison", "vs-act");
+  const page = await getVsActPage();
+
   if (!page) return {};
-  return { title: page.meta_title, description: page.meta_description };
+
+  return createMetadata({
+    title: page.meta_title || page.title,
+    description: page.meta_description || page.intro,
+    path: "/sat/vs-act",
+  });
 }
 
 export default async function SatVsActPage() {
@@ -46,21 +60,58 @@ export default async function SatVsActPage() {
     faqs: Faq[];
   };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: (faqs ?? []).map((faq) => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: { "@type": "Answer", text: faq.a },
-    })),
-  };
+  const webPageSchema = createWebPageSchema({
+    title: page.meta_title || page.title,
+    description: page.meta_description || page.intro,
+    path: "/sat/vs-act",
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "SAT",
+      path: "/sat",
+    },
+    {
+      name: page.title,
+      path: "/sat/vs-act",
+    },
+  ]);
+
+  const faqSchema = createFAQSchema(
+    (faqs ?? []).map((faq) => ({
+      question: faq.q,
+      answer: faq.a,
+    }))
+  );
 
   return (
     <Layout>
-      <script
+      <Script
+        id="vs-act-webpage-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="vs-act-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+
+      <Script
+        id="vs-act-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
+        }}
       />
 
       {/* Hero */}
@@ -153,9 +204,8 @@ export default async function SatVsActPage() {
               {comparisonTable.map((row, i) => (
                 <div
                   key={row.feature}
-                  className={`grid grid-cols-3 ${
-                    i < comparisonTable.length - 1 ? "border-b border-site-border/40" : ""
-                  } hover:bg-site-highlight/30 transition-colors`}
+                  className={`grid grid-cols-3 ${i < comparisonTable.length - 1 ? "border-b border-site-border/40" : ""
+                    } hover:bg-site-highlight/30 transition-colors`}
                 >
                   <div className="p-4 flex items-center gap-2.5">
                     {iconMap[row.feature] ?? <BarChart3 className="w-4 h-4 text-site-muted" />}

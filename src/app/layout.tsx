@@ -14,12 +14,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+
   title: {
     default: "SATCracker — AI-Powered SAT Prep | Practice Smarter",
     template: "%s | SATCracker",
   },
+
   description:
-    "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking. Join 25,000+ students prepping smarter with SATCracker.",
+    "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking.",
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "SATCracker",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -2,11 +2,19 @@ import { Layout } from "@/components";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { ArrowRight, GraduationCap } from "lucide-react";
+import Script from "next/script";
+import {
+  createMetadata,
+  createWebPageSchema,
+  createBreadcrumbSchema,
+} from "@/lib/seo";
 
-export const metadata = {
-  title: "SAT College Requirements | SATCracker",
-  description: "Browse SAT score requirements for top colleges and universities.",
-};
+export const metadata = createMetadata({
+  title: "SAT College Requirements",
+  description:
+    "Browse SAT score requirements, average SAT scores, and admissions information for top colleges and universities.",
+  path: "/sat/colleges",
+});
 
 export default async function CollegesPage() {
   const supabase = await createClient();
@@ -19,8 +27,45 @@ export default async function CollegesPage() {
   const publishedColleges = (colleges ?? []).filter((c) => c.is_published);
   const unpublishedColleges = (colleges ?? []).filter((c) => !c.is_published);
 
+  const webPageSchema = createWebPageSchema({
+    title: "SAT College Requirements",
+    description:
+      "Browse SAT score requirements, average SAT scores, and admissions information for top colleges and universities.",
+    path: "/sat/colleges",
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "SAT",
+      path: "/sat",
+    },
+    {
+      name: "Colleges",
+      path: "/sat/colleges",
+    },
+  ]);
+
   return (
     <Layout>
+      <Script
+        id="college-list-webpage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="college-list-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div

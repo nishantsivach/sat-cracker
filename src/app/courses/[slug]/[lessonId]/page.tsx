@@ -14,8 +14,56 @@ import {
   Crown,
 } from "lucide-react";
 import { checkIsPremium } from "@/utils/supabase/api/subscription";
+import { cache } from "react";
+import { Metadata } from "next";
+import { truncateForMeta } from "@/utils/seo";
 
 type PageProps = { params: Promise<{ slug: string; lessonId: string }> };
+
+// Memoized per request — generateMetadata and the page component both need
+const getCourse = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data: course } = await supabase
+    .from("course")
+    .select("id, title, slug")
+    .eq("slug", slug)
+    .single();
+  return course;
+});
+
+const getLesson = cache(async (lessonId: string) => {
+  const supabase = await createClient();
+  const { data: lesson } = await supabase
+    .from("lesson")
+    .select("id, title, content, video_path, free_preview, module_id, order")
+    .eq("id", lessonId)
+    .single();
+  return lesson;
+});
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug, lessonId } = await params;
+  const [course, lesson] = await Promise.all([getCourse(slug), getLesson(lessonId)]);
+
+  if (!course || !lesson) return {};
+
+  const title = truncateForMeta(`${lesson.title} — ${course.title}`, 55);
+  const description = truncateForMeta(
+    `${lesson.title}, part of the ${course.title} course. ${
+      lesson.free_preview ? "Free preview available." : "Unlock with SATCracker Premium."
+    }`,
+    160,
+  );
+  const url = `/courses/${slug}/${lessonId}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title: `${title} | SATCracker`, description, url, type: "website", siteName: "SATCracker" },
+    twitter: { card: "summary_large_image", title: `${title} | SATCracker`, description },
+  };
+}
 
 export default async function LessonPage({ params }: PageProps) {
   const { slug, lessonId } = await params;

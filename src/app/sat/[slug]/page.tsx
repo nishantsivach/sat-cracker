@@ -11,6 +11,9 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { createStaticClient } from "@/utils/supabase/static";
+import { cache } from "react";
+import { createBreadcrumbSchema, createFAQSchema, createMetadata, createWebPageSchema } from "@/lib/seo";
+import Script from "next/script";
 
 const iconMap: Record<string, React.ReactNode> = {
   calculator: <Calculator className="w-5 h-5 text-site-secondary" />,
@@ -18,6 +21,8 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 type PageProps = { params: Promise<{ slug: string }> };
+
+
 
 export async function generateStaticParams() {
   const supabase = await createStaticClient();
@@ -28,7 +33,7 @@ export async function generateStaticParams() {
   return [...sectionSlugs, ...logisticsSlugs, ...comparisonSlugs, ...faqSlugs].map((slug) => ({ slug }));
 }
 
-async function findPage(slug: string) {
+const findPage = cache(async (slug: string) => {
   const supabase = await createStaticClient();
   return (
     (await getContentPage(supabase, "section", slug)) ??
@@ -36,13 +41,21 @@ async function findPage(slug: string) {
     (await getContentPage(supabase, "comparison", slug)) ??
     (await getContentPage(supabase, "faq", slug))
   );
-}
+});
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const page = await findPage(slug);
+  ;
+
   if (!page) return {};
-  return { title: page.meta_title, description: page.meta_description };
+
+
+  return createMetadata({
+    title: page.meta_title || page.title,
+    description: page.meta_description || page.intro,
+    path: `/sat/${slug}`,
+  });
 }
 
 // Shared Components
@@ -113,8 +126,21 @@ function PracticeCTA() {
 
 export default async function SatSlugPage({ params }: PageProps) {
   const { slug } = await params;
-   if (slug === "colleges") notFound();
+  if (slug === "colleges") notFound();
   const page = await findPage(slug);
+
+  const webPageSchema = createWebPageSchema({
+    title: page.title,
+    description: page.meta_description || page.intro,
+    path: `/sat/${slug}`,
+  })
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "SAT", path: "/sat" },
+    { name: page.title, path: `/sat/${slug}` },
+  ]);
+
   if (!page) notFound();
 
   // ===== Section page =====
@@ -124,6 +150,21 @@ export default async function SatSlugPage({ params }: PageProps) {
 
     return (
       <Layout>
+        <Script
+          id="sat-webpage-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(webPageSchema),
+          }}
+        />
+
+        <Script
+          id="sat-breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbSchema),
+          }}
+        />
         <PageHero title={page.title} subtitle={page.data?.subtitle} intro={page.intro}>
           <div className="flex items-center gap-4 mt-6">
             <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shadow-sm">
@@ -180,20 +221,23 @@ export default async function SatSlugPage({ params }: PageProps) {
   if (page.type === "comparison") {
     const { comparisonTable = [], keyDifferences = [], chooseSat = [], chooseAct = [], faqs = [] } = page.data ?? {};
 
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((f: { q: string; a: string }) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    };
+    const faqSchema = createFAQSchema(
+      faqs.map((faq: { q: string; a: string }) => ({
+        question: faq.q,
+        answer: faq.a,
+      }))
+    );
 
     return (
       <Layout>
         {faqs.length > 0 && (
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+          <Script
+            id="comparison-faq-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(faqSchema),
+            }}
+          />
         )}
         <PageHero title={page.title} subtitle={page.data?.subtitle} intro={page.intro} />
 
@@ -293,19 +337,22 @@ export default async function SatSlugPage({ params }: PageProps) {
   if (page.type === "faq") {
     const items = page.data?.items ?? [];
 
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: items.map((item: { q: string; a: string }) => ({
-        "@type": "Question",
-        name: item.q,
-        acceptedAnswer: { "@type": "Answer", text: item.a },
-      })),
-    };
+    const faqSchema = createFAQSchema(
+      items.map((item: { q: string; a: string }) => ({
+        question: item.q,
+        answer: item.a,
+      }))
+    );
 
     return (
       <Layout>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <Script
+          id="faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqSchema),
+          }}
+        />
         <PageHero title={page.title} subtitle={page.data?.subtitle} intro={page.intro} />
 
         <section className="max-w-3xl mx-auto px-6 py-12">
