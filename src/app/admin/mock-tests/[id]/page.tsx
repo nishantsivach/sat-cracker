@@ -31,6 +31,7 @@ export default async function EditMockTestPage({ params }: { params: Promise<{ i
           title: test.title,
           duration_minutes: test.duration_minutes,
           is_published: test.is_published,
+          is_premium: test.is_premium,
         }}
       />
 

@@ -61,14 +61,13 @@ export default async function SatPillarPage() {
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-site-accent/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-18">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-5">
@@ -92,22 +91,15 @@ export default async function SatPillarPage() {
           )}
 
           {quickStats.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-6">
+            <div className="mt-8 flex flex-wrap gap-5">
               {quickStats.map((stat: { value: string; label: string }) => (
-                <div
-                  key={stat.label}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                    <span className="text-site-accent text-sm font-bold">
-                      {stat.value}
-                    </span>
+                <div key={stat.label} className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shadow-sm">
+                    <span className="text-site-accent text-sm font-bold">{stat.value}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">
-                      {stat.value}
-                    </p>
-                    <p className="text-[11px] text-white/50">{stat.label}</p>
+                    <p className="text-sm font-semibold text-white">{stat.value}</p>
+                    <p className="text-[11px] text-white/40">{stat.label}</p>
                   </div>
                 </div>
               ))}
@@ -117,11 +109,11 @@ export default async function SatPillarPage() {
       </section>
 
       {/* Sections Grid */}
-      <section className="max-w-4xl mx-auto px-6 py-14 md:py-18">
+      <section className="max-w-4xl mx-auto px-6 py-12">
         {sections.length > 0 && (
           <>
             <div className="mb-10">
-              <div className="inline-flex items-center gap-2 bg-site-highlight rounded-full px-4 py-1.5 mb-4">
+              <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-4 shadow-sm border border-site-border/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
                 <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
                   Explore by section
@@ -139,27 +131,25 @@ export default async function SatPillarPage() {
                   <Link
                     key={s.href}
                     href={s.href}
-                    className="group flex items-start gap-4 p-5 bg-white rounded-2xl border border-site-border hover:border-site-accent/25 hover:shadow-lg hover:shadow-site-accent/[0.04] transition-all duration-300 cursor-pointer"
+                    className="group flex items-start gap-4 p-5 bg-white rounded-3xl border border-site-border/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                   >
-                    <div className="w-11 h-11 rounded-xl bg-site-highlight flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-site-highlight flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-300">
                       {iconMap[s.icon] ?? <BookOpen className="w-5 h-5 text-site-secondary" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <h3 className="font-bold text-site-text group-hover:text-site-primary transition-colors">
+                        <h3 className="text-sm font-bold text-site-text group-hover:text-site-primary transition-colors">
                           {s.title}
                         </h3>
                         {s.stat && (
-                          <span className="text-[11px] font-mono text-site-muted bg-site-highlight rounded-md px-2 py-0.5 shrink-0">
+                          <span className="text-[10px] font-mono font-bold text-site-muted bg-site-highlight rounded-md px-2 py-0.5 shrink-0">
                             {s.stat}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-site-muted mt-1 leading-relaxed">
-                        {s.desc}
-                      </p>
+                      <p className="text-xs text-site-muted mt-1 leading-relaxed">{s.desc}</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-site-muted group-hover:text-site-accent group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                    <ArrowRight className="w-4 h-4 text-site-muted group-hover:text-site-accent group-hover:translate-x-0.5 transition-all shrink-0 mt-0.5" />
                   </Link>
                 )
               )}
@@ -169,13 +159,13 @@ export default async function SatPillarPage() {
 
         {/* Topic Guides */}
         {topicLinks.length > 0 && (
-          <div className="mt-14">
-            <div className="bg-site-highlight rounded-2xl border border-site-border p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="w-5 h-5 text-site-accent" />
-                <h2 className="text-xl font-bold text-site-text">
-                  Popular topic guides
-                </h2>
+          <div className="mt-12">
+            <div className="bg-white rounded-2xl border border-site-border/60 p-6 md:p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-9 h-9 rounded-xl bg-site-accent/10 flex items-center justify-center shadow-sm">
+                  <Sparkles className="w-4 h-4 text-site-accent" />
+                </div>
+                <h2 className="text-sm font-bold text-site-text">Popular topic guides</h2>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-2">
@@ -183,7 +173,7 @@ export default async function SatPillarPage() {
                   <Link
                     key={t.href}
                     href={t.href}
-                    className="flex items-center justify-between gap-2 px-4 py-3 bg-white rounded-xl border border-site-border hover:border-site-accent/20 hover:shadow-sm transition-all group cursor-pointer"
+                    className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-site-highlight/50 border border-transparent hover:border-site-accent/20 hover:bg-white hover:shadow-sm transition-all group cursor-pointer"
                   >
                     <span className="text-sm font-medium text-site-text group-hover:text-site-secondary transition-colors">
                       {t.title}
@@ -197,18 +187,21 @@ export default async function SatPillarPage() {
         )}
 
         {/* Bottom CTA */}
-        <div className="mt-12 p-6 bg-site-primary rounded-2xl text-center">
-          <p className="text-white font-bold">Ready to start practicing?</p>
-          <p className="text-white/60 text-sm mt-1">
-            Knowing the format is step one. Improving your score comes next.
-          </p>
-          <Link
-            href="/practice"
-            className="inline-flex items-center gap-2 mt-4 bg-site-accent text-site-primary px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors cursor-pointer"
-          >
-            Start practicing
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        <div className="mt-10 p-6 bg-site-primary rounded-2xl text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-site-accent/8 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+          <div className="relative">
+            <p className="text-white font-bold text-sm">Ready to start practicing?</p>
+            <p className="text-white/50 text-xs mt-1">
+              Knowing the format is step one. Improving your score comes next.
+            </p>
+            <Link
+              href="/practice"
+              className="inline-flex items-center gap-2 mt-4 bg-site-accent text-site-primary px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors cursor-pointer"
+            >
+              Start practicing
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

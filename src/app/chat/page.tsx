@@ -1,6 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
-import { getRecentConversation, listConversations } from "@/utils/supabase/api/ai_conversation";
+import { getRecentConversation, listConversations, getMessageCountToday } from "@/utils/supabase/api/ai_conversation";
 import { ChatClient } from "./ChatClient";
+import { checkIsPremium } from "@/utils/supabase/api/subscription";
+
 
 
 const WELCOME_MESSAGE = {
@@ -38,8 +40,13 @@ export default async function ChatPage({ searchParams }: PageProps) {
   let initialConversations: { id: string; title: string; updated_at: string }[] = [];
   let initialInput = "";
 
+  let isPremium = false;
+  let messagesUsedToday = 0;
+
   if (user) {
     initialConversations = await listConversations(supabase, user.id);
+    isPremium = await checkIsPremium(supabase, user.id);
+    messagesUsedToday = await getMessageCountToday(supabase, user.id);
   }
 
 
@@ -84,6 +91,8 @@ Can you explain:
       initialConversations={initialConversations}
       initialInput={initialInput}
       isLoggedIn={Boolean(user)}
+      initialIsPremium={isPremium}
+      initialMessagesUsedToday={messagesUsedToday}
     />
   );
 }

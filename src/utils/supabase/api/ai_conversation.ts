@@ -1,8 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
-const DAILY_MESSAGE_LIMIT = 20;
+export const FREE_DAILY_MESSAGE_LIMIT = 2;
 
-export async function hasReachedDailyLimit(supabase: SupabaseClient, userId: string): Promise<boolean> {
+export async function getMessageCountToday(supabase: SupabaseClient, userId: string): Promise<number> {
   const startOfDay = new Date();
   startOfDay.setUTCHours(0, 0, 0, 0);
 
@@ -13,7 +13,17 @@ export async function hasReachedDailyLimit(supabase: SupabaseClient, userId: str
     .eq("role", "user")
     .gte("created_at", startOfDay.toISOString());
 
-  return (count ?? 0) >= DAILY_MESSAGE_LIMIT;
+  return count ?? 0;
+}
+
+export async function hasReachedDailyLimit(
+  supabase: SupabaseClient,
+  userId: string,
+  isPremium: boolean,
+): Promise<boolean> {
+  if (isPremium) return false;
+  const count = await getMessageCountToday(supabase, userId);
+  return count >= FREE_DAILY_MESSAGE_LIMIT;
 }
 
 export async function createConversation(supabase: SupabaseClient, userId: string, title: string) {

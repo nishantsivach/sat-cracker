@@ -33,13 +33,13 @@ export default function FAQ() {
   return (
     <section className="py-28 px-6 bg-site-highlight relative overflow-hidden">
       {/* Decorative circles */}
-      <div className="absolute top-0 right-0 w-96 h-96 border border-site-accent/10 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute top-0 right-0 w-64 h-64 border border-site-accent/5 rounded-full -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 border border-site-accent/8 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 border border-site-accent/4 rounded-full -translate-y-1/3 translate-x-1/3 pointer-events-none" />
 
       <div className="max-w-3xl mx-auto relative">
         {/* Header */}
         <div className="mb-14">
-          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 border border-site-border shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <HelpCircle className="w-3.5 h-3.5 text-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               FAQ
@@ -64,31 +64,32 @@ export default function FAQ() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className={`rounded-2xl border transition-all duration-200 ${openIndex === index
-                  ? "bg-white border-site-accent/20 shadow-lg shadow-site-accent/5"
-                  : "bg-white/60 border-site-border hover:border-site-accent/20 hover:bg-white"
-                }`}
+              className={`rounded-3xl border transition-all duration-200 ${
+                openIndex === index
+                  ? "bg-white border-site-accent/20 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.06)]"
+                  : "bg-white/50 border-site-border/60 hover:border-site-accent/15 hover:bg-white hover:shadow-sm"
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
                 aria-expanded={openIndex === index}
                 aria-controls={`faq-answer-${index}`}
-                className="w-full flex items-center justify-between p-5 md:p-6 text-left gap-4"
+                className="w-full flex items-center justify-between p-5 md:p-6 text-left gap-4 cursor-pointer"
               >
                 <span
-                  className={`text-base md:text-lg font-semibold transition-colors duration-200 ${openIndex === index
-                      ? "text-site-primary"
-                      : "text-site-text"
-                    }`}
+                  className={`text-sm md:text-base font-bold transition-colors duration-200 ${
+                    openIndex === index ? "text-site-primary" : "text-site-text"
+                  }`}
                 >
                   {faq.q}
                 </span>
 
                 <span
-                  className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${openIndex === index
-                      ? "bg-site-accent text-white rotate-180"
-                      : "bg-site-highlight text-site-muted group-hover:text-site-primary group-hover:bg-site-accent/10"
-                    }`}
+                  className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                    openIndex === index
+                      ? "bg-site-accent text-white rotate-180 shadow-sm"
+                      : "bg-white border border-site-border/60 text-site-muted group-hover:text-site-primary group-hover:border-site-accent/30"
+                  }`}
                   aria-hidden="true"
                 >
                   {openIndex === index ? (
@@ -103,13 +104,14 @@ export default function FAQ() {
                 id={`faq-answer-${index}`}
                 role="region"
                 aria-labelledby={`faq-question-${index}`}
-                className={`grid transition-all duration-200 ease-in-out ${openIndex === index
+                className={`grid transition-all duration-200 ease-in-out ${
+                  openIndex === index
                     ? "grid-rows-[1fr] opacity-100"
                     : "grid-rows-[0fr] opacity-0"
-                  }`}
+                }`}
               >
                 <div className="overflow-hidden">
-                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[15px] text-site-muted leading-relaxed">
+                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[14px] text-site-muted leading-relaxed">
                     {faq.a}
                   </div>
                 </div>
@@ -118,20 +120,21 @@ export default function FAQ() {
           ))}
         </div>
 
-        {/* Bottom CTA — slightly softer, feels like part of the FAQ flow */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-site-muted">
-            Still have questions?{" "}
-            <Link
-              href="/contact"
-              className="font-semibold text-site-secondary hover:text-site-primary underline underline-offset-2 transition-colors"
-            >
-              Get in touch
-            </Link>
+        {/* Bottom CTA */}
+        <div className="mt-10 p-5 bg-white rounded-2xl border border-site-border/60 text-center shadow-sm">
+          <p className="text-sm text-site-text font-medium">
+            Still have questions?
           </p>
           <p className="text-xs text-site-muted mt-1">
             We read and reply to every message — no bots.
           </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-site-secondary hover:text-site-primary transition-colors cursor-pointer"
+          >
+            Get in touch
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </div>
     </section>

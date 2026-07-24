@@ -30,33 +30,32 @@ export default function Hero() {
     >
       {/* Background pattern */}
       <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage:
-            "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-          backgroundSize: "28px 28px",
+            "radial-gradient(circle, white 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
         }}
         aria-hidden="true"
       />
 
-      {/* Glow orbs */}
+      {/* Glow orbs — softer */}
       <div
-        className="absolute top-0 right-0 w-[600px] h-[600px] bg-site-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"
+        className="absolute top-0 right-0 w-[600px] h-[600px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-site-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"
+        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-site-secondary/6 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute top-1/2 right-10 w-[400px] h-[400px] bg-site-accent/5 rounded-full blur-3xl pointer-events-none"
+        className="absolute top-1/2 right-10 w-[400px] h-[400px] bg-site-accent/3 rounded-full blur-3xl pointer-events-none"
         aria-hidden="true"
       />
 
       <div className="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
         {/* LEFT */}
         <div className="min-h-[400px] lg:min-h-[500px]">
-          {/* Badge — only ONE */}
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-6">
             <Sparkles className="w-3.5 h-3.5 text-site-accent shrink-0" />
             <span className="text-xs font-semibold tracking-wider text-site-accent uppercase whitespace-nowrap">
@@ -96,7 +95,7 @@ export default function Hero() {
             {transformations.map((t) => (
               <div
                 key={t.name}
-                className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3 backdrop-blur-sm"
+                className="rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-sm px-3 py-3 hover:bg-white/[0.06] transition-colors"
               >
                 <p className="text-[10px] font-semibold text-white/40 uppercase tracking-wider truncate">
                   {t.name} · {t.days}d
@@ -117,7 +116,7 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/practice"
-              className="group relative inline-flex items-center gap-2 bg-site-accent text-site-primary px-7 py-4 rounded-xl font-bold text-sm shadow-lg shadow-site-accent/25 hover:shadow-site-accent/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 overflow-hidden"
+              className="group relative inline-flex items-center gap-2 bg-site-accent text-site-primary px-7 py-4 rounded-xl font-bold text-sm shadow-lg shadow-site-accent/25 hover:shadow-xl hover:shadow-site-accent/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Start practicing free
@@ -165,36 +164,35 @@ export default function Hero() {
             ))}
           </div>
         </div>
-        {/* RIGHT — Glassmorphism Panel with Zig-Zag White Cards */}
+
+        {/* RIGHT — Glassmorphism Panel */}
         <div
           className="relative lg:ml-auto w-full flex flex-col justify-center"
           style={{ maxWidth: "520px", minHeight: "460px" }}
         >
-          {/* Badge */}
           <div className="flex justify-end mb-6">
-            <div className="inline-flex items-center gap-2 bg-site-accent/20 backdrop-blur-md border border-site-accent/30 text-site-accent text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">
+            <div className="inline-flex items-center gap-2 bg-site-accent/20 backdrop-blur-md border border-site-accent/30 text-site-accent text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap shadow-lg shadow-site-accent/10">
               <span className="w-1.5 h-1.5 rounded-full bg-site-accent shrink-0" />
               3 tools, one demo
             </div>
           </div>
 
-          {/* Glass Panel Container */}
-          <div
-            className="relative rounded-3xl overflow-hidden"
-            style={{ height: "450px" }}
-          >
-            <div className="absolute inset-0 bg-white/[0.04] backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl" />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-white/[0.01] rounded-3xl pointer-events-none" />
-            <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+          {/* Glass Panel */}
+          <div className="relative rounded-3xl overflow-hidden" style={{ height: "450px" }}>
+            {/* Glass background */}
+            <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.3)]" />
+            {/* Inner glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-white/[0.01] rounded-3xl pointer-events-none" />
+            {/* Top shine */}
+            <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
             <div className="relative z-10 p-6 h-full">
-
               {/* Card 1 — top left */}
               <div
-                className="absolute left-6 right-16 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
+                className="absolute left-6 right-16 rounded-2xl bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.10)] p-5 overflow-hidden transition-all duration-300"
                 style={{ top: "35px", height: "130px" }}
               >
-                <div className="absolute top-0 left-0 right-0 h-1 bg-amber-400 rounded-t-2xl" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-300 rounded-t-2xl" />
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <span className="text-sm font-bold text-site-text">Smart practice</span>
@@ -223,10 +221,10 @@ export default function Hero() {
 
               {/* Card 2 — middle right */}
               <div
-                className="absolute left-18 right-5 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
+                className="absolute left-18 right-5 rounded-2xl bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.10)] p-5 overflow-hidden transition-all duration-300"
                 style={{ top: "180px", height: "108px" }}
               >
-                <div className="absolute top-0 left-0 right-0 h-1 bg-blue-400 rounded-t-2xl" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-t-2xl" />
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <span className="text-sm font-bold text-site-text">Progress tracking</span>
@@ -248,10 +246,10 @@ export default function Hero() {
 
               {/* Card 3 — bottom left */}
               <div
-                className="absolute left-6 right-16 rounded-2xl bg-white shadow-lg p-5 overflow-hidden hover:shadow-xl transition-shadow"
+                className="absolute left-6 right-16 rounded-2xl bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.10)] p-5 overflow-hidden transition-all duration-300"
                 style={{ top: "300px", height: "115px" }}
               >
-                <div className="absolute top-0 left-0 right-0 h-1 bg-purple-400 rounded-t-2xl" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-purple-300 rounded-t-2xl" />
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <span className="text-sm font-bold text-site-text">AI tutor</span>
@@ -267,7 +265,6 @@ export default function Hero() {
                   <span className="font-bold text-green-600">x = 2</span>. Most SAT problems follow this exact pattern.&rdquo;
                 </p>
               </div>
-
             </div>
           </div>
         </div>

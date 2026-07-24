@@ -19,9 +19,11 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-site-border">
+    <footer className="bg-white border-t border-site-border/60">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
+        {/* Top section */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
+          {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <Image
@@ -35,7 +37,7 @@ export function Footer() {
             </Link>
 
             <p className="text-sm text-site-muted leading-relaxed max-w-xs">
-              AI-powered SAT prep that focuses on what actually matters —
+              AI-powered SAT prep that focuses on what actually matters — 
               understanding your mistakes and improving your score.
             </p>
 
@@ -45,6 +47,7 @@ export function Footer() {
             </div>
           </div>
 
+          {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-site-muted mb-4">
@@ -66,6 +69,7 @@ export function Footer() {
             </div>
           ))}
 
+          {/* Newsletter */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-site-muted mb-4">
               Stay sharp
@@ -73,18 +77,15 @@ export function Footer() {
             <p className="text-sm text-site-muted mb-3 leading-relaxed">
               Weekly SAT tips and strategy breakdowns. No spam.
             </p>
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="flex gap-2"
-            >
+            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 bg-site-background border border-site-border rounded-lg px-3.5 py-2.5 text-sm text-site-text placeholder:text-site-muted focus:outline-none focus:border-site-accent/40 transition-colors"
+                className="flex-1 bg-site-background border border-site-border/60 rounded-xl px-3.5 py-2.5 text-sm text-site-text placeholder:text-site-muted focus:outline-none focus:border-site-accent/40 focus:ring-4 focus:ring-site-accent/10 transition-all"
               />
               <button
                 type="submit"
-                className="bg-site-primary text-white px-4 rounded-lg text-sm font-bold hover:bg-site-primary/90 transition-colors shrink-0 cursor-pointer"
+                className="bg-site-primary text-white px-4 rounded-xl text-sm font-bold hover:bg-site-primary/95 transition-colors shrink-0 cursor-pointer"
               >
                 Join
               </button>
@@ -92,7 +93,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-6 border-t border-site-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-site-muted">
+        {/* Bottom bar */}
+        <div className="mt-16 pt-6 border-t border-site-border/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-site-muted">
           <p>© {new Date().getFullYear()} SATCracker. All rights reserved.</p>
           <p>Made for students who actually want to improve.</p>
         </div>

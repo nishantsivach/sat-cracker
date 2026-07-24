@@ -32,9 +32,7 @@ export default async function BlogsPage({
       <Layout>
         <div className="flex flex-col justify-center items-center min-h-[60vh] px-6">
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md text-center">
-            <h3 className="text-red-800 text-lg font-bold mb-2">
-              Couldn&apos;t load blogs
-            </h3>
+            <h3 className="text-red-800 text-lg font-bold mb-2">Couldn&apos;t load blogs</h3>
             <p className="text-red-600 text-sm mb-4">{error.message}</p>
             <RetryButton className="px-5 py-2.5 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition-colors" />
           </div>
@@ -47,14 +45,14 @@ export default async function BlogsPage({
     return (
       <Layout>
         <div className="flex flex-col justify-center items-center min-h-[60vh] px-6">
-          <BookOpen className="w-16 h-16 text-site-muted mb-4" />
-          <h2 className="text-2xl font-bold text-site-text mb-2">
-            No articles yet
-          </h2>
+          <div className="w-16 h-16 rounded-2xl bg-site-highlight flex items-center justify-center mb-5">
+            <BookOpen className="w-7 h-7 text-site-muted" />
+          </div>
+          <h2 className="text-xl font-bold text-site-text mb-2">No articles yet</h2>
           <p className="text-site-muted mb-6">Check back soon for SAT tips and guides.</p>
           <Link
             href="/"
-            className="px-5 py-2.5 bg-site-primary text-white rounded-xl text-sm font-bold hover:bg-site-primary/90 transition-colors"
+            className="px-5 py-2.5 bg-site-primary text-white rounded-xl text-sm font-bold hover:bg-site-primary/95 transition-colors cursor-pointer"
           >
             Back to home
           </Link>
@@ -78,9 +76,6 @@ export default async function BlogsPage({
     });
   };
 
-  // Strips both HTML tags and common markdown syntax (##, **, _, etc.) so
-  // preview snippets show clean text instead of raw formatting characters —
-  // blog_content.content is authored as markdown, not HTML.
   const stripFormatting = (raw: string) => {
     return (
       raw
@@ -94,32 +89,30 @@ export default async function BlogsPage({
 
   return (
     <Layout>
-      {/* Hero — consistent with Hero.tsx: dot-grid texture, underline+label
-          eyebrow instead of a pill badge, no blurred glow blob. */}
+      {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.06]"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, white 1.5px, transparent 1.5px)",
-            backgroundSize: "28px 28px",
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-site-accent/6 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-18">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <span className="h-px w-8 bg-site-accent" />
-            <p className="text-xs font-semibold tracking-widest text-site-accent uppercase">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-5">
+            <BookOpen className="w-3.5 h-3.5 text-site-accent" />
+            <span className="text-xs font-bold tracking-wider text-site-accent uppercase">
               Blog
-            </p>
+            </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-3">
             SAT tips, strategies & guides
           </h1>
           <p className="text-white/60 leading-relaxed max-w-xl text-[15px]">
-            Practical advice for the SAT — written for students who want to
-            improve, not just read.
+            Practical advice for the SAT — written for students who want to improve, not just read.
           </p>
 
           {count ? (
@@ -131,18 +124,18 @@ export default async function BlogsPage({
       </section>
 
       {/* Content */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Featured post — only on page 1 */}
+      <section className="max-w-6xl mx-auto px-6 py-12">
+        {/* Featured post */}
         {currentPage === 1 && blogs.length > 0 && (
-          <div className="mb-14">
-            <h2 className="text-lg font-bold text-site-text mb-5 flex items-center gap-2">
+          <div className="mb-12">
+            <h2 className="text-sm font-bold text-site-text mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
               Latest article
             </h2>
 
             <Link
               href={`/blogs/${blogs[0].slug}`}
-              className="group block bg-white rounded-2xl border border-site-border p-6 md:p-8 hover:border-site-secondary/40 hover:shadow-lg transition-all"
+              className="group block bg-white rounded-3xl border border-site-border/60 p-6 md:p-8 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
             >
               <div className="flex items-center gap-3 text-xs text-site-muted mb-3">
                 <span className="flex items-center gap-1.5">
@@ -156,7 +149,7 @@ export default async function BlogsPage({
                 </span>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-bold text-site-text group-hover:text-site-secondary transition-colors mb-3">
+              <h3 className="text-2xl md:text-3xl font-black text-site-text group-hover:text-site-secondary transition-colors mb-3">
                 {blogs[0].title}
               </h3>
 
@@ -174,7 +167,7 @@ export default async function BlogsPage({
 
         {/* All articles */}
         <div>
-          <h2 className="text-lg font-bold text-site-text mb-5 flex items-center gap-2">
+          <h2 className="text-sm font-bold text-site-text mb-5 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             {currentPage === 1 ? "More articles" : `Page ${currentPage}`}
           </h2>
@@ -184,9 +177,9 @@ export default async function BlogsPage({
               <Link
                 key={blog.slug}
                 href={`/blogs/${blog.slug}`}
-                className="group bg-white rounded-2xl border border-site-border p-6 hover:border-site-secondary/40 hover:shadow-md transition-all flex flex-col"
+                className="group bg-white rounded-3xl border border-site-border/60 p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col cursor-pointer"
               >
-                <div className="flex items-center gap-3 text-xs text-site-muted mb-3">
+                <div className="flex items-center gap-2 text-xs text-site-muted mb-3">
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-3 h-3" />
                     {formatDate(blog.created_at)}
@@ -198,15 +191,15 @@ export default async function BlogsPage({
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-site-text group-hover:text-site-secondary transition-colors mb-3 leading-snug">
+                <h3 className="text-sm font-bold text-site-text group-hover:text-site-secondary transition-colors mb-2 leading-snug">
                   {blog.title}
                 </h3>
 
-                <p className="text-sm text-site-muted leading-relaxed line-clamp-3 mb-5 flex-1">
+                <p className="text-xs text-site-muted leading-relaxed line-clamp-2 mb-5 flex-1">
                   {stripFormatting(blog.content)}
                 </p>
 
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-site-secondary group-hover:text-site-primary transition-colors mt-auto">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-site-secondary group-hover:text-site-primary transition-colors mt-auto">
                   Read more
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </span>
@@ -221,7 +214,7 @@ export default async function BlogsPage({
             {currentPage > 1 && (
               <Link
                 href={`?page=${currentPage - 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border rounded-xl hover:border-site-secondary/40 hover:bg-site-highlight transition-all"
+                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border/60 rounded-xl hover:border-site-accent/30 hover:bg-site-highlight transition-all cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Previous
@@ -233,19 +226,15 @@ export default async function BlogsPage({
                 const page = i + 1;
                 const isActive = currentPage === page;
 
-                if (
-                  page === 1 ||
-                  page === totalPages ||
-                  Math.abs(page - currentPage) <= 1
-                ) {
+                if (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1) {
                   return (
                     <Link
                       key={page}
                       href={`?page=${page}`}
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all cursor-pointer ${
                         isActive
                           ? "bg-site-primary text-white shadow-sm"
-                          : "text-site-text bg-white border border-site-border hover:border-site-secondary/40 hover:bg-site-highlight"
+                          : "text-site-text bg-white border border-site-border/60 hover:border-site-accent/30 hover:bg-site-highlight"
                       }`}
                     >
                       {page}
@@ -255,10 +244,7 @@ export default async function BlogsPage({
 
                 if (page === 2 || page === totalPages - 1) {
                   return (
-                    <span
-                      key={page}
-                      className="w-10 h-10 flex items-center justify-center text-site-muted text-sm"
-                    >
+                    <span key={page} className="w-10 h-10 flex items-center justify-center text-site-muted text-sm">
                       ...
                     </span>
                   );
@@ -271,7 +257,7 @@ export default async function BlogsPage({
             {currentPage < totalPages && (
               <Link
                 href={`?page=${currentPage + 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border rounded-xl hover:border-site-secondary/40 hover:bg-site-highlight transition-all"
+                className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-site-text bg-white border border-site-border/60 rounded-xl hover:border-site-accent/30 hover:bg-site-highlight transition-all cursor-pointer"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />

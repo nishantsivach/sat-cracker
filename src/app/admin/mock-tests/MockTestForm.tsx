@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Clock } from "lucide-react";
 
-type Values = { title: string; duration_minutes: number; is_published: boolean };
+type Values = { title: string; duration_minutes: number; is_published: boolean; is_premium: boolean };
 
 export default function MockTestForm({
   mode,
@@ -21,6 +21,7 @@ export default function MockTestForm({
     title: initialValues?.title ?? "",
     duration_minutes: initialValues?.duration_minutes ?? 60,
     is_published: initialValues?.is_published ?? false,
+    is_premium: initialValues?.is_premium ?? false,
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -136,6 +137,20 @@ export default function MockTestForm({
             <div>
               <p className="font-medium">Published</p>
               <p className="text-xs text-site-muted">Visible to students</p>
+            </div>
+          </label>
+          
+          {/* Premium toggle */}
+          <label className="flex items-center gap-3 text-sm text-site-text cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={values.is_premium}
+              onChange={(e) => setValues((prev) => ({ ...prev, is_premium: e.target.checked }))}
+              className="w-4 h-4 rounded border-site-border text-site-accent focus:ring-site-accent/20 cursor-pointer"
+            />
+            <div>
+              <p className="font-medium">Premium only</p>
+              <p className="text-xs text-site-muted">Free users see this test locked with an upgrade prompt</p>
             </div>
           </label>
 

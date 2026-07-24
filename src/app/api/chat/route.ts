@@ -6,6 +6,7 @@ import {
   getConversationHistory,
   saveMessage,
 } from "@/utils/supabase/api/ai_conversation";
+import { checkIsPremium } from "@/utils/supabase/api/subscription";
 
 
 const SYSTEM_PROMPT = `You are an expert, encouraging SAT tutor who helps students with every part of SAT preparation: Math, Reading & Writing, study planning, test-taking strategy, and general motivation.
@@ -28,10 +29,14 @@ export async function POST(req: NextRequest) {
   let activeConversationId: string | null = conversationId ?? null;
   let history: { role: "user" | "assistant"; content: string }[] = [];
 
+    let isPremium = false;
+
   if (user) {
-    if (await hasReachedDailyLimit(supabase, user.id)) {
+    isPremium = await checkIsPremium(supabase, user.id);
+
+    if (await hasReachedDailyLimit(supabase, user.id, isPremium)) {
       return new Response(
-        JSON.stringify({ error: "Daily message limit reached. Try again tomorrow." }),
+        JSON.stringify({ error: "Daily message limit reached. Upgrade to Premium for unlimited messages." }),
         { status: 429 },
       );
     }
@@ -113,6 +118,7 @@ export async function POST(req: NextRequest) {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "X-Conversation-Id": activeConversationId ?? "",
+      "X-Is-Premium": String(isPremium),
     },
   });
 }

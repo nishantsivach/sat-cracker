@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Clock, ListChecks, Search, ClipboardList, AlertTriangle } from "lucide-react";
+import { Plus, Pencil, Trash2, Clock, ListChecks, Search, ClipboardList, AlertTriangle, Crown } from "lucide-react";
 import Pagination from "@/components/common/Pagination";
 
 type MockTest = {
@@ -11,6 +11,7 @@ type MockTest = {
   title: string;
   duration_minutes: number;
   is_published: boolean;
+  is_premium: boolean;
   question_count: number;
 };
 
@@ -45,7 +46,6 @@ export default function MockTestsList({
       router.push(`${pathname}?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   const togglePublish = async (test: MockTest) => {
@@ -124,27 +124,18 @@ export default function MockTestsList({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-site-border bg-site-highlight">
-              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">
-                Title
-              </th>
-              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">
-                Duration
-              </th>
-              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider hidden sm:table-cell">
-                Questions
-              </th>
-              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">
-                Status
-              </th>
-              <th className="text-right px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">
-                Actions
-              </th>
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">Title</th>
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">Duration</th>
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider hidden sm:table-cell">Questions</th>
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">Access</th>
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">Status</th>
+              <th className="text-right px-5 py-3.5 text-xs font-bold text-site-muted uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-site-border">
             {localTests.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-5 py-12 text-center">
+                <td colSpan={6} className="px-5 py-12 text-center">
                   <div className="flex flex-col items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-site-highlight flex items-center justify-center">
                       <ClipboardList className="w-6 h-6 text-site-muted" />
@@ -174,6 +165,16 @@ export default function MockTestsList({
                     <ListChecks className="w-3.5 h-3.5" />
                     {test.question_count}
                   </span>
+                </td>
+                <td className="px-5 py-3.5">
+                  {test.is_premium ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                      <Crown className="w-3 h-3" />
+                      Premium
+                    </span>
+                  ) : (
+                    <span className="text-[11px] font-medium text-site-muted">Free</span>
+                  )}
                 </td>
                 <td className="px-5 py-3.5">
                   <button

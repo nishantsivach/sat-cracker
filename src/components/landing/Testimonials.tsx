@@ -105,6 +105,7 @@ const students = [
     highlight: true,
   },
 ];
+
 export default function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -114,7 +115,6 @@ export default function Testimonials() {
   const cardsPerView = 3;
   const totalSlides = Math.ceil(students.length / cardsPerView);
 
-  // Auto-scroll
   useEffect(() => {
     if (isPaused) return;
 
@@ -129,7 +129,6 @@ export default function Testimonials() {
         const nextScroll = nextIndex * cardWidth;
 
         if (nextScroll >= maxScroll) {
-          // Reset to start
           scrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
           return 0;
         } else {
@@ -146,11 +145,11 @@ export default function Testimonials() {
 
   return (
     <section className="py-28 px-6 bg-site-background relative overflow-hidden">
+      {/* Background pattern */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, #1B2A4A 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, #1B2A4A 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
@@ -158,14 +157,14 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto relative">
         {/* Header */}
         <div className="max-w-2xl mb-16">
-          <div className="inline-flex items-center gap-2 bg-site-highlight rounded-full px-4 py-1.5 mb-5">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-5 shadow-sm border border-site-border/60">
             <span className="w-1.5 h-1.5 rounded-full bg-site-accent" />
             <span className="text-xs font-bold tracking-[0.2em] text-site-primary uppercase">
               Student Results
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black text-site-primary leading-[1.05] tracking-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-[3.25rem] font-black text-site-primary leading-[1.05] tracking-tight">
             Scores don&apos;t lie.
             <br />
             <span className="text-site-secondary">
@@ -173,9 +172,8 @@ export default function Testimonials() {
             </span>
           </h2>
 
-          <p className="mt-5 text-site-muted text-lg leading-relaxed max-w-xl">
-            {students.length}+ students who showed up, did the work, and got
-            the scores they wanted.
+          <p className="mt-4 text-site-muted text-lg leading-relaxed max-w-xl">
+            {students.length}+ students who showed up, did the work, and got the scores they wanted.
           </p>
         </div>
 
@@ -192,14 +190,19 @@ export default function Testimonials() {
           {students.map((student, index) => (
             <article
               key={student.name}
-              className="group relative bg-site-surface rounded-2xl border border-site-border hover:shadow-xl hover:shadow-site-primary/5 transition-all duration-300 snap-start shrink-0 w-[340px] md:w-[380px]"
+              className="group relative bg-white rounded-3xl border border-site-border/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 snap-start shrink-0 w-[340px] md:w-[380px]"
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-site-accent/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              {/* Top shine */}
+              <div className="absolute top-0 left-5 right-5 h-px bg-gradient-to-r from-transparent via-site-border/40 to-transparent" />
 
-              <div className="relative p-7 h-full flex flex-col min-h-[320px]">
-                <div className="flex items-start justify-between mb-6">
+              {/* Subtle hover glow */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-site-accent/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+              <div className="relative p-6 h-full flex flex-col min-h-[300px]">
+                {/* Top row: Avatar + Score */}
+                <div className="flex items-start justify-between mb-5">
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-sm ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-sm ${
                       index % 3 === 0
                         ? "bg-site-primary"
                         : index % 3 === 1
@@ -211,7 +214,7 @@ export default function Testimonials() {
                   </div>
 
                   <div className="text-right">
-                    <span className="text-[2.25rem] font-black text-site-primary leading-none tracking-tight">
+                    <span className="text-[2rem] font-black text-site-primary leading-none tracking-tight">
                       {student.after}
                     </span>
                     <div className="flex items-center justify-end gap-1.5 mt-1">
@@ -226,27 +229,29 @@ export default function Testimonials() {
                   </div>
                 </div>
 
-                <blockquote className="text-site-text leading-relaxed mb-6 flex-1 text-[15px]">
-                  <span className="text-site-accent/30 text-3xl leading-none font-serif">
+                {/* Quote */}
+                <blockquote className="text-site-text leading-relaxed mb-5 flex-1 text-sm">
+                  <span className="text-site-accent/25 text-2xl leading-none font-serif">
                     &ldquo;
                   </span>
                   {student.text}
                 </blockquote>
 
-                <div className="flex items-center justify-between pt-4 border-t border-site-border">
+                {/* Bottom: Name + badge */}
+                <div className="flex items-center justify-between pt-4 border-t border-site-border/60">
                   <div>
-                    <div className="text-site-primary font-semibold text-sm">
+                    <div className="text-site-primary font-semibold text-xs">
                       {student.name}
                     </div>
-                    <div className="text-site-muted text-xs">
+                    <div className="text-site-muted text-[11px]">
                       {student.role}
                     </div>
                   </div>
 
                   {student.highlight ? (
-                    <div className="flex items-center gap-1.5 bg-site-highlight px-2.5 py-1.5 rounded-lg">
+                    <div className="flex items-center gap-1.5 bg-site-accent/10 px-2.5 py-1 rounded-lg">
                       <Medal className="w-3.5 h-3.5 text-site-accent" />
-                      <span className="text-xs font-semibold text-site-primary">
+                      <span className="text-[10px] font-bold text-site-accent">
                         Top Improver
                       </span>
                     </div>
@@ -255,7 +260,7 @@ export default function Testimonials() {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className="w-3.5 h-3.5 fill-site-accent text-site-accent"
+                          className="w-3 h-3 fill-site-accent text-site-accent"
                         />
                       ))}
                     </div>
@@ -266,6 +271,7 @@ export default function Testimonials() {
           ))}
         </div>
 
+        {/* Dots indicator */}
         <div className="mt-8 flex items-center justify-center gap-2">
           {Array.from({ length: totalSlides }).map((_, i) => (
             <button
@@ -279,9 +285,9 @@ export default function Testimonials() {
                 });
                 setCurrentIndex(i * cardsPerView);
               }}
-              className={`transition-all duration-300 rounded-full ${
+              className={`transition-all duration-300 rounded-full cursor-pointer ${
                 Math.floor(currentIndex / cardsPerView) === i
-                  ? "w-6 h-2 bg-site-accent"
+                  ? "w-5 h-2 bg-site-accent"
                   : "w-2 h-2 bg-site-border hover:bg-site-muted"
               }`}
               aria-label={`Go to slide ${i + 1}`}
@@ -289,7 +295,8 @@ export default function Testimonials() {
           ))}
         </div>
 
-        <div className="mt-16 pt-16 border-t border-site-border">
+        {/* Bottom trust row */}
+        <div className="mt-16 pt-14 border-t border-site-border/60">
           <div className="flex flex-wrap items-center justify-between gap-8">
             <div className="flex items-center gap-5">
               <div className="flex -space-x-3">
@@ -309,9 +316,7 @@ export default function Testimonials() {
                 <div className="text-2xl font-black text-site-primary">
                   {students.length * 800}+
                 </div>
-                <div className="text-sm text-site-muted">
-                  students prepping smarter
-                </div>
+                <div className="text-sm text-site-muted">students prepping smarter</div>
               </div>
             </div>
 
@@ -320,7 +325,7 @@ export default function Testimonials() {
                 <div className="text-2xl font-black text-site-accent">+192</div>
                 <div className="text-sm text-site-muted">avg improvement</div>
               </div>
-              <div className="w-px h-10 bg-site-border" />
+              <div className="w-px h-10 bg-site-border/60" />
               <div className="text-center">
                 <div className="text-2xl font-black text-site-primary">4.9</div>
                 <div className="text-sm text-site-muted">out of 5 rating</div>
