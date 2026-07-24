@@ -16,10 +16,10 @@ const transformations = [
 ];
 
 const proofPoints = [
-  "Real SAT-format questions",
-  "Instant AI explanations",
-  "Adapts to your weak spots",
-  "Score tracking that's actually useful",
+  "SAT-format practice questions",
+  "AI-powered explanations",
+  "Personalized weak-area practice",
+  "SAT score tracking",
 ];
 
 export default function Hero() {
@@ -64,20 +64,17 @@ export default function Hero() {
           </div>
 
           <h1 className="text-[2.75rem] lg:text-[3.75rem] font-black leading-[1.02] tracking-tight">
-            Don&apos;t cheat on yourself.
-            <br />
-            <span className="bg-gradient-to-r from-site-accent via-amber-300 to-site-accent bg-clip-text text-transparent">
-              Preparation &gt;&gt; Intelligence
-            </span>
-            <span className="block text-lg text-white/50 font-normal mt-2">
-              (99% of the time)
-            </span>
-          </h1>
+  AI-Powered SAT Prep
+  <br />
+  <span className="bg-gradient-to-r from-site-accent via-amber-300 to-site-accent bg-clip-text text-transparent">
+    Built to Improve Your Score
+  </span>
+</h1>
 
           <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-lg">
-            25,000+ students stopped guessing and started preparing with AI-powered
-            practice and instant explanations.
-          </p>
+  Prepare for the SAT with AI tutoring, adaptive practice questions,
+  and instant explanations designed to help you improve your score faster.
+</p>
 
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 min-h-[28px]">
             {proofPoints.map((point) => (
@@ -119,7 +116,7 @@ export default function Hero() {
               className="group relative inline-flex items-center gap-2 bg-site-accent text-site-primary px-7 py-4 rounded-xl font-bold text-sm shadow-lg shadow-site-accent/25 hover:shadow-xl hover:shadow-site-accent/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-2">
-                Start practicing free
+                Explore SAT Prep Guide
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-300 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -195,7 +192,7 @@ export default function Hero() {
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-300 rounded-t-2xl" />
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <span className="text-sm font-bold text-site-text">Smart practice</span>
+                    <span className="text-sm font-bold text-site-text">SAT Smart Practice</span>
                     <p className="text-[10px] text-site-muted">Adaptive question sets</p>
                   </div>
                   <span className="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">

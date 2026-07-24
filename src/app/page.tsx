@@ -17,9 +17,9 @@ import { createMetadata, createOrganizationSchema, createWebPageSchema } from "@
 import Script from "next/script";
 
 export const metadata = createMetadata({
-  title: "AI-Powered SAT Prep | Practice Smarter",
+  title: "SAT Prep Courses, AI Tutor & Practice Tests | SATCracker",
   description:
-    "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking. 25,000+ students already prep smarter with SATCracker.",
+    "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores with smarter preparation.",
   path: "/",
 });
 
@@ -40,12 +40,13 @@ export default async function LandingPage() {
 
   const organizationSchema = createOrganizationSchema();
 
-  const webPageSchema = createWebPageSchema({
-    title: "AI-Powered SAT Prep | Practice Smarter",
-    description:
-      "Prepare for the SAT with AI-powered explanations, adaptive practice questions, and real progress tracking. 25,000+ students already prep smarter with SATCracker.",
-    path: "/",
-  });
+ const webPageSchema = createWebPageSchema({
+  title: "SAT Prep Courses, AI Tutor & Practice Tests | SATCracker",
+  description:
+    "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores with smarter preparation.",
+  path: "/",
+});
+
   return (
     <Layout>
       <Script
