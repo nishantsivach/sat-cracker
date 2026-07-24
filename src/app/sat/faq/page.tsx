@@ -65,7 +65,7 @@ export default async function SatFaqPage() {
   ]);
 
   const faqSchema = createFAQSchema(items);
-    return (
+  return (
     <Layout>
       <Script
         id="faq-webpage-schema"
@@ -132,6 +132,9 @@ export default async function SatFaqPage() {
 
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 py-12">
+        <h2 className="text-2xl font-bold text-site-text mb-6">
+          Answers to Your Most Common SAT Questions
+        </h2>
         <FaqAccordion items={items} />
 
         {/* Bottom CTA */}

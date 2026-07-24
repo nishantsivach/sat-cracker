@@ -379,6 +379,10 @@ export default async function SatSlugPage({ params }: PageProps) {
       <PageHero title={page.title} subtitle={page.data?.subtitle} />
 
       <section className="max-w-3xl mx-auto px-6 py-12">
+         <h2 className="text-2xl font-bold text-site-text mb-6">
+        {page.data?.sectionTitle || "Important Information You Need to Know"}
+      </h2>
+      
         {bodyParagraphs.length > 0 ? (
           <div className="space-y-5">
             {bodyParagraphs.map((para: string, i: number) => (
