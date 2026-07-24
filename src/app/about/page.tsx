@@ -1,12 +1,14 @@
 import { Layout } from "@/components";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Target, Users, Zap } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "About SATCracker | AI-Powered SAT Preparation",
+export const metadata = createMetadata({
+  title: "About SATCracker | AI-Powered SAT Prep",
   description:
-    "SATCracker helps students prepare for the SAT with AI-powered explanations, adaptive practice, and real progress tracking.",
-};
+    "Learn how SATCracker helps students prepare for the SAT with AI tutoring, adaptive practice questions, courses, and progress tracking.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

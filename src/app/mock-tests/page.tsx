@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import { Layout } from "@/components";
 import Link from "next/link";
 import { Clock, FileText, ArrowRight, Target, Zap, Crown } from "lucide-react";
 import { checkIsPremium } from "@/utils/supabase/api/subscription";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  robots: { index: false, follow: false },
-};
+
+export const metadata = createMetadata({
+  title: "SAT Mock Tests — Free Full-Length Practice Tests",
+  description: "Take full-length SAT mock tests that mirror the real digital SAT. Free tests available, plus premium tests for full coverage.",
+  path: "/mock-tests",
+});
 
 export default async function MockTestsPage() {
   const supabase = await createClient();

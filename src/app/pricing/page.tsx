@@ -8,12 +8,14 @@ import {
 } from "@/components/pricing";
 import { getSubscription } from "@/utils/supabase/api/subscription";
 import { createClient } from "@/utils/supabase/server";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "SAT Pricing | Premium SAT Prep Plans | SATCracker",
+export const metadata = createMetadata({
+  title: "SAT Pricing Plans | Premium SAT Prep | SATCracker",
   description:
-    "Compare SATCracker Free and Premium plans. Unlock unlimited AI SAT tutoring, full SAT courses, practice tests, and advanced analytics.",
-};
+    "Compare SATCracker pricing plans and unlock premium SAT prep features including AI tutoring, SAT courses, practice tests, and progress analytics.",
+  path: "/pricing",
+});
 
 export default async function PricingPage() {
 
