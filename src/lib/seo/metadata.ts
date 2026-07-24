@@ -32,6 +32,10 @@ export function createMetadata({
     title: pageTitle,
     description: pageDescription,
 
+    icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
     alternates: {
       canonical,
     },
