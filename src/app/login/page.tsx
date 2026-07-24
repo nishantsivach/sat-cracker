@@ -17,6 +17,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -87,9 +88,9 @@ function LoginForm() {
             </span>
           </h1>
 
-          <p className="mt-5 text-site-muted leading-relaxed text-[15px]">
-            Log in to continue your personalized SAT prep journey. Your progress, study plan, and AI tutor are waiting.
-          </p>
+          <h2 className="text-xl font-semibold text-site-muted mt-4 max-w-sm">
+            Access your personalized study plan and AI tutor
+          </h2>
 
           <div className="mt-8 space-y-3.5">
             {[

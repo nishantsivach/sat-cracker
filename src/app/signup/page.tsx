@@ -139,6 +139,9 @@ export default function SignupPage() {
                 prep journey today.
               </span>
             </h1>
+            <h2 className="text-xl font-semibold text-site-muted mt-4 max-w-sm">
+              Join 25,000+ students already improving their SAT scores
+            </h2>
 
             <p className="mt-5 text-site-muted leading-relaxed text-[15px]">
               Create your free account and get access to AI-powered practice, progress tracking, and personalized study plans.

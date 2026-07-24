@@ -11,9 +11,56 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
+import { cache } from "react";
+import { truncateForMeta } from "@/utils/seo";
+import { Metadata } from "next";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+
+// React's cache() memoizes this per request generateMetadata and the page
+
+const getCourse = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data: course } = await supabase
+    .from("course")
+    .select("id, title, slug, description")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
+  return course;
+});
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const course = await getCourse(slug);
+  if (!course) return {};
+
+  const title = truncateForMeta(course.title, 55);
+  const description = truncateForMeta(
+    course.description ?? `Structured SAT prep: ${course.title}. Learn at your own pace with SATCracker.`,
+    160,
+  );
+  const url = `/courses/${slug}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | SATCracker`,
+      description,
+      url,
+      type: "website",
+      siteName: "SATCracker",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | SATCracker`,
+      description,
+    },
+  };
+}
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();

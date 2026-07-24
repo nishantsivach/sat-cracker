@@ -10,30 +10,37 @@ import {
   Info,
   EyeOff,
 } from "lucide-react";
+import {
+  createMetadata,
+  createWebPageSchema,
+  createBreadcrumbSchema,
+} from "@/lib/seo";
+import Script from "next/script";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
+
   const supabase = await createClient();
-  
-  // Get college regardless of publish status for metadata
+
   const { data: college } = await supabase
     .from("college")
-    .select("meta_title, meta_description, is_published")
+    .select("name, meta_title, meta_description")
     .eq("slug", slug)
     .single();
 
   if (!college) return {};
-  
-  const title = college.is_published 
-    ? college.meta_title 
-    : `${college.meta_title || "College"} - Coming Soon`;
-    
-  return { 
-    title, 
-    description: college.meta_description 
-  };
+
+  return createMetadata({
+    title:
+      college.meta_title ??
+      `${college.name} SAT Requirements, Scores & Admission Guide`,
+    description:
+      college.meta_description ??
+      `Check ${college.name} SAT requirements, average SAT scores, admission details and preparation tips.`,
+    path: `/sat/colleges/${slug}`,
+  });
 }
 
 export default async function CollegeSatPage({ params }: PageProps) {
@@ -92,7 +99,7 @@ export default async function CollegeSatPage({ params }: PageProps) {
             <div className="w-16 h-16 mx-auto rounded-2xl bg-site-highlight flex items-center justify-center mb-6">
               <EyeOff className="w-7 h-7 text-site-muted" />
             </div>
-            
+
             <h2 className="text-xl font-bold text-site-text mb-2">
               College profile coming soon
             </h2>
@@ -125,19 +132,51 @@ export default async function CollegeSatPage({ params }: PageProps) {
     );
   }
 
-  // College is published — show full page
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: `${college.name} SAT Requirements`,
-    description: college.meta_description,
-  };
+  const webPageSchema = createWebPageSchema({
+    title:
+      college.meta_title ??
+      `${college.name} SAT Requirements`,
+    description:
+      college.meta_description ??
+      `SAT requirements for ${college.name}.`,
+    path: `/sat/colleges/${slug}`,
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "SAT",
+      path: "/sat",
+    },
+    {
+      name: "Colleges",
+      path: "/sat/colleges",
+    },
+    {
+      name: college.name,
+      path: `/sat/colleges/${slug}`,
+    },
+  ]);
 
   return (
     <Layout>
-      <script
+      <Script
+        id="college-webpage-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="college-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
       />
 
       {/* Hero */}

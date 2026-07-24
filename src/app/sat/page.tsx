@@ -13,6 +13,9 @@ import {
   BarChart3,
   Sparkles,
 } from "lucide-react";
+import { cache } from "react";
+import { createBreadcrumbSchema, createMetadata, createWebPageSchema } from "@/lib/seo";
+import Script from "next/script";
 
 const iconMap: Record<string, React.ReactNode> = {
   calculator: <Calculator className="w-5 h-5 text-site-secondary" />,
@@ -22,16 +25,26 @@ const iconMap: Record<string, React.ReactNode> = {
   help: <HelpCircle className="w-5 h-5 text-site-secondary" />,
 };
 
-export async function generateMetadata() {
+const getSatPillarPage = cache(async () => {
   const supabase = await createClient();
-  const page = await getContentPage(supabase, "pillar", "sat");
+  return getContentPage(supabase, "pillar", "sat");
+});
+
+
+export async function generateMetadata() {
+  const page = await getSatPillarPage();
   if (!page) return {};
-  return { title: page.meta_title, description: page.meta_description };
+
+  return createMetadata({
+    title: page.meta_title || page.title,
+    description: page.meta_description || page.intro,
+    path: "/sat",
+  });
 }
 
 export default async function SatPillarPage() {
-  const supabase = await createClient();
-  const page = await getContentPage(supabase, "pillar", "sat");
+  // const supabase = await createClient();
+  const page = await getSatPillarPage();
   if (!page) notFound();
 
   const sections = page.data?.sections ?? [];
@@ -43,19 +56,33 @@ export default async function SatPillarPage() {
     { value: "7x/yr", label: "Offered" },
   ];
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: page.title,
-    description: page.meta_description,
-    about: "SAT Exam Preparation",
-  };
+  const webPageSchema = createWebPageSchema({
+    title: page.title,
+    description: page.meta_description || page.intro,
+    path: "/sat",
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "SAT", path: "/sat" },
+  ]);
 
   return (
     <Layout>
-      <script
+      <Script
+        id="sat-webpage-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="sat-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
       />
 
       {/* Hero */}
