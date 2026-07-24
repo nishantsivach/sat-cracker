@@ -14,44 +14,37 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { cache } from "react";
+import { createMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{
     slug: string;
   }>;
 };
-
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+const getBlogPost = cache(async (slug: string) => {
   const supabase = await createClient();
+  const { data } = await supabase.from("blog_content").select().eq("slug", slug).single();
+  return data;
+});
 
-  const { data } = await supabase
-    .from("blog_content")
-    .select("title, meta_title, meta_description")
-    .eq("slug", slug)
-    .single();
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+  if (!post) return {};
 
-  if (!data) return {};
-
-  return {
-    title: data.meta_title || data.title,
-    description: data.meta_description || "",
-  };
+  return createMetadata({
+    title: post.meta_title || post.title,
+    description: post.meta_description || post.content?.slice(0, 160) || "",
+    path: `/blogs/${slug}`,
+    type: "article",
+  });
 }
 
 export default async function BlogPost({ params }: PageProps) {
-  const supabase = await createClient();
-  const slug = (await params).slug;
-
-  const { data, error } = await supabase
-    .from("blog_content")
-    .select()
-    .eq("slug", slug)
-    .single();
-
-  if (!data || error) notFound();
+  const { slug } = await params;
+  const data = await getBlogPost(slug);
+  if (!data) notFound();
 
   const calculateReadTime = (content: string) => {
     const words = content.split(/\s+/).length;

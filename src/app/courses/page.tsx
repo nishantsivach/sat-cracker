@@ -7,12 +7,28 @@ import {
     GraduationCap,
     Sparkles,
 } from "lucide-react";
+import type { Metadata } from "next";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
+
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("course")
+    .select("*", { count: "exact", head: true })
+    .eq("is_published", true);
+
+  const description =
+    count && count > 0
+      ? `Browse ${count} structured SAT course${count !== 1 ? "s" : ""} covering Math and Reading & Writing, with free preview lessons in every course.`
+      : "Browse structured SAT courses covering Math and Reading & Writing, with free preview lessons in every course.";
+
+  return createMetadata({
     title: "SAT Courses — Structured Prep by Section",
-    description:
-        "Browse structured SAT courses covering Math and Reading & Writing, with free preview lessons in every course.",
-};
+    description,
+    path: "/courses",
+  });
+}
 
 export default async function CoursesPage() {
     const supabase = await createClient();

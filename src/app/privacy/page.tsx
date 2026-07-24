@@ -1,12 +1,14 @@
 import { Layout } from "@/components";
 import Link from "next/link";
 import { ShieldCheck, ArrowLeft } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Privacy Policy | SATCracker",
-  description: "SATCracker's privacy policy — how we collect, use, and protect your data.",
-};
-
+export const metadata = createMetadata({
+  title: "Privacy Policy",
+  description:
+    "Learn how SATCracker collects, uses, and protects your personal information when using our AI-powered SAT preparation platform.",
+  path: "/privacy-policy",
+});
 export default function PrivacyPage() {
   return (
     <Layout>
