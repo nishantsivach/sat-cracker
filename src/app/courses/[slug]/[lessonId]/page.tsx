@@ -16,7 +16,14 @@ import {
 import { checkIsPremium } from "@/utils/supabase/api/subscription";
 import { cache } from "react";
 import { Metadata } from "next";
-import { truncateForMeta } from "@/utils/seo";
+import Script from "next/script";
+
+import {
+  createMetadata,
+  createArticleSchema,
+  createBreadcrumbSchema,
+  createWebPageSchema,
+} from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string; lessonId: string }> };
 
@@ -41,47 +48,51 @@ const getLesson = cache(async (lessonId: string) => {
   return lesson;
 });
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug, lessonId } = await params;
-  const [course, lesson] = await Promise.all([getCourse(slug), getLesson(lessonId)]);
+
+  const [course, lesson] = await Promise.all([
+    getCourse(slug),
+    getLesson(lessonId),
+  ]);
 
   if (!course || !lesson) return {};
 
-  const title = truncateForMeta(`${lesson.title} — ${course.title}`, 55);
-  const description = truncateForMeta(
-    `${lesson.title}, part of the ${course.title} course. ${
-      lesson.free_preview ? "Free preview available." : "Unlock with SATCracker Premium."
-    }`,
-    160,
-  );
-  const url = `/courses/${slug}/${lessonId}`;
+  const description =
+    `${lesson.title}, part of the ${course.title} course. ` +
+    (lesson.free_preview
+      ? "Free preview available."
+      : "Available with SATCracker Premium.");
 
-  return {
-    title,
+  return createMetadata({
+    title: `${lesson.title} | ${course.title}`,
     description,
-    alternates: { canonical: url },
-    openGraph: { title: `${title} | SATCracker`, description, url, type: "website", siteName: "SATCracker" },
-    twitter: { card: "summary_large_image", title: `${title} | SATCracker`, description },
-  };
+    path: `/courses/${slug}/${lessonId}`,
+
+    keywords: [
+      "SAT Lesson",
+      "SAT Course",
+      course.title,
+      lesson.title,
+      "Digital SAT",
+    ],
+
+    type: "article",
+  });
 }
 
 export default async function LessonPage({ params }: PageProps) {
   const { slug, lessonId } = await params;
+  const [course, lesson] = await Promise.all([
+    getCourse(slug),
+    getLesson(lessonId),
+  ]);
+
+  if (!course || !lesson) notFound();
+
   const supabase = await createClient();
-
-  const { data: course } = await supabase
-    .from("course")
-    .select("id, title, slug")
-    .eq("slug", slug)
-    .single();
-
-  if (!course) notFound();
-
-  const { data: lesson } = await supabase
-    .from("lesson")
-    .select("id, title, content, video_path, free_preview, module_id, order")
-    .eq("id", lessonId)
-    .single();
 
   if (!lesson) notFound();
 
@@ -91,6 +102,44 @@ export default async function LessonPage({ params }: PageProps) {
 
   const isPremium = user ? await checkIsPremium(supabase, user.id) : false;
   const hasAccess = lesson.free_preview || isPremium;
+
+  const description =
+    `${lesson.title}, part of the ${course.title} course. ` +
+    (lesson.free_preview
+      ? "Free preview available."
+      : "Available with SATCracker Premium.");
+
+  const articleSchema = createArticleSchema({
+    title: lesson.title,
+    description,
+    path: `/courses/${slug}/${lessonId}`,
+  });
+
+  const webPageSchema = createWebPageSchema({
+    title: lesson.title,
+    description,
+    path: `/courses/${slug}/${lessonId}`,
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Courses",
+      path: "/courses",
+    },
+    {
+      name: course.title,
+      path: `/courses/${slug}`,
+    },
+    {
+      name: lesson.title,
+      path: `/courses/${slug}/${lessonId}`,
+    },
+  ]);
+
 
   const { data: nextLesson } = await supabase
     .from("lesson")
@@ -103,6 +152,31 @@ export default async function LessonPage({ params }: PageProps) {
 
   return (
     <Layout>
+
+      <Script
+        id="lesson-article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleSchema),
+        }}
+      />
+
+      <Script
+        id="lesson-webpage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="lesson-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div

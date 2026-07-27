@@ -19,7 +19,6 @@ type FAQItem = {
   answer: string;
 };
 
-
 type CourseSchemaOptions = BaseSchemaOptions & {
   provider?: string;
 };
@@ -33,7 +32,29 @@ export function createOrganizationSchema() {
     "@type": "Organization",
     name: SEO_CONFIG.organizationName,
     url: SEO_CONFIG.siteUrl,
+    description: SEO_CONFIG.defaultDescription,
+
     logo: buildCanonical("/logo.png"),
+
+    sameAs: [],
+  };
+}
+
+/**
+ * Website Schema
+ */
+export function createWebsiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SEO_CONFIG.siteName,
+    url: SEO_CONFIG.siteUrl,
+    inLanguage: SEO_CONFIG.language,
+
+    publisher: {
+      "@type": "Organization",
+      name: SEO_CONFIG.organizationName,
+    },
   };
 }
 
@@ -48,11 +69,20 @@ export function createWebPageSchema({
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
+
     name: title,
     headline: title,
     description,
+
     url: buildCanonical(path),
+
     inLanguage: SEO_CONFIG.language,
+
+    publisher: {
+      "@type": "Organization",
+      name: SEO_CONFIG.organizationName,
+    },
+
     isPartOf: {
       "@type": "WebSite",
       name: SEO_CONFIG.siteName,
@@ -62,7 +92,7 @@ export function createWebPageSchema({
 }
 
 /**
- * Article Schema
+ * Blog Article Schema
  */
 export function createArticleSchema({
   title,
@@ -75,10 +105,13 @@ export function createArticleSchema({
 }: ArticleSchemaOptions) {
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+
     headline: title,
     description,
+
     url: buildCanonical(path),
+    mainEntityOfPage: buildCanonical(path),
 
     image: image
       ? buildCanonical(image)
@@ -135,14 +168,18 @@ export function createCourseSchema({
   return {
     "@context": "https://schema.org",
     "@type": "Course",
+
     name: title,
     description,
+
     url: buildCanonical(path),
+
+    inLanguage: SEO_CONFIG.language,
 
     provider: {
       "@type": "Organization",
       name: provider ?? SEO_CONFIG.organizationName,
+      url: SEO_CONFIG.siteUrl,
     },
   };
 }
-

@@ -5,6 +5,11 @@ import { Calendar, Clock, ArrowRight, BookOpen, ChevronLeft, ChevronRight } from
 import { RetryButton } from "@/components/common/RetryButton";
 import { createMetadata } from "@/lib/seo";
 import { Metadata } from "next";
+import {
+createWebPageSchema,
+  createBreadcrumbSchema,
+} from "@/lib/seo";
+import Script from "next/script";
 
 const PAGE_SIZE = 10;
 
@@ -51,7 +56,10 @@ export default async function BlogsPage({
     count,
   } = await supabase
     .from("blog_content")
-    .select("title, slug, content, created_at", { count: "exact" })
+    .select("title, slug, content, created_at, updated_at", {
+      count: "exact",
+    })
+    .eq("is_published", true)
     .order("created_at", { ascending: false })
     .range(from, to);
 
@@ -115,8 +123,52 @@ export default async function BlogsPage({
     );
   };
 
+  const description =
+  count && count > 0
+    ? `Explore ${count} SAT prep articles covering Digital SAT Math, Reading & Writing, test strategies, study plans, score improvement tips, and college admissions.`
+    : "Expert SAT prep articles covering Digital SAT Math, Reading & Writing, study plans, score improvement strategies, and college admissions.";
+  
+const webPageSchema = createWebPageSchema({
+  title:
+    currentPage > 1
+      ? `SAT Prep Blog - Page ${currentPage}`
+      : "SAT Prep Blog",
+
+  description,
+
+  path:
+    currentPage > 1
+      ? `/blogs?page=${currentPage}`
+      : "/blogs",
+});
+
+const breadcrumbSchema = createBreadcrumbSchema([
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "Blogs",
+    path: "/blogs",
+  },
+]);
   return (
     <Layout>
+      <Script
+      id="blogs-webpage-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(webPageSchema),
+      }}
+    />
+
+    <Script
+      id="blogs-breadcrumb-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(breadcrumbSchema),
+      }}
+    />
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
@@ -259,11 +311,10 @@ export default async function BlogsPage({
                     <Link
                       key={page}
                       href={`?page=${page}`}
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all cursor-pointer ${
-                        isActive
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all cursor-pointer ${isActive
                           ? "bg-site-primary text-white shadow-sm"
                           : "text-site-text bg-white border border-site-border/60 hover:border-site-accent/30 hover:bg-site-highlight"
-                      }`}
+                        }`}
                     >
                       {page}
                     </Link>

@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { ArrowLeft, Clock, BarChart3, ArrowRight } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
 const sectionHref: Record<string, string> = {
   math: "/sat/math",
@@ -33,9 +34,13 @@ export async function generateMetadata({ params }: PageProps) {
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
-
+ 
   if (!guide) return {};
-  return { title: guide.meta_title, description: guide.meta_description };
+  return createMetadata({
+    title: guide.meta_title,
+    description: guide.meta_description,
+    path: `/topics/${slug}`,
+  });
 }
 
 export default async function TopicGuidePage({ params }: PageProps) {

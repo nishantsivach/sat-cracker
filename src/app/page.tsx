@@ -13,16 +13,28 @@ import {
 } from "@/components/landing";
 import PremiumSection from "@/components/landing/PremiumSection";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
-import { createMetadata, createOrganizationSchema, createWebPageSchema } from "@/lib/seo";
+import { createMetadata, createOrganizationSchema, createWebPageSchema, createWebsiteSchema } from "@/lib/seo";
 import Script from "next/script";
 
 export const metadata = createMetadata({
   title: "SAT Prep Courses, AI Tutor & Practice Tests | SATCracker",
-  description:
-    "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores, build confidence, and prepare smarter.",
-  path: "/",
-});
 
+  description:
+    "Master the Digital SAT with AI tutoring, adaptive practice questions, video courses, and full-length mock tests. Improve your score with SATCracker.",
+
+  path: "/",
+
+  image: "/images/og/homepage-og.png",
+
+  keywords: [
+    "SAT Prep",
+    "Digital SAT",
+    "SAT Practice Tests",
+    "SAT Mock Tests",
+    "SAT AI Tutor",
+    "SAT Courses",
+  ],
+});
 export default async function LandingPage() {
   const supabase = await createClient();
 
@@ -46,6 +58,7 @@ export default async function LandingPage() {
     "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores with smarter preparation.",
   path: "/",
 });
+const websiteSchema = createWebsiteSchema();
 
   return (
     <Layout>
@@ -56,7 +69,13 @@ export default async function LandingPage() {
           __html: JSON.stringify(organizationSchema),
         }}
       />
-
+      <Script
+      id="website-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(websiteSchema),
+      }}
+    />
       <Script
         id="homepage-schema"
         type="application/ld+json"

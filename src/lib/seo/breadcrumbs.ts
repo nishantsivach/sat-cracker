@@ -16,6 +16,8 @@ export type BreadcrumbItem = {
  * ]);
  */
 export function createBreadcrumbSchema(items: BreadcrumbItem[]) {
+  if (items.length === 0) return null;
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

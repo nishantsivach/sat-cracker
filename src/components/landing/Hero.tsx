@@ -195,7 +195,7 @@ export default function Hero() {
                     <span className="text-sm font-bold text-site-text">SAT Smart Practice</span>
                     <p className="text-[10px] text-site-muted">Adaptive question sets</p>
                   </div>
-                  <span className="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
+                  <span className="flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
                     Live
                   </span>
@@ -233,7 +233,7 @@ export default function Hero() {
                   <div className="h-full w-[76%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full" />
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                  <p className="text-[11px] text-green-600 font-medium flex items-center gap-1">
+                  <p className="text-[11px] text-green-800 font-medium flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
                     +40 points this week
                   </p>
@@ -259,7 +259,7 @@ export default function Hero() {
                 </div>
                 <p className="text-[13px] text-site-text leading-relaxed italic">
                   &ldquo;Subtract 3, divide by 2 →{" "}
-                  <span className="font-bold text-green-600">x = 2</span>. Most SAT problems follow this exact pattern.&rdquo;
+                  <span className="font-bold text-green-800">x = 2</span>. Most SAT problems follow this exact pattern.&rdquo;
                 </p>
               </div>
             </div>

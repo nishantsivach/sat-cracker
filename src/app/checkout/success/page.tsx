@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Layout } from "@/components";
 import { CheckCircle2, ArrowRight, BookOpen, Sparkles, Zap } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Subscription Activated | SATCracker",
-  description:
-    "Your SATCracker Premium subscription has been activated successfully.",
-};
+export const metadata = createMetadata({
+  title: "Subscription Activated",
+  description: "Your SATCracker Premium subscription has been activated successfully.",
+  path: "/checkout/success",
+  noIndex: true,
+});
 
 export default function CheckoutSuccessPage() {
   return (

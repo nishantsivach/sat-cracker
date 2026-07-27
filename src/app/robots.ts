@@ -7,9 +7,28 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/", "/dashboard", "/profile", "/chat", "/checkout/"],
+        disallow: [
+          // Admin & API
+          "/admin",
+          "/api",
+
+          // Auth & User
+          "/auth",
+          "/dashboard",
+          "/profile",
+          "/account",
+          "/settings",
+
+          // Student Features
+          "/chat",
+          "/checkout",
+
+          // Internal/System
+          "/_next",
+        ],
       },
     ],
     sitemap: `${SEO_CONFIG.siteUrl}/sitemap.xml`,
+    host: SEO_CONFIG.siteUrl,
   };
 }

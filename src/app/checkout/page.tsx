@@ -7,6 +7,7 @@ import {
 } from "@/components/checkout";
 import { checkoutPlans } from "@/components/checkout/data";
 import { ShieldCheck } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
 type PageProps = {
   searchParams: Promise<{
@@ -14,11 +15,13 @@ type PageProps = {
   }>;
 };
 
-export const metadata = {
-  title: "Checkout | SATCracker Premium",
+export const metadata = createMetadata({
+  title: "Checkout",
   description:
     "Complete your SATCracker Premium subscription and unlock unlimited AI tutoring, SAT courses, mock tests, and more.",
-};
+  path: "/checkout",
+  noIndex: true,
+});
 
 export default async function CheckoutPage({
   searchParams,

@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Layout } from "@/components";
 import { ArrowLeft, ArrowRight, CreditCard, ShieldCheck } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Checkout Cancelled | SATCracker",
+export const metadata = createMetadata({
+  title: "Checkout Cancelled",
   description:
     "Your Premium checkout was cancelled. You can continue preparing for the SAT with the Free plan or upgrade anytime.",
-};
+  path: "/checkout/cancel",
+  noIndex: true,
+});
 
 export default function CheckoutCancelPage() {
   return (
