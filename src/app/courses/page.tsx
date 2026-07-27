@@ -8,26 +8,44 @@ import {
     Sparkles,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { createMetadata } from "@/lib/seo";
+import Script from "next/script";
+
+import {
+    createMetadata,
+    createWebPageSchema,
+    createBreadcrumbSchema,
+} from "@/lib/seo";
 
 
 export async function generateMetadata(): Promise<Metadata> {
-  const supabase = await createClient();
-  const { count } = await supabase
-    .from("course")
-    .select("*", { count: "exact", head: true })
-    .eq("is_published", true);
+    const supabase = await createClient();
 
-  const description =
-    count && count > 0
-      ? `Browse ${count} structured SAT course${count !== 1 ? "s" : ""} covering Math and Reading & Writing, with free preview lessons in every course.`
-      : "Browse structured SAT courses covering Math and Reading & Writing, with free preview lessons in every course.";
+    const { count } = await supabase
+        .from("course")
+        .select("*", { count: "exact", head: true })
+        .eq("is_published", true);
 
-  return createMetadata({
-    title: "SAT Courses — Structured Prep by Section",
-    description,
-    path: "/courses",
-  });
+    const description =
+        count && count > 0
+            ? `Browse ${count} structured SAT course${count !== 1 ? "s" : ""
+            } covering Math and Reading & Writing.`
+            : "Browse structured SAT courses covering Math and Reading & Writing.";
+
+    return createMetadata({
+        title: "SAT Courses – Structured Prep by Section",
+        description,
+        path: "/courses",
+
+        keywords: [
+            "SAT Courses",
+            "Digital SAT",
+            "SAT Math Course",
+            "SAT Reading Course",
+            "SAT Preparation",
+            "SAT Lessons",
+            "SAT Video Course",
+        ],
+    });
 }
 
 export default async function CoursesPage() {
@@ -39,8 +57,45 @@ export default async function CoursesPage() {
         .eq("is_published", true)
         .order("created_at", { ascending: true });
 
+    const description =
+        courses && courses.length > 0
+            ? `Browse ${courses.length} structured SAT courses covering Math and Reading & Writing.`
+            : "Browse structured SAT courses covering Math and Reading & Writing.";
+
+    const webPageSchema = createWebPageSchema({
+        title: "SAT Courses",
+        description,
+        path: "/courses",
+    });
+
+    const breadcrumbSchema = createBreadcrumbSchema([
+        {
+            name: "Home",
+            path: "/",
+        },
+        {
+            name: "Courses",
+            path: "/courses",
+        },
+    ]);
+
     return (
         <Layout>
+            <Script
+                id="courses-webpage-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(webPageSchema),
+                }}
+            />
+
+            <Script
+                id="courses-breadcrumb-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema),
+                }}
+            />
             {/* Hero */}
             <section className="bg-site-primary text-white relative overflow-hidden">
                 <div
@@ -67,8 +122,8 @@ export default async function CoursesPage() {
                         <span className="text-site-accent">section by section.</span>
                     </h1>
                     <p className="text-white/60 leading-relaxed max-w-xl text-[15px]">
-                        Every course includes free preview lessons so you can try before
-                        you commit. No surprises, just solid prep.
+                        Explore structured SAT courses designed to help you master each section,
+                        one lesson at a time.
                     </p>
 
                     {courses && (
@@ -133,7 +188,7 @@ export default async function CoursesPage() {
                                     {index === 0 && (
                                         <span className="flex items-center gap-1 text-[10px] font-bold text-site-accent bg-site-accent/10 px-2.5 py-1 rounded-full">
                                             <Sparkles className="w-3 h-3" />
-                                            Recommended
+                                            Free to start
                                         </span>
                                     )}
                                 </div>
@@ -154,10 +209,10 @@ export default async function CoursesPage() {
                                     </span>
 
                                     {/* Free preview badge */}
-                                    <span className="flex items-center gap-1 text-[10px] font-bold text-site-accent bg-site-accent/10 px-2.5 py-1 rounded-full">
+                                    {/* <span className="flex items-center gap-1 text-[10px] font-bold text-site-accent bg-site-accent/10 px-2.5 py-1 rounded-full">
                                         <Sparkles className="w-3 h-3" />
                                         Free preview
-                                    </span>
+                                    </span> */}
                                 </div>
                             </Link>
                         ))}

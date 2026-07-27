@@ -24,16 +24,22 @@ export function createOpenGraph({
   return {
     type,
     locale: SEO_CONFIG.locale,
+    countryName: "United States",
     siteName: SEO_CONFIG.siteName,
+
     title,
     description,
+
     url: buildCanonical(path),
+
     images: [
       {
         url: imageUrl,
+        secureUrl: imageUrl,
         width: 1200,
         height: 630,
-        alt: title,
+        type: "image/png",
+        alt: `${title} | ${SEO_CONFIG.siteName}`,
       },
     ],
   };

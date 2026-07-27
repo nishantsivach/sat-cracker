@@ -18,26 +18,39 @@ export function createMetadata({
   description,
   path = "/",
   image,
+  keywords,
   type = "website",
   noIndex = false,
 }: CreateMetadataOptions): Metadata {
   const pageTitle = title ?? SEO_CONFIG.defaultTitle;
-
   const pageDescription =
     description ?? SEO_CONFIG.defaultDescription;
 
-  const canonical = buildCanonical(path);
-
   return {
+    metadataBase: new URL(SEO_CONFIG.siteUrl),
+
     title: pageTitle,
     description: pageDescription,
 
+    keywords,
+
+    authors: [
+      {
+        name: SEO_CONFIG.author,
+      },
+    ],
+
+    publisher: SEO_CONFIG.organizationName,
+
+    themeColor: SEO_CONFIG.themeColor,
+
     icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-  },
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
+    },
+
     alternates: {
-      canonical,
+      canonical: buildCanonical(path),
     },
 
     robots: noIndex
@@ -59,6 +72,7 @@ export function createMetadata({
       card: "summary_large_image",
       title: pageTitle,
       description: pageDescription,
+      creator: SEO_CONFIG.twitterHandle,
       images: [
         image
           ? buildCanonical(image)

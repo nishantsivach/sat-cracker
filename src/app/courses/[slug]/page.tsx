@@ -11,9 +11,16 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
-import { cache } from "react";
-import { truncateForMeta } from "@/utils/seo";
 import { Metadata } from "next";
+import { cache } from "react";
+import Script from "next/script";
+
+import {
+  createMetadata,
+  createCourseSchema,
+  createBreadcrumbSchema,
+  createWebPageSchema,
+} from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -31,48 +38,41 @@ const getCourse = cache(async (slug: string) => {
   return course;
 });
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
+
   const course = await getCourse(slug);
+
   if (!course) return {};
 
-  const title = truncateForMeta(course.title, 55);
-  const description = truncateForMeta(
-    course.description ?? `Structured SAT prep: ${course.title}. Learn at your own pace with SATCracker.`,
-    160,
-  );
-  const url = `/courses/${slug}`;
+  return createMetadata({
+    title: course.title,
+    description:
+      course.description ??
+      `Structured SAT prep for ${course.title}.`,
 
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title: `${title} | SATCracker`,
-      description,
-      url,
-      type: "website",
-      siteName: "SATCracker",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | SATCracker`,
-      description,
-    },
-  };
+    path: `/courses/${slug}`,
+
+    keywords: [
+      "SAT Course",
+      "Digital SAT",
+      "SAT Lessons",
+      "SAT Preparation",
+      course.title,
+    ],
+  });
 }
+
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: course } = await supabase
-    .from("course")
-    .select("id, title, slug, description")
-    .eq("slug", slug)
-    .eq("is_published", true)
-    .single();
+  const course = await getCourse(slug);
 
   if (!course) notFound();
+
+  const supabase = await createClient();
+
 
   const { data: modules } = await supabase
     .from("module")
@@ -84,8 +84,62 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const totalLessons = allLessons.length;
   const freeLessons = allLessons.filter((l) => l.free_preview).length;
 
+  const description =
+    course.description ??
+    `Structured SAT prep for ${course.title}.`;
+
+  const webPageSchema = createWebPageSchema({
+    title: course.title,
+    description,
+    path: `/courses/${slug}`,
+  });
+
+  const courseSchema = createCourseSchema({
+    title: course.title,
+    description,
+    path: `/courses/${slug}`,
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Courses",
+      path: "/courses",
+    },
+    {
+      name: course.title,
+      path: `/courses/${slug}`,
+    },
+  ]);
+
   return (
     <Layout>
+      <Script
+        id="course-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(courseSchema),
+        }}
+      />
+
+      <Script
+        id="course-webpage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema),
+        }}
+      />
+
+      <Script
+        id="course-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div
@@ -185,15 +239,13 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     <Link
                       key={lesson.id}
                       href={`/courses/${course.slug}/${lesson.id}`}
-                      className={`flex items-center justify-between px-6 py-3.5 hover:bg-site-highlight/50 transition-colors cursor-pointer ${
-                        lessonIndex < lessons.length - 1 ? "border-b border-site-border/40" : ""
-                      }`}
+                      className={`flex items-center justify-between px-6 py-3.5 hover:bg-site-highlight/50 transition-colors cursor-pointer ${lessonIndex < lessons.length - 1 ? "border-b border-site-border/40" : ""
+                        }`}
                     >
                       <span className="flex items-center gap-3 min-w-0">
                         <span
-                          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${
-                            lesson.free_preview ? "bg-green-50" : "bg-site-highlight"
-                          }`}
+                          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${lesson.free_preview ? "bg-green-50" : "bg-site-highlight"
+                            }`}
                         >
                           {lesson.free_preview ? (
                             <PlayCircle className="w-3.5 h-3.5 text-green-600" />

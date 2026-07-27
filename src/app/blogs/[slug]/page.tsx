@@ -16,6 +16,11 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { cache } from "react";
 import { createMetadata } from "@/lib/seo";
+import {
+  createArticleSchema,
+  createBreadcrumbSchema,
+} from "@/lib/seo";
+import Script from "next/script";
 
 type PageProps = {
   params: Promise<{
@@ -24,7 +29,13 @@ type PageProps = {
 };
 const getBlogPost = cache(async (slug: string) => {
   const supabase = await createClient();
-  const { data } = await supabase.from("blog_content").select().eq("slug", slug).single();
+  const { data } = await supabase
+    .from("blog_content")
+    .select()
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
+
   return data;
 });
 
@@ -34,11 +45,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!post) return {};
 
   return createMetadata({
-    title: post.meta_title || post.title,
-    description: post.meta_description || post.content?.slice(0, 160) || "",
-    path: `/blogs/${slug}`,
-    type: "article",
-  });
+  title: post.meta_title || post.title,
+
+  description:
+    post.meta_description ||
+    post.content.slice(0, 160),
+
+  path: `/blogs/${slug}`,
+
+  type: "article",
+
+  image:
+    post.featured_image ??
+    "/images/og/default-blog.png",
+
+  keywords: [
+    "SAT",
+    "Digital SAT",
+    post.title,
+  ],
+});
 }
 
 export default async function BlogPost({ params }: PageProps) {
@@ -62,8 +88,51 @@ export default async function BlogPost({ params }: PageProps) {
 
   const readTime = calculateReadTime(data.content);
 
+  const articleSchema = createArticleSchema({
+    title: data.meta_title || data.title,
+    description:
+      data.meta_description ||
+      data.content.slice(0, 160),
+
+    path: `/blogs/${slug}`,
+
+    publishedTime: data.created_at,
+    modifiedTime: data.updated_at,
+    author: data.author?.name ?? "SATCracker",
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Blogs",
+      path: "/blogs",
+    },
+    {
+      name: data.title,
+      path: `/blogs/${slug}`,
+    },
+  ]);
+
   return (
     <Layout>
+      <Script
+        id="blog-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleSchema),
+        }}
+      />
+
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       {/* Hero */}
       <section className="bg-site-primary text-white relative overflow-hidden">
         <div

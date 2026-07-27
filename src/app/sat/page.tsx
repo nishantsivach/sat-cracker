@@ -36,10 +36,17 @@ export async function generateMetadata() {
   if (!page) return {};
 
   return createMetadata({
-    title: page.meta_title || page.title,
-    description: page.meta_description || page.intro,
-    path: "/sat",
-  });
+  title: page.meta_title || page.title,
+  description: page.meta_description || page.intro,
+  path: "/sat",
+  keywords: [
+    "SAT",
+    "Digital SAT",
+    "SAT Exam",
+    "SAT Guide",
+    "SAT Preparation",
+  ],
+});
 }
 
 export default async function SatPillarPage() {
@@ -108,7 +115,7 @@ export default async function SatPillarPage() {
             {page.title || "SAT Exam Guide"}
           </h1>
           <p className="text-white/50 text-sm font-medium">
-            Everything you actually need to know
+            Everything you need to know about the Digital SAT, including scoring, sections, timing, strategies and preparation resources.
           </p>
 
           {page.intro && (
