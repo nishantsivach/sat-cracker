@@ -3,8 +3,36 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { Calendar, Clock, ArrowRight, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { RetryButton } from "@/components/common/RetryButton";
+import { createMetadata } from "@/lib/seo";
+import { Metadata } from "next";
 
 const PAGE_SIZE = 10;
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const { page } = await searchParams;
+  const currentPage = parseInt(page || "1", 10);
+
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("blog_content")
+    .select("*", { count: "exact", head: true })
+    .eq("is_published", true);
+
+  const description =
+    count && count > 0
+      ? `Read ${count} article${count !== 1 ? "s" : ""} on SAT prep strategy, test-day tips, and score improvement from SATCracker.`
+      : "SAT prep strategy, test-day tips, and score improvement guides from SATCracker.";
+
+  return createMetadata({
+    title: currentPage > 1 ? `SAT Prep Blog — Page ${currentPage}` : "SAT Prep Blog",
+    description,
+    path: currentPage > 1 ? `/blogs?page=${currentPage}` : "/blogs",
+  });
+}
 
 export default async function BlogsPage({
   searchParams,
