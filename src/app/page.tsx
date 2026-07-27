@@ -19,7 +19,7 @@ import Script from "next/script";
 export const metadata = createMetadata({
   title: "SAT Prep Courses, AI Tutor & Practice Tests | SATCracker",
   description:
-    "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores with smarter preparation.",
+    "Master the SAT with AI tutoring, adaptive practice, courses, and mock tests. SATCracker helps students improve scores, build confidence, and prepare smarter.",
   path: "/",
 });
 
